@@ -30,3 +30,4 @@ dist-ssr
 *.tiff
 *.psd
 Шрифты/
+.vercel
