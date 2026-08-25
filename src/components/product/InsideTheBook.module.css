@@ -1,0 +1,23 @@
+.section {
+  display: grid;
+  gap: var(--space-md);
+  margin-bottom: var(--space-2xl);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.lead {
+  font-weight: 700;
+}
+
+.list {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--color-text-muted);
+}

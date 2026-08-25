@@ -1,0 +1,6 @@
+.media {
+  display: grid;
+  gap: var(--space-md);
+  min-width: 0;
+  align-content: start;
+}

@@ -1,0 +1,32 @@
+.sidebar {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.list {
+  display: grid;
+  margin: 0;
+  padding: var(--space-sm);
+  list-style: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-sm);
+  text-decoration: none;
+}
+
+.link:hover,
+.active {
+  background: var(--color-bg);
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  .sidebar {
+    border-bottom: 0;
+    border-right: 1px solid var(--color-border);
+  }
+}

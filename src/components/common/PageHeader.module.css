@@ -1,0 +1,15 @@
+.header {
+  display: grid;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xl);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-xl);
+}
+
+.description {
+  color: var(--color-text-muted);
+  max-width: 40rem;
+}

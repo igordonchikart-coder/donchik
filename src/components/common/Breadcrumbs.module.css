@@ -1,0 +1,25 @@
+.nav {
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-muted);
+}
+
+.list li:not(:last-child)::after {
+  content: '/';
+  margin-left: var(--space-xs);
+}
+
+.list a:hover {
+  color: var(--color-text);
+}

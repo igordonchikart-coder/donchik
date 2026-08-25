@@ -1,0 +1,57 @@
+.item {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.image {
+  width: 72px;
+  height: 96px;
+  object-fit: cover;
+  background: var(--color-border);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.title {
+  font-family: var(--font-serif);
+}
+
+.meta {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.quantity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.quantityButton {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.remove {
+  background: none;
+  border: 0;
+  min-height: 44px;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+}

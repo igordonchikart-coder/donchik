@@ -1,0 +1,75 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: 0.7rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  text-decoration: none;
+}
+
+.button:hover {
+  text-decoration: none;
+  opacity: 0.92;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.buttonSecondary {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.buttonDanger {
+  background: var(--color-error);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2xs);
+}
+
+.fieldLabel {
+  font-size: var(--font-size-sm);
+}
+
+.fieldControl,
+.fieldTextarea,
+.fieldSelect {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.fieldTextarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.fieldError {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+}
+
+.formGrid {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}

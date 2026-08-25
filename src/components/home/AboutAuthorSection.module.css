@@ -1,0 +1,9 @@
+.section {
+  padding-block: var(--space-2xl);
+}
+
+.inner::after {
+  content: '';
+  display: table;
+  clear: both;
+}

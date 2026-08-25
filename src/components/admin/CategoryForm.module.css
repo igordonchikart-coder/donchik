@@ -1,0 +1,12 @@
+.form {
+  display: grid;
+  gap: var(--space-md);
+  max-width: 640px;
+}
+
+.preview {
+  width: 160px;
+  aspect-ratio: 8 / 5;
+  object-fit: cover;
+  background: var(--color-border);
+}

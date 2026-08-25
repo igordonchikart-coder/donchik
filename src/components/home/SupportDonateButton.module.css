@@ -1,0 +1,18 @@
+.button {
+  min-width: 10rem;
+  height: var(--support-control-height, 3.25rem);
+  padding: 0 1.5rem;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}

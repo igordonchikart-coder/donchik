@@ -1,0 +1,23 @@
+.button {
+  justify-self: start;
+  flex-direction: column;
+  width: 5.5rem;
+  height: 5.5rem;
+  min-width: 5.5rem;
+  padding: 0.4rem;
+  gap: var(--space-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.icon {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.icon {
+  width: 1.15rem;
+  height: 1.15rem;
+}

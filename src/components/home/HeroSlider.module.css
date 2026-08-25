@@ -1,0 +1,23 @@
+.section {
+  width: 100%;
+}
+
+.frame {
+  position: relative;
+}
+
+.viewport {
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.track {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition: none;
+  }
+}

@@ -1,0 +1,5 @@
+.title {
+  margin: var(--space-xl) 0 var(--space-md);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}

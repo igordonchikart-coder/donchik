@@ -1,0 +1,28 @@
+.frame {
+  position: relative;
+}
+
+.viewport {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.track {
+  display: flex;
+}
+
+.image {
+  flex: 0 0 100%;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.dots {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: var(--space-sm);
+  transform: translateX(-50%);
+}

@@ -1,0 +1,32 @@
+:root {
+  --color-bg: #161513;
+  --color-surface: #1e1c1a;
+  --color-text: #efece6;
+  --color-text-muted: #b3aea6;
+  --color-border: #4a4640;
+  --color-accent: #efece6;
+  --color-accent-contrast: #161513;
+  --color-error: #d46a6a;
+  --color-success: #6fbf8a;
+  --color-overlay: rgb(0 0 0 / 55%);
+  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.75rem;
+  --font-size-hero: clamp(2rem, 4vw, 3rem);
+  --line-height-body: 1.55;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --container-width: 1120px;
+  --radius: 6px;
+  --header-height: 72px;
+  --shadow: 0 8px 24px rgb(0 0 0 / 35%);
+}

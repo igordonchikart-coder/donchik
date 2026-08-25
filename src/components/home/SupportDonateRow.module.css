@@ -1,0 +1,13 @@
+.row {
+  display: grid;
+  gap: var(--space-md);
+  --support-control-height: 3.25rem;
+}
+
+@media (min-width: 768px) {
+  .row {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: var(--space-lg);
+  }
+}

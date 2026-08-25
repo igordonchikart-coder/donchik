@@ -1,0 +1,20 @@
+.summary {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  height: fit-content;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.total {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}

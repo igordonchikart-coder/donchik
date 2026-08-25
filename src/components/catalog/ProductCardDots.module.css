@@ -1,0 +1,27 @@
+.dots {
+  display: flex;
+  justify-content: center;
+}
+
+.dot {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+}
+
+.dot::after {
+  content: '';
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  background: transparent;
+}
+
+.dotActive::after {
+  background: #fff;
+}

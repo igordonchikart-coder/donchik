@@ -1,0 +1,52 @@
+.item {
+  position: relative;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.itemVertical .trigger {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.chevron {
+  font-size: var(--font-size-xs);
+}
+
+.menu {
+  margin: 0;
+  padding: var(--space-xs);
+  list-style: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.menuHorizontal {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 14rem;
+  z-index: 30;
+}
+
+.menuVertical {
+  margin-top: var(--space-xs);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-sm);
+  text-decoration: none;
+}

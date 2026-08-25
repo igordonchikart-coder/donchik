@@ -1,0 +1,27 @@
+.panel {
+  display: grid;
+  gap: var(--space-md);
+  align-content: start;
+}
+
+.title {
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.price {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.delivery,
+.sale {
+  font-weight: 600;
+}
+
+.meta {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}

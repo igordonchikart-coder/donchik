@@ -1,0 +1,13 @@
+.top {
+  display: grid;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+@media (min-width: 900px) {
+  .top {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    column-gap: var(--space-xl);
+  }
+}

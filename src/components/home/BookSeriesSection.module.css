@@ -1,0 +1,10 @@
+.section {
+  padding-block: var(--space-2xl);
+}
+
+.title {
+  margin-bottom: var(--space-xl);
+  font-family: var(--font-serif);
+  font-size: var(--font-size-xl);
+  text-align: center;
+}

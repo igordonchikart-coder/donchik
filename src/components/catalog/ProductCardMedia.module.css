@@ -1,0 +1,35 @@
+.media {
+  position: relative;
+}
+
+.imageWrap {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+
+.imageWrap:hover {
+  text-decoration: none;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--color-bg);
+}
+
+.year {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding-bottom: 3rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1;
+  pointer-events: none;
+}

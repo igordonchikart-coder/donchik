@@ -1,0 +1,16 @@
+.footer {
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--space-xl) var(--space-2xl);
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .inner {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+}
