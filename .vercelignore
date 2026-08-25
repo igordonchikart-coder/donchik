@@ -1,0 +1,15 @@
+# Local mockups and fonts are too large for Vercel
+*.tif
+*.tiff
+*.psd
+Titul Page.tif
+Web_Volume I.tif
+Шрифты
+Шрифты/
+
+node_modules
+dist
+.env
+.env.*
+.DS_Store
+*.log
