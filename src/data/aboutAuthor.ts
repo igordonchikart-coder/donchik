@@ -1,4 +1,4 @@
-import { placeholders } from './placeholders'
+import portrait from '@/assets/about/igor-donchik.png'
 
 export interface AboutAuthorPortrait {
   id: string
@@ -24,9 +24,9 @@ export const aboutAuthorParagraphs = [
 ]
 
 export const aboutAuthorPortraits: AboutAuthorPortrait[] = [
-  { id: 'portrait-1', image: placeholders.portraits[0], alt: 'Igor Donchik' },
-  { id: 'portrait-2', image: placeholders.portraits[1], alt: 'Igor Donchik' },
-  { id: 'portrait-3', image: placeholders.portraits[2], alt: 'Igor Donchik' },
+  { id: 'portrait-1', image: portrait, alt: 'Igor Donchik' },
+  { id: 'portrait-2', image: portrait, alt: 'Igor Donchik' },
+  { id: 'portrait-3', image: portrait, alt: 'Igor Donchik' },
 ]
 
 export const aboutAuthorSocials: AboutAuthorSocial[] = [

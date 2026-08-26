@@ -12,9 +12,12 @@
   border-radius: 50%;
   background: var(--color-surface);
   transform: translateY(-50%);
+  font-family: var(--font-nav);
   font-size: var(--font-size-lg);
   font-weight: 700;
+  font-stretch: 75%;
   line-height: 1;
+  color: var(--color-nav);
 }
 
 @media (min-width: 768px) {

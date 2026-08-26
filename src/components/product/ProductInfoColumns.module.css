@@ -1,7 +1,7 @@
 .row {
   display: grid;
   gap: var(--space-xl);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-xl);
 }
 
 @media (min-width: 900px) {

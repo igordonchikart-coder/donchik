@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'Bahnschrift';
+  src: url('../assets/fonts/Bahnschrift.ttf') format('truetype');
+  font-weight: 300 700;
+  font-stretch: 75% 100%;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Guttery';
+  src: url('../assets/fonts/Guttery.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

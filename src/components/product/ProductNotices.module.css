@@ -4,8 +4,11 @@
 }
 
 .heading {
+  font-family: var(--font-nav);
   font-size: var(--font-size-md);
   font-weight: 700;
+  font-stretch: 87.5%;
+  color: var(--color-nav);
 }
 
 .list {

@@ -39,12 +39,9 @@ export function CtaSlider() {
       onKeyDown={handleKeyDown}
     >
       <Container>
-        <header className={styles.header}>
-          <h2 id="cta-slider-title" className={styles.heading}>
-            Discounted book collections
-          </h2>
-          <div className={styles.rule} />
-        </header>
+        <h2 id="cta-slider-title" className={styles.heading}>
+          Discounted book collections
+        </h2>
         <div className={styles.frame}>
           <div className={styles.viewport}>
             <div

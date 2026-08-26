@@ -9,7 +9,7 @@ export function AboutPage() {
       <Container>
         <PageHeader title="About us" />
       </Container>
-      <AboutAuthorSection />
+      <AboutAuthorSection compact />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 .list {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: var(--space-sm);
   margin: var(--space-lg) 0 0;
   padding: 0;
@@ -8,21 +9,17 @@
 }
 
 .link {
-  width: 2.75rem;
-  height: 2.75rem;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background: var(--color-surface);
-  color: var(--color-text);
+  display: block;
+  line-height: 0;
 }
 
 .link:hover {
   text-decoration: none;
+  opacity: 0.82;
 }
 
-.link svg {
-  width: 1.25rem;
-  height: 1.25rem;
+.icon {
+  display: block;
+  height: 2.75rem;
+  width: auto;
 }

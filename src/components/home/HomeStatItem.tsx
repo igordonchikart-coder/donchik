@@ -1,4 +1,5 @@
 import type { HomeStat } from '@/data/homeStats'
+import starIcon from '@/assets/ui/star.png'
 import styles from './HomeStatItem.module.css'
 
 interface HomeStatItemProps {
@@ -6,13 +7,13 @@ interface HomeStatItemProps {
 }
 
 export function HomeStatItem({ stat }: HomeStatItemProps) {
+  const isTrustpilot = stat.icon === 'star'
+
   return (
-    <li className={styles.item}>
+    <li className={`${styles.item} ${isTrustpilot ? styles.trustpilot : styles.default}`}>
       <p className={styles.valueRow}>
-        {stat.icon === 'star' ? (
-          <span className={styles.icon} aria-hidden="true">
-            ★
-          </span>
+        {isTrustpilot ? (
+          <img className={styles.star} src={starIcon} alt="" width={182} height={172} aria-hidden="true" />
         ) : null}
         <span className={styles.value}>{stat.value}</span>
       </p>

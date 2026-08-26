@@ -25,11 +25,15 @@
 }
 
 .title {
+  font-family: var(--font-nav);
   font-size: var(--font-size-lg);
+  font-weight: 700;
+  font-stretch: 87.5%;
   line-height: 1.05;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-decoration: none;
+  color: var(--color-nav);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -75,8 +79,10 @@
 .body {
   height: 6.5rem;
   padding-top: var(--space-sm);
+  font-family: var(--font-nav);
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  font-stretch: 87.5%;
+  color: var(--color-nav);
   text-align: center;
   overflow: hidden;
 }
@@ -90,10 +96,9 @@
 }
 
 .footerSlot {
-  height: 4.25rem;
   display: grid;
   align-content: start;
   justify-items: center;
-  padding-top: var(--space-sm);
-  overflow: hidden;
+  margin-top: -0.15rem;
+  padding-top: 0.2rem;
 }

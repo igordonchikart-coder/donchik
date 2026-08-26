@@ -21,17 +21,25 @@
 }
 
 .title {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-family: var(--font-nav);
+  font-size: var(--font-size-section);
   font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.03em;
   line-height: 1.15;
+  color: var(--color-nav);
 }
 
 .text {
-  color: var(--color-text-muted);
+  font-family: var(--font-nav);
+  font-stretch: 87.5%;
+  color: var(--color-nav);
 }
 
 .thanks {
-  color: var(--color-text-muted);
+  font-family: var(--font-nav);
+  font-stretch: 87.5%;
+  color: var(--color-nav);
 }
 
 @media (min-width: 768px) {

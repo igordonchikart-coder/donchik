@@ -9,6 +9,10 @@
   border-radius: var(--radius);
   background: var(--color-accent);
   color: var(--color-accent-contrast);
+  font-family: var(--font-nav);
+  font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.04em;
   text-decoration: none;
 }
 

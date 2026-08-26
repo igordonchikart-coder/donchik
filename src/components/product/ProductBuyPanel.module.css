@@ -2,26 +2,41 @@
   display: grid;
   gap: var(--space-md);
   align-content: start;
+  font-family: var(--font-nav);
+  color: var(--color-nav);
 }
 
 .title {
-  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  font-family: var(--font-nav);
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
   font-weight: 700;
-  line-height: 1.25;
+  font-stretch: 87.5%;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  color: var(--color-nav);
 }
 
 .price {
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-family: var(--font-nav);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
   font-weight: 700;
+  font-stretch: 75%;
+  letter-spacing: 0.02em;
   line-height: 1.1;
+  color: var(--color-nav);
 }
 
 .delivery,
 .sale {
-  font-weight: 600;
+  font-family: var(--font-nav);
+  font-weight: 700;
+  font-stretch: 75%;
+  color: var(--color-nav);
 }
 
 .meta {
-  color: var(--color-text-muted);
+  font-family: var(--font-nav);
   font-size: var(--font-size-sm);
+  font-stretch: 75%;
+  color: var(--color-text-muted);
 }

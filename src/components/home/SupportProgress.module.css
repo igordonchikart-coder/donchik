@@ -22,9 +22,12 @@
 }
 
 .amount {
+  font-family: var(--font-nav);
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 700;
+  font-stretch: 87.5%;
   line-height: 1.1;
   text-align: center;
   letter-spacing: 0.02em;
+  color: var(--color-nav);
 }

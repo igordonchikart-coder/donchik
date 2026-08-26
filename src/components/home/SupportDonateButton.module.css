@@ -6,10 +6,13 @@
   border-radius: var(--radius);
   background: transparent;
   color: var(--color-text);
+  font-family: var(--font-nav);
   font-size: var(--font-size-lg);
   font-weight: 700;
+  font-stretch: 87.5%;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--color-nav);
 }
 
 .button:disabled {

@@ -1,22 +1,16 @@
 .section {
-  padding-block: var(--space-2xl);
-}
-
-.header {
-  margin-bottom: var(--space-lg);
-  text-align: center;
+  padding-block: var(--space-xl);
 }
 
 .heading {
-  font-family: var(--font-serif);
-  font-size: var(--font-size-xl);
-}
-
-.rule {
-  width: 100%;
-  height: 1px;
-  margin-top: var(--space-md);
-  background: var(--color-border);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-nav);
+  font-size: var(--font-size-section);
+  font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: var(--color-nav);
 }
 
 .frame {

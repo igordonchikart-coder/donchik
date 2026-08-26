@@ -1,46 +1,77 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-md);
   min-width: 0;
-  min-height: 44px;
   text-decoration: none;
+  color: var(--color-nav);
 }
 
 .brand:hover {
   text-decoration: none;
+  color: var(--color-nav);
 }
 
 .mark {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
+  width: var(--brand-mark-size);
+  height: var(--brand-mark-size);
+  object-fit: contain;
   flex-shrink: 0;
 }
 
 .text {
   display: grid;
+  align-content: center;
   min-width: 0;
-  gap: var(--space-2xs);
+  gap: 0.45rem;
 }
 
 .name {
-  font-family: var(--font-serif);
-  font-size: var(--font-size-md);
-  line-height: 1.2;
+  font-family: var(--font-display);
+  font-size: var(--font-size-brand);
+  font-weight: 700;
+  font-stretch: 100%;
+  line-height: 1;
+  color: inherit;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  max-width: 100%;
+  gap: 0.35rem;
+}
+
+.divider {
+  display: block;
+  width: 0;
+  min-width: 100%;
+  height: 0.2rem;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
 }
 
 .tagline {
-  padding-top: var(--space-2xs);
-  border-top: 1px solid var(--color-border);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-family: var(--font-nav);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  font-stretch: 87.5%;
   letter-spacing: 0.02em;
+  text-transform: none;
+  color: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+  width: max-content;
 }
 
-@media (min-width: 640px) {
-  .name {
-    font-size: var(--font-size-lg);
+@media (max-width: 639px) {
+  .meta {
+    display: none;
+  }
+
+  .brand {
+    gap: var(--space-sm);
   }
 }

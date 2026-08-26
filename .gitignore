@@ -29,5 +29,6 @@ dist-ssr
 *.tif
 *.tiff
 *.psd
+*.mp4
 Шрифты/
 .vercel

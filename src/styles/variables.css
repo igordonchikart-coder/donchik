@@ -1,5 +1,5 @@
 :root {
-  --color-bg: #161513;
+  --color-bg: #241d17;
   --color-surface: #1e1c1a;
   --color-text: #efece6;
   --color-text-muted: #b3aea6;
@@ -9,14 +9,21 @@
   --color-error: #d46a6a;
   --color-success: #6fbf8a;
   --color-overlay: rgb(0 0 0 / 55%);
-  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-nav: #f3e6cd;
+  --color-nav-active: #d8bb6a;
+  --color-trustpilot: #9ac497;
+  --font-sans: 'Bahnschrift', 'Segoe UI', system-ui, sans-serif;
+  --font-nav: 'Bahnschrift', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Guttery', 'Iowan Old Style', Georgia, serif;
   --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.75rem;
+  --font-size-brand: clamp(1.5rem, 2.4vw, 2rem);
   --font-size-hero: clamp(2rem, 4vw, 3rem);
+  --font-size-section: clamp(1.5rem, 2.8vw, 2.15rem);
   --line-height-body: 1.55;
   --space-2xs: 0.25rem;
   --space-xs: 0.5rem;
@@ -27,6 +34,7 @@
   --space-2xl: 4rem;
   --container-width: 1120px;
   --radius: 6px;
-  --header-height: 72px;
+  --brand-mark-size: 4.75rem;
+  --header-height: calc(var(--brand-mark-size) + var(--space-md) * 2);
   --shadow: 0 8px 24px rgb(0 0 0 / 35%);
 }

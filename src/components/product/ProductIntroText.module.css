@@ -1,5 +1,7 @@
 .intro {
-  color: var(--color-text-muted);
+  font-family: var(--font-nav);
+  font-stretch: 87.5%;
+  color: var(--color-nav);
 }
 
 .trustpilot {

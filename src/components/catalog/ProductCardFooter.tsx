@@ -17,7 +17,11 @@ export function ProductCardFooter({ product }: ProductCardFooterProps) {
         ) : null}
         <span className={styles.price}>{formatPrice(product.price, product.currency)}</span>
       </Link>
-      {product.deliveryNote ? <p className={styles.note}>{product.deliveryNote}</p> : null}
+      {product.deliveryNote ? (
+        <p className={styles.delivery}>
+          <span aria-hidden="true">🔥</span> {product.deliveryNote.replace(/\bdelivery\b/i, 'Delivery')}
+        </p>
+      ) : null}
       {product.saleLabel ? <p className={styles.note}>{product.saleLabel}</p> : null}
     </div>
   )

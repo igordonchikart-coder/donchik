@@ -1,7 +1,7 @@
 .grid {
   display: grid;
-  gap: var(--space-lg);
-  align-items: stretch;
+  gap: 0.65rem;
+  align-items: start;
 }
 
 @media (min-width: 640px) {

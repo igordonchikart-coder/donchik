@@ -6,19 +6,25 @@ import styles from './BookSeriesSection.module.css'
 interface BookSeriesSectionProps {
   series: Category
   products: Product[]
+  showTitle?: boolean
 }
 
-export function BookSeriesSection({ series, products }: BookSeriesSectionProps) {
+export function BookSeriesSection({ series, products, showTitle = true }: BookSeriesSectionProps) {
   const ordered = [...products].sort(
     (left, right) => Number(left.isOnSale) - Number(right.isOnSale) || left.volumeNumber - right.volumeNumber,
   )
 
   return (
-    <section className={styles.section} aria-labelledby={`series-${series.id}`}>
+    <section
+      className={`${styles.section} ${showTitle ? '' : styles.sectionFlush}`}
+      aria-labelledby={showTitle ? `series-${series.id}` : undefined}
+    >
       <Container>
-        <h2 id={`series-${series.id}`} className={styles.title}>
-          «{series.title}» book series
-        </h2>
+        {showTitle ? (
+          <h2 id={`series-${series.id}`} className={styles.title}>
+            «{series.title}» book series
+          </h2>
+        ) : null}
         <ProductGrid
           products={ordered}
           emptyTitle="No volumes yet"

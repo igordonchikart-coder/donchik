@@ -1,5 +1,5 @@
 .section {
-  padding-block: var(--space-lg);
+  padding-block: var(--space-xl);
 }
 
 .list {
@@ -14,5 +14,7 @@
   .list {
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
+    justify-items: center;
+    gap: var(--space-lg);
   }
 }

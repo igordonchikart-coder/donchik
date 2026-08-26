@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import type { Product } from '@/types'
 import { getProductCardSlides, isComingSoon } from '@/utils/product'
+import { PanzerSeriesCard } from './PanzerSeriesCard'
 import { ProductCardDots } from './ProductCardDots'
 import { ProductCardFooter } from './ProductCardFooter'
 import { ProductCardMedia } from './ProductCardMedia'
@@ -13,6 +14,14 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  if (
+    (product.categoryId === 'series-panzer-camouflage' && product.volumeNumber <= 6) ||
+    product.categoryId === 'series-military-symbols' ||
+    product.categoryId === 'series-unit-insignia'
+  ) {
+    return <PanzerSeriesCard product={product} />
+  }
+
   const slides = getProductCardSlides(product)
   const [activeIndex, setActiveIndex] = useState(0)
   const safeIndex = Math.min(activeIndex, slides.length - 1)

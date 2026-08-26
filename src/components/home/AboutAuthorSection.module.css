@@ -1,5 +1,11 @@
 .section {
-  padding-block: var(--space-2xl);
+  padding-block: var(--space-xl);
+  font-family: var(--font-nav);
+  color: var(--color-nav);
+}
+
+.compact {
+  padding-top: 0;
 }
 
 .inner::after {

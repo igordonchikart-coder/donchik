@@ -1,0 +1,140 @@
+.card {
+  display: grid;
+  grid-template-rows: auto auto;
+}
+
+.frameWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2388 / 4180;
+}
+
+.frameImage {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.inner {
+  position: absolute;
+  z-index: 1;
+  top: 3.15%;
+  right: 6.35%;
+  bottom: 4.55%;
+  left: 6.55%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  background-color: #2f2924;
+}
+
+.media {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1 / -1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.underlay {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2101 / 2666;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.mediaLink {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+.mediaLink:hover {
+  text-decoration: none;
+}
+
+.artwork {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: top center;
+}
+
+.artworkCropLeft {
+  width: calc(100% + 3px);
+  max-width: none;
+  margin-left: -3px;
+}
+
+.yearBadge {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 34%;
+  width: min(46%, 9rem);
+  height: auto;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+}
+
+.bottom {
+  grid-column: 1;
+  grid-row: 2;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  padding: 4.25rem 0.75rem 0.8rem;
+}
+
+.divider {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.description {
+  margin: 0;
+  width: 100%;
+  min-height: calc(1.4em * 8);
+  font-family: var(--font-nav);
+  font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+  font-weight: 600;
+  font-stretch: 87.5%;
+  line-height: 1.4;
+  text-align: center;
+  white-space: pre-line;
+  color: var(--color-nav);
+}
+
+.descriptionLarge {
+  font-size: clamp(1.25rem, 1.85vw, 1.6rem);
+  font-weight: 700;
+  font-stretch: 75%;
+  min-height: calc(1.4 * clamp(0.8rem, 1.05vw, 0.95rem) * 8);
+}
+
+.footerSlot {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  margin-top: -0.55rem;
+  padding-top: 0.15rem;
+}

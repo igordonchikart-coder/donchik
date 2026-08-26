@@ -1,6 +1,5 @@
-import { placeholders } from './placeholders'
-
 export const homeVideo = {
-  poster: placeholders.video,
+  src: '/video/home.mp4',
+  poster: '/video/home-poster.png',
   label: 'Play video',
 }

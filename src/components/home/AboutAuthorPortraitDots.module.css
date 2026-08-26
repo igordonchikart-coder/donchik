@@ -1,32 +1,16 @@
 .dots {
+  composes: dots from '../../styles/sliderDots.module.css';
   position: absolute;
   z-index: 2;
-  left: 50%;
+  right: 0;
   bottom: 8%;
-  display: flex;
-  justify-content: center;
-  transform: translateX(-50%);
+  left: 0;
 }
 
 .dot {
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  display: grid;
-  place-items: center;
+  composes: dot from '../../styles/sliderDots.module.css';
 }
 
-.dot::after {
-  content: '';
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  border: 1px solid var(--color-accent);
-  background: transparent;
-}
-
-.dotActive::after {
-  background: var(--color-accent);
+.dotActive {
+  composes: dotActive from '../../styles/sliderDots.module.css';
 }

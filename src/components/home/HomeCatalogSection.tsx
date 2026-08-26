@@ -8,9 +8,14 @@ import { BookSeriesSection } from './BookSeriesSection'
 interface HomeCatalogSectionProps {
   onlyCategoryId?: string
   excludeCategoryId?: string
+  showTitle?: boolean
 }
 
-export function HomeCatalogSection({ onlyCategoryId, excludeCategoryId }: HomeCatalogSectionProps) {
+export function HomeCatalogSection({
+  onlyCategoryId,
+  excludeCategoryId,
+  showTitle = true,
+}: HomeCatalogSectionProps) {
   const series = useCategories()
   const products = useProducts()
 
@@ -50,6 +55,7 @@ export function HomeCatalogSection({ onlyCategoryId, excludeCategoryId }: HomeCa
           key={item.id}
           series={item}
           products={productList.filter((product) => product.categoryId === item.id)}
+          showTitle={showTitle}
         />
       ))}
     </>

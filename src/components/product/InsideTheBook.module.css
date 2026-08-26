@@ -1,17 +1,24 @@
 .section {
   display: grid;
   gap: var(--space-md);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-xl);
 }
 
 .title {
-  font-size: var(--font-size-xl);
+  font-family: var(--font-nav);
+  font-size: var(--font-size-section);
   font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.03em;
   line-height: 1.2;
+  color: var(--color-nav);
 }
 
 .lead {
+  font-family: var(--font-nav);
   font-weight: 700;
+  font-stretch: 87.5%;
+  color: var(--color-nav);
 }
 
 .list {

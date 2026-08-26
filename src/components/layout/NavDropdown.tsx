@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import styles from './NavDropdown.module.css'
 
 export interface NavDropdownLink {
@@ -25,12 +25,14 @@ export function NavDropdown({
   onToggle,
   onNavigate,
 }: NavDropdownProps) {
+  const { pathname } = useLocation()
   const menuId = `${id}-menu`
+  const isActive = items.some((item) => pathname === item.to || pathname.startsWith(`${item.to}/`))
 
   return (
     <li className={`${styles.item} ${orientation === 'vertical' ? styles.itemVertical : ''}`}>
       <button
-        className={styles.trigger}
+        className={`${styles.trigger} ${isActive ? styles.triggerActive : ''}`}
         type="button"
         aria-expanded={isOpen}
         aria-controls={menuId}

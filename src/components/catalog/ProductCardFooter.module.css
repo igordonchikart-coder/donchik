@@ -19,13 +19,32 @@
 }
 
 .original {
+  font-family: var(--font-nav);
+  font-stretch: 75%;
+  font-weight: 700;
   color: var(--color-text-muted);
   text-decoration: line-through;
 }
 
 .price {
-  font-family: var(--font-serif);
-  font-size: var(--font-size-lg);
+  font-family: var(--font-nav);
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 700;
+  font-stretch: 75%;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--color-nav);
+}
+
+.delivery {
+  margin: 0;
+  font-family: var(--font-nav);
+  font-size: clamp(0.9rem, 1.35vw, 1.15rem);
+  font-weight: 700;
+  font-stretch: 75%;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--color-nav);
 }
 
 .note {

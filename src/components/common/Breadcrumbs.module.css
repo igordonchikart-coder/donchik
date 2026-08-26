@@ -1,8 +1,12 @@
 .nav {
   margin-bottom: var(--space-sm);
+  font-family: var(--font-nav);
   font-size: var(--font-size-sm);
+  font-weight: 600;
+  font-stretch: 87.5%;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: var(--color-nav);
 }
 
 .list {
@@ -12,7 +16,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  color: var(--color-text-muted);
+  color: var(--color-nav);
 }
 
 .list li:not(:last-child)::after {

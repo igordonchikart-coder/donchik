@@ -10,8 +10,17 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: inherit;
+  color: var(--color-nav);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.trigger:hover,
+.triggerActive {
+  color: var(--color-nav-active);
 }
 
 .itemVertical .trigger {
@@ -20,7 +29,7 @@
 }
 
 .chevron {
-  font-size: var(--font-size-xs);
+  font-size: 0.55em;
 }
 
 .menu {
@@ -48,5 +57,21 @@
   align-items: center;
   min-height: 44px;
   padding: 0 var(--space-sm);
+  font-family: var(--font-nav);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  font-stretch: 87.5%;
+  letter-spacing: 0.06em;
+  text-transform: none;
   text-decoration: none;
+  color: var(--color-nav);
+}
+
+.link:hover {
+  text-decoration: none;
+  color: var(--color-nav-active);
+}
+
+.link:global(.active) {
+  color: var(--color-nav-active);
 }

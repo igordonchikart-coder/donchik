@@ -1,5 +1,14 @@
+.section {
+  padding-top: var(--space-xl);
+}
+
 .title {
-  margin: var(--space-xl) 0 var(--space-md);
-  font-size: var(--font-size-xl);
+  margin: 0 0 var(--space-lg);
+  font-family: var(--font-nav);
+  font-size: var(--font-size-section);
   font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: var(--color-nav);
 }

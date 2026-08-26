@@ -21,8 +21,11 @@
 }
 
 .statValue {
-  font-family: var(--font-serif);
+  font-family: var(--font-nav);
   font-size: var(--font-size-xl);
+  font-weight: 700;
+  font-stretch: 87.5%;
+  color: var(--color-nav);
 }
 
 .toolbar {

@@ -1,0 +1,74 @@
+.dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.dot {
+  appearance: none;
+  position: relative;
+  width: 0.95rem;
+  height: 0.95rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.dot::before,
+.dot::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  box-sizing: border-box;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.dot::after {
+  content: '';
+  width: 0.58rem;
+  height: 0.58rem;
+  border: 0.11rem solid var(--color-nav);
+  background: none;
+  box-shadow: none;
+}
+
+.dotActive::after {
+  width: 0.78rem;
+  height: 0.78rem;
+  border-width: 0.1rem;
+}
+
+.dotActive::before {
+  content: '';
+  width: 0.34rem;
+  height: 0.34rem;
+  background: var(--color-nav);
+}
+
+@media (min-width: 768px) {
+  .dot {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  .dot::after {
+    width: 0.66rem;
+    height: 0.66rem;
+    border-width: 0.12rem;
+  }
+
+  .dotActive::after {
+    width: 0.9rem;
+    height: 0.9rem;
+    border-width: 0.12rem;
+  }
+
+  .dotActive::before {
+    width: 0.38rem;
+    height: 0.38rem;
+  }
+}
