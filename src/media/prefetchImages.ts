@@ -1,4 +1,4 @@
-const CACHE_NAME = 'donchik-media-v1'
+const CACHE_NAME = 'donchik-media-v2'
 
 let started = false
 

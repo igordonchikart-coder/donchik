@@ -1,5 +1,5 @@
-const CACHE_NAME = 'donchik-media-v1'
-const CACHEABLE = /\.(?:png|jpe?g|webp|gif|svg|ico|woff2?|ttf|otf|mp4)$/i
+const CACHE_NAME = 'donchik-media-v2'
+const CACHEABLE = /\.(?:png|jpe?g|webp|gif|svg|ico|woff2?|ttf|otf)$/i
 
 self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting())
@@ -9,9 +9,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) =>
-        Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))),
-      )
+      .then((keys) => Promise.all(keys.map((key) => caches.delete(key))))
       .then(() => self.clients.claim()),
   )
 })
@@ -27,10 +25,12 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  const isAsset =
-    url.pathname.startsWith('/assets/') ||
-    url.pathname.startsWith('/video/') ||
-    url.pathname.startsWith('/fonts/')
+  // Never intercept video: browsers need Range/partial responses.
+  if (url.pathname.startsWith('/video/') || url.pathname.endsWith('.mp4')) {
+    return
+  }
+
+  const isAsset = url.pathname.startsWith('/assets/') || url.pathname.startsWith('/fonts/')
   if (!isAsset && !CACHEABLE.test(url.pathname)) {
     return
   }
