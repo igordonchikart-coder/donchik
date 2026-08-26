@@ -1,5 +1,6 @@
 .section {
   padding-block: var(--space-xl);
+  overflow: visible;
 }
 
 .sectionFlush {

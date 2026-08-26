@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { LazyImage } from '@/components/common/LazyImage'
 import type { Product } from '@/types'
 import styles from './ProductCardMedia.module.css'
 
@@ -20,7 +21,7 @@ export function ProductCardMedia({ product, image, to, comingSoon, children }: P
         tabIndex={-1}
         aria-label={`${product.title} ${product.volumeLabel}`}
       >
-        <img className={styles.image} src={image} alt="" draggable={false} />
+        <LazyImage className={styles.image} src={image} alt="" />
         {comingSoon && product.releaseYear ? <span className={styles.year}>{product.releaseYear}</span> : null}
       </Link>
       {children}

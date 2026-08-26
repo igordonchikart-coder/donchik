@@ -8,8 +8,8 @@
 .dot {
   appearance: none;
   position: relative;
-  width: 0.95rem;
-  height: 0.95rem;
+  width: 1.15rem;
+  height: 1.15rem;
   padding: 0;
   border: 0;
   background: none;
@@ -29,9 +29,9 @@
 
 .dot::after {
   content: '';
-  width: 0.58rem;
-  height: 0.58rem;
-  border: 0.11rem solid var(--color-nav);
+  width: 0.68rem;
+  height: 0.68rem;
+  border: 0.12rem solid var(--color-nav);
   background: none;
   box-shadow: none;
 }

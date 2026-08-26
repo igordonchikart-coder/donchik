@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import { symbolsCardSources } from '@/assets/books/military-symbols'
 import { panzerCardAssets, panzerVolumeSources, panzerVolumeYears } from '@/assets/books/panzer-camouflage'
 import { insigniaCardSources } from '@/assets/books/unit-insignia'
+import { LazyImage } from '@/components/common/LazyImage'
+import { useInView } from '@/hooks/useInView'
 import type { Product } from '@/types'
 import { getProductCardSlides, isComingSoon } from '@/utils/product'
 import sliderDots from '@/styles/sliderDots.module.css'
@@ -48,6 +50,8 @@ function isDevelopmentCaption(text: string): boolean {
 }
 
 export function PanzerSeriesCard({ product }: PanzerSeriesCardProps) {
+  const cardRef = useRef<HTMLElement>(null)
+  const nearViewport = useInView(cardRef, { rootMargin: '640px 0px' })
   const productTo = routes.product(product.slug)
   const artwork = getFramedArtwork(product)
   const slides = getProductCardSlides({
@@ -55,6 +59,7 @@ export function PanzerSeriesCard({ product }: PanzerSeriesCardProps) {
     gallery: artwork ? [artwork] : product.gallery,
   })
   const [activeIndex, setActiveIndex] = useState(0)
+  const [artReady, setArtReady] = useState(false)
   const safeIndex = Math.min(activeIndex, Math.max(slides.length - 1, 0))
   const comingSoon = isComingSoon(product)
   const yearBadge = getYearBadge(product)
@@ -67,22 +72,29 @@ export function PanzerSeriesCard({ product }: PanzerSeriesCardProps) {
   }
 
   return (
-    <article className={styles.card}>
+    <article ref={cardRef} className={`${styles.card} ${artReady ? styles.cardReady : ''}`}>
       <div className={styles.frameWrap}>
-        <img className={styles.frameImage} src={panzerCardAssets.cardFrame} alt="" aria-hidden="true" />
+        {nearViewport ? (
+          <img className={styles.frameImage} src={panzerCardAssets.cardFrame} alt="" aria-hidden="true" />
+        ) : null}
 
         <div className={styles.inner}>
           <div className={styles.media}>
-            <img className={styles.underlay} src={panzerCardAssets.cardUnderlay} alt="" aria-hidden="true" />
+            {nearViewport ? (
+              <img className={styles.underlay} src={panzerCardAssets.cardUnderlay} alt="" aria-hidden="true" />
+            ) : null}
             <Link className={styles.mediaLink} to={productTo} aria-label={`${product.title} ${product.volumeLabel}`}>
-              <img
-                className={`${styles.artwork} ${cropLeft ? styles.artworkCropLeft : ''}`}
-                src={slides[safeIndex]}
-                alt=""
-                draggable={false}
-              />
+              {nearViewport ? (
+                <LazyImage
+                  className={`${styles.artwork} ${cropLeft ? styles.artworkCropLeft : ''}`}
+                  src={slides[safeIndex]}
+                  alt=""
+                  eager
+                  onReady={() => setArtReady(true)}
+                />
+              ) : null}
             </Link>
-            {yearBadge ? (
+            {yearBadge && nearViewport ? (
               <img className={styles.yearBadge} src={yearBadge} alt="" aria-hidden="true" />
             ) : null}
           </div>

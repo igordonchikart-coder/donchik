@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import videoFrame from '@/assets/ui/video-frame.png'
+import videoFrame from '@/assets/ui/video-frame.webp'
 import videoPause from '@/assets/ui/video-pause.png'
 import videoPlay from '@/assets/ui/video-play.png'
 import { homeVideo } from '@/data/homeVideo'

@@ -1,4 +1,4 @@
-import title from './title.jpg'
+import title from './title.webp'
 
 export const heroImages = {
   title,

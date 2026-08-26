@@ -1,3 +1,4 @@
+import { DeferredMount } from '@/components/common/DeferredMount'
 import { CtaSlider } from '@/components/home/CtaSlider'
 import { HomeCatalogSection } from '@/components/home/HomeCatalogSection'
 import { RelatedProducts } from '@/components/product/RelatedProducts'
@@ -12,7 +13,9 @@ export function ProductBelowFold({ product }: ProductBelowFoldProps) {
     <>
       <RelatedProducts categoryId={product.categoryId} />
       <CtaSlider />
-      <HomeCatalogSection excludeCategoryId={product.categoryId} />
+      <DeferredMount minHeight="40rem">
+        <HomeCatalogSection excludeCategoryId={product.categoryId} />
+      </DeferredMount>
     </>
   )
 }

@@ -1,4 +1,3 @@
-@import './fonts.css';
 @import './variables.css';
 
 *,
@@ -10,11 +9,13 @@
 html {
   font-family: var(--font-nav);
   font-stretch: 87.5%;
+  font-synthesis: none;
   line-height: var(--line-height-body);
   background: var(--color-bg);
   color: var(--color-text);
   color-scheme: dark;
   overflow-anchor: none;
+  overflow-x: clip;
 }
 
 body {
@@ -70,8 +71,20 @@ button {
 }
 
 .container {
-  width: min(100% - var(--space-lg) * 2, var(--container-width));
+  width: min(100% - var(--space-sm) * 2, var(--container-width));
   margin-inline: auto;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --brand-mark-size: 3.35rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .container {
+    width: min(100% - var(--space-lg) * 2, var(--container-width));
+  }
 }
 
 .section {

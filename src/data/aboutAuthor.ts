@@ -1,4 +1,4 @@
-import portrait from '@/assets/about/igor-donchik.png'
+import portrait from '@/assets/about/igor-donchik.webp'
 
 export interface AboutAuthorPortrait {
   id: string

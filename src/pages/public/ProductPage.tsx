@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { Container } from '@/components/common/Container'
+import { DeferredMount } from '@/components/common/DeferredMount'
 import { ErrorState } from '@/components/common/ErrorState'
 import { LoadingState } from '@/components/common/LoadingState'
 import { InsideTheBook } from '@/components/product/InsideTheBook'
@@ -29,7 +30,9 @@ export function ProductPage() {
             <ProductInfoColumns />
             <ProductStory product={data} />
             <InsideTheBook chapters={data.chapters} />
-            <ProductVideo />
+            <DeferredMount minHeight="28rem">
+              <ProductVideo />
+            </DeferredMount>
           </div>
         ) : null}
       </Container>

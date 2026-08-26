@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import brandDivider from '@/assets/ui/brand-divider.png'
-import logo from '@/assets/ui/logo.png'
+import logo from '@/assets/ui/logo.webp'
 import { SITE_NAME, SITE_TAGLINE } from '@/utils/constants'
 import { handleHomeClick } from './goToPageStart'
 import styles from './SiteBrand.module.css'
@@ -11,7 +11,7 @@ export function SiteBrand() {
 
   return (
     <Link className={styles.brand} to={routes.home} onClick={(event) => handleHomeClick(event, pathname)}>
-      <img className={styles.mark} src={logo} alt="" width={152} height={152} />
+      <img className={styles.mark} src={logo} alt="" width={152} height={152} decoding="async" fetchPriority="high" />
       <span className={styles.text}>
         <span className={styles.name}>{SITE_NAME}</span>
         <span className={styles.meta}>

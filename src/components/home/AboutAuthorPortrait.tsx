@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { KeyboardEvent } from 'react'
+import { LazyImage } from '@/components/common/LazyImage'
 import { aboutAuthorPortraits } from '@/data/aboutAuthor'
 import { AboutAuthorPortraitDots } from './AboutAuthorPortraitDots'
 import styles from './AboutAuthorPortrait.module.css'
@@ -40,16 +41,19 @@ export function AboutAuthorPortrait() {
     >
       <div className={styles.viewport}>
         <div className={styles.track} style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
-          {aboutAuthorPortraits.map((portrait, index) => (
-            <img
-              key={portrait.id}
-              className={styles.image}
-              src={portrait.image}
-              alt={index === activeIndex ? portrait.alt : ''}
-              aria-hidden={index !== activeIndex}
-              draggable={false}
-            />
-          ))}
+          {aboutAuthorPortraits.map((portrait, index) =>
+            index === activeIndex ? (
+              <LazyImage
+                key={portrait.id}
+                className={styles.image}
+                src={portrait.image}
+                alt={portrait.alt}
+                eager
+              />
+            ) : (
+              <div key={portrait.id} className={styles.image} aria-hidden="true" />
+            ),
+          )}
         </div>
       </div>
       <AboutAuthorPortraitDots

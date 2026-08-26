@@ -1,16 +1,39 @@
 @font-face {
+  font-family: 'Bahnschrift Fallback';
+  src: local('Arial Narrow'), local('Segoe UI'), local('Helvetica Neue'), local('Arial');
+  size-adjust: 87.5%;
+  ascent-override: 79%;
+  descent-override: 21%;
+  line-gap-override: 0%;
+  font-style: normal;
+  font-weight: 400 700;
+}
+
+@font-face {
+  font-family: 'Guttery Fallback';
+  src: local('Georgia'), local('Times New Roman'), local('Times');
+  size-adjust: 78%;
+  ascent-override: 80%;
+  descent-override: 39%;
+  line-gap-override: 0%;
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
   font-family: 'Bahnschrift';
-  src: url('../assets/fonts/Bahnschrift.ttf') format('truetype');
+  src: url('/fonts/bahnschrift.woff2') format('woff2');
   font-weight: 300 700;
   font-stretch: 75% 100%;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
   font-family: 'Guttery';
-  src: url('../assets/fonts/Guttery.ttf') format('truetype');
+  src: url('/fonts/guttery.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
+

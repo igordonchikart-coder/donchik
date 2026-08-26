@@ -1,0 +1,14 @@
+.pending {
+  opacity: 0;
+}
+
+.ready {
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ready {
+    transition: none;
+  }
+}
