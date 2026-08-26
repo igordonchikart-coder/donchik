@@ -1,4 +1,5 @@
 import { routes } from '@/app/routes'
+import { heroImages } from '@/assets/hero'
 import { placeholders } from './placeholders'
 
 export interface HeroSlide {
@@ -16,7 +17,7 @@ export const heroSlides: HeroSlide[] = [
     id: 'hero-1',
     title: 'Panzer Camouflage',
     volumeLabel: 'Volume I',
-    image: images[0 % images.length],
+    image: heroImages.title,
     to: routes.product('panzer-camouflage-volume-i'),
   },
   {

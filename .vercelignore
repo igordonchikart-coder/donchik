@@ -3,6 +3,7 @@
 *.tiff
 *.psd
 *.mp4
+!public/video/*.mp4
 Titul Page.tif
 Web_Volume I.tif
 Шрифты

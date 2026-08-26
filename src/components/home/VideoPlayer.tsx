@@ -15,6 +15,15 @@ function formatTime(seconds: number) {
   return `${minutes}:${String(rest).padStart(2, '0')}`
 }
 
+type WebkitDocument = Document & {
+  webkitFullscreenElement?: Element | null
+  webkitExitFullscreen?: () => Promise<void>
+}
+
+type WebkitElement = HTMLElement & {
+  webkitRequestFullscreen?: () => Promise<void>
+}
+
 export function VideoPlayer() {
   const wrapRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -118,20 +127,29 @@ export function VideoPlayer() {
       return
     }
 
-    const fullscreenElement = document.fullscreenElement ?? document.webkitFullscreenElement
+    const doc = document as WebkitDocument
+    const fullscreenElement = doc.fullscreenElement ?? doc.webkitFullscreenElement
     if (fullscreenElement) {
-      const exit = document.exitFullscreen ?? document.webkitExitFullscreen
-      await exit.call(document)
+      if (doc.exitFullscreen) {
+        await doc.exitFullscreen()
+      } else {
+        await doc.webkitExitFullscreen?.()
+      }
       return
     }
 
-    const request = wrap.requestFullscreen ?? wrap.webkitRequestFullscreen
-    await request.call(wrap)
+    const el = wrap as HTMLDivElement & WebkitElement
+    if (el.requestFullscreen) {
+      await el.requestFullscreen()
+    } else {
+      await el.webkitRequestFullscreen?.()
+    }
   }
 
   useEffect(() => {
     function syncFullscreen() {
-      setIsFullscreen(Boolean(document.fullscreenElement ?? document.webkitFullscreenElement))
+      const doc = document as WebkitDocument
+      setIsFullscreen(Boolean(doc.fullscreenElement ?? doc.webkitFullscreenElement))
     }
 
     document.addEventListener('fullscreenchange', syncFullscreen)
