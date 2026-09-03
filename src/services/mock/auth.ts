@@ -43,3 +43,7 @@ export function getDemoCredentials() {
     password: DEMO_PASSWORD,
   }
 }
+
+export function onAuthChange(_callback: (user: AuthUser | null) => void): () => void {
+  return () => {}
+}

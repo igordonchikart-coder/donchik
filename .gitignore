@@ -33,3 +33,4 @@ dist-ssr
 !public/video/*.mp4
 Шрифты/
 .vercel
+.env*

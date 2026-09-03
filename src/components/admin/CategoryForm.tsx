@@ -38,14 +38,14 @@ export function CategoryForm({ initialCategory, submitLabel, onSubmit, onCancel 
     setError(null)
     setIsSubmitting(true)
     try {
-      if (!image) {
+      if (!image && !initialCategory) {
         throw new Error('Add a series image')
       }
       await onSubmit({
         title,
         slug: slug || slugify(title),
         description,
-        image,
+        image: image || initialCategory?.image || '',
       })
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : 'Could not save the series')

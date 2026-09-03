@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Container } from '@/components/common/Container'
+import navLine from '@/assets/ui/nav-line.png'
 import { CartButton } from './CartButton'
 import { MobileMenu } from './MobileMenu'
 import { Navigation } from './Navigation'
@@ -41,13 +42,23 @@ export function Header() {
             className={styles.menuButton}
             type="button"
             aria-expanded={isMenuOpen}
-            aria-controls={isMenuOpen ? 'mobile-menu' : undefined}
+            aria-controls="mobile-menu"
+            aria-label="Open menu"
             onClick={() => setIsMenuOpen(true)}
           >
-            Menu
+            <span className={styles.menuIcon} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </button>
         </div>
       </Container>
+      <div className={styles.navLineTrack} aria-hidden="true">
+        <Container>
+          <img className={styles.navLine} src={navLine} alt="" draggable={false} />
+        </Container>
+      </div>
       <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </header>
   )

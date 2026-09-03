@@ -8,24 +8,25 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  if (!isOpen) {
-    return null
-  }
-
   return (
-    <div className={styles.overlay} role="presentation" onClick={onClose}>
+    <div
+      className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ''}`}
+      role="presentation"
+      aria-hidden={!isOpen}
+      onClick={onClose}
+    >
       <div
-        className={styles.panel}
+        className={`${styles.panel} ${isOpen ? styles.panelOpen : ''}`}
         id="mobile-menu"
         role="dialog"
-        aria-modal="true"
+        aria-modal={isOpen}
         aria-label="Mobile menu"
         onClick={(event) => event.stopPropagation()}
       >
         <div className={styles.top}>
           <SiteBrand />
           <button className={styles.close} type="button" onClick={onClose} aria-label="Close menu">
-            Close
+            <span className={styles.closeIcon} aria-hidden="true" />
           </button>
         </div>
         <Navigation orientation="vertical" onNavigate={onClose} />

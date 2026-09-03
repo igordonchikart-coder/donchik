@@ -124,8 +124,9 @@ function chaptersFor(categoryId: string) {
 }
 
 function book(
-  partial: Omit<Product, 'volumeLabel' | 'createdAt' | 'updatedAt' | 'currency' | 'gallery'> & {
+  partial: Omit<Product, 'volumeLabel' | 'createdAt' | 'updatedAt' | 'currency' | 'gallery' | 'pageGallery'> & {
     gallery?: string[]
+    pageGallery?: string[]
     createdAt?: string
   },
 ): Product {
@@ -133,6 +134,7 @@ function book(
     ...partial,
     currency: 'EUR',
     gallery: partial.gallery ?? [partial.coverImage],
+    pageGallery: partial.pageGallery ?? [],
     volumeLabel: toVolumeLabel(partial.volumeNumber),
     chapters: partial.chapters.length > 0 ? partial.chapters : chaptersFor(partial.categoryId),
     hasVideo: true,
@@ -346,8 +348,8 @@ export const mockProducts: Product[] = [
     features: ['Over 1,000 symbols', 'Ground encyclopedia'],
     chapters: [],
     price: 33.6,
-    coverImage: symbolsCardSources['prod-symbols-1'],
-    gallery: [symbolsCardSources['prod-symbols-1']],
+    coverImage: symbolsCardSources[1],
+    gallery: [symbolsCardSources[1]],
     categoryId: 'series-military-symbols',
     stock: 10,
     isAvailable: true,
@@ -367,8 +369,8 @@ export const mockProducts: Product[] = [
     features: ['Additional plates', 'Vehicle markings'],
     chapters: [],
     price: 39.9,
-    coverImage: symbolsCardSources['prod-symbols-2'],
-    gallery: [symbolsCardSources['prod-symbols-2']],
+    coverImage: symbolsCardSources[2],
+    gallery: [symbolsCardSources[2]],
     categoryId: 'series-military-symbols',
     stock: 7,
     isAvailable: true,
@@ -389,8 +391,8 @@ export const mockProducts: Product[] = [
     chapters: [],
     price: 15,
     originalPrice: 33.6,
-    coverImage: symbolsCardSources['prod-symbols-sale'],
-    gallery: [symbolsCardSources['prod-symbols-sale']],
+    coverImage: symbolsCardSources.sale,
+    gallery: [symbolsCardSources.sale],
     categoryId: 'series-military-symbols',
     stock: 4,
     isAvailable: true,

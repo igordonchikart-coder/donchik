@@ -17,6 +17,17 @@ export function getProductHeadline(product: Pick<Product, 'title' | 'volumeNumbe
   return `${product.title} Vol. ${product.volumeNumber} — ${product.shortDescription}`
 }
 
+export function getProductPageSlides(
+  product: Pick<Product, 'pageGallery' | 'coverImage' | 'gallery'>,
+): string[] {
+  const pageSlides = (product.pageGallery ?? []).filter(Boolean)
+  if (pageSlides.length > 0) {
+    return pageSlides
+  }
+
+  return getProductCardSlides(product)
+}
+
 export function getProductCardSlides(product: Pick<Product, 'coverImage' | 'gallery'>): string[] {
   const slides: string[] = []
 
@@ -27,4 +38,23 @@ export function getProductCardSlides(product: Pick<Product, 'coverImage' | 'gall
   }
 
   return slides.length > 0 ? slides : [product.coverImage]
+}
+
+export function padProductCardSlides(
+  product: Pick<Product, 'coverImage' | 'gallery'>,
+  count = 3,
+): string[] {
+  const slides = getProductCardSlides(product)
+  const fill = slides[0] ?? product.coverImage
+
+  if (!fill) {
+    return slides
+  }
+
+  const padded = [...slides]
+  while (padded.length < count) {
+    padded.push(fill)
+  }
+
+  return padded
 }

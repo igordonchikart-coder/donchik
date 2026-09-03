@@ -3,7 +3,7 @@ import type { KeyboardEvent } from 'react'
 import { ProductCardDots } from '@/components/catalog/ProductCardDots'
 import { LazyImage } from '@/components/common/LazyImage'
 import type { Product } from '@/types'
-import { getProductCardSlides } from '@/utils/product'
+import { getProductPageSlides } from '@/utils/product'
 import styles from './ProductGallery.module.css'
 
 interface ProductGalleryProps {
@@ -11,7 +11,7 @@ interface ProductGalleryProps {
 }
 
 export function ProductGallery({ product }: ProductGalleryProps) {
-  const slides = getProductCardSlides(product)
+  const slides = getProductPageSlides(product)
   const [activeIndex, setActiveIndex] = useState(0)
   const [loaded, setLoaded] = useState(() => new Set([0]))
   const slideCount = slides.length

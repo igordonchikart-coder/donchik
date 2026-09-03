@@ -7,6 +7,8 @@
   position: relative;
   width: 100%;
   aspect-ratio: 2388 / 4180;
+  container-type: inline-size;
+  container-name: card;
 }
 
 .frameImage {
@@ -28,24 +30,26 @@
   bottom: 4.55%;
   left: 6.55%;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto auto minmax(0, 1fr);
   overflow: hidden;
   background-color: #2f2924;
 }
 
 .media {
   position: relative;
-  grid-column: 1;
-  grid-row: 1 / -1;
+  isolation: isolate;
   min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto;
   overflow: hidden;
 }
 
 .underlay {
-  position: absolute;
+  grid-column: 1;
+  grid-row: 1;
   z-index: 0;
-  top: 0;
-  left: 0;
   width: 100%;
   height: auto;
   aspect-ratio: 2101 / 2666;
@@ -55,11 +59,16 @@
 }
 
 .mediaLink {
+  grid-column: 1;
+  grid-row: 1;
   position: relative;
   z-index: 1;
   display: block;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 2101 / 2666;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   text-decoration: none;
 }
 
@@ -67,26 +76,45 @@
   text-decoration: none;
 }
 
-.artwork {
+.track {
+  position: absolute;
+  inset: 0;
+  display: flex;
   width: 100%;
   height: 100%;
-  display: block;
-  object-fit: contain;
-  object-position: top center;
+  transition: transform 0.45s ease;
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.artwork {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  max-height: none;
+  transform: translateX(-50%);
 }
 
 .artworkCropLeft {
-  width: calc(100% + 3px);
-  max-width: none;
-  margin-left: -3px;
+  transform: translateX(calc(-50% - 0.9cqi));
 }
 
 .yearBadge {
   position: absolute;
-  z-index: 4;
+  z-index: 2;
   left: 50%;
-  top: 34%;
-  width: min(46%, 9rem);
+  top: 50%;
+  width: 46%;
   height: auto;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -94,28 +122,64 @@
 }
 
 .bottom {
-  grid-column: 1;
-  grid-row: 2;
   z-index: 3;
   display: grid;
   justify-items: center;
-  gap: 0.45rem;
-  padding: 4.25rem 0.75rem 0.8rem;
+  align-content: start;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 6.2cqi 6.8cqi;
+}
+
+.dots {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.8cqi 0 2.2cqi;
+}
+
+.dots button {
+  width: 4.6cqi;
+  height: 4.6cqi;
+}
+
+.dots button::after {
+  width: 2.7cqi;
+  height: 2.7cqi;
+  border-width: 0.48cqi;
+}
+
+.dots button[aria-selected='true']::after {
+  width: 3.15cqi;
+  height: 3.15cqi;
+  border-width: 0.42cqi;
+}
+
+.dots button[aria-selected='true']::before {
+  width: 1.35cqi;
+  height: 1.35cqi;
 }
 
 .divider {
   display: block;
-  width: 100%;
+  width: auto;
   height: auto;
-  margin: 0;
+  margin: 0 5.4cqi;
+  padding: 0;
+  justify-self: stretch;
 }
 
 .description {
   margin: 0;
+  padding-top: 3.6cqi;
   width: 100%;
-  min-height: calc(1.4em * 8);
+  min-height: 0;
+  overflow: hidden;
   font-family: var(--font-nav);
-  font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+  font-size: clamp(0.78rem, 3.65cqi, 1.35rem);
   font-weight: 600;
   font-stretch: 87.5%;
   line-height: 1.4;
@@ -125,10 +189,9 @@
 }
 
 .descriptionLarge {
-  font-size: clamp(1.25rem, 1.85vw, 1.6rem);
+  font-size: clamp(1.05rem, 5.8cqi, 2rem);
   font-weight: 700;
   font-stretch: 75%;
-  min-height: calc(1.4 * clamp(0.8rem, 1.05vw, 0.95rem) * 8);
 }
 
 .footerSlot {
@@ -137,4 +200,10 @@
   align-content: start;
   margin-top: -0.55rem;
   padding-top: 0.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition: none;
+  }
 }

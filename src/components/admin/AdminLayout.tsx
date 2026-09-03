@@ -1,24 +1,46 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { isSupabaseConfigured } from '@/services/config'
 import { AdminHeader } from './AdminHeader'
+import { AdminMobileMenu } from './AdminMobileMenu'
 import { AdminSidebar } from './AdminSidebar'
 import styles from './AdminLayout.module.css'
 
 export function AdminLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMenuOpen])
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 900px)')
+    function handleChange(event: MediaQueryListEvent) {
+      if (event.matches) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    media.addEventListener('change', handleChange)
+    return () => media.removeEventListener('change', handleChange)
+  }, [])
 
   return (
     <div className={styles.layout}>
-      <AdminHeader onMenuToggle={() => setIsSidebarOpen((value) => !value)} />
+      <AdminHeader isMenuOpen={isMenuOpen} onMenuOpen={() => setIsMenuOpen(true)} />
+      <AdminMobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <div className={styles.body}>
-        <div className={isSidebarOpen ? styles.sidebarWrapOpen : styles.sidebarWrap}>
-          <AdminSidebar onNavigate={() => setIsSidebarOpen(false)} />
+        <div className={styles.sidebarWrap}>
+          <AdminSidebar />
         </div>
         <div className={styles.content}>
           {!isSupabaseConfigured() ? (
             <p className={styles.notice}>
-              Mock data is in use. After `.env` is filled, this layer will switch to Supabase without changing pages.
+              Supabase is not connected yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to `.env`,
+              then run `supabase/schema.sql` in the Supabase SQL editor.
             </p>
           ) : null}
           <Outlet />

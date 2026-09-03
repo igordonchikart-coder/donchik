@@ -33,7 +33,14 @@ export function AdminDashboardPage() {
 
   return (
     <>
-      <PageHeader title="Admin" description="Shop overview. Data may still be mock." />
+      <PageHeader
+        title="Overview"
+        description={
+          products.data?.length
+            ? 'Catalog and orders at a glance.'
+            : 'When Supabase is connected, new books added here appear on the site.'
+        }
+      />
       <div className={styles.stats}>
         <article className={styles.stat}>
           <p>Books</p>

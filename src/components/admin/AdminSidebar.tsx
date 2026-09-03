@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom'
+import { Button } from '@/components/common/Button'
 import { routes } from '@/app/routes'
+import { useAuth } from '@/hooks/useAuth'
 import styles from './AdminSidebar.module.css'
 
 const items = [
@@ -10,12 +12,23 @@ const items = [
 ]
 
 interface AdminSidebarProps {
+  variant?: 'rail' | 'drawer'
   onNavigate?: () => void
 }
 
-export function AdminSidebar({ onNavigate }: AdminSidebarProps) {
+export function AdminSidebar({ variant = 'rail', onNavigate }: AdminSidebarProps) {
+  const { logout } = useAuth()
+
+  async function handleLogout() {
+    onNavigate?.()
+    await logout()
+  }
+
   return (
-    <aside className={styles.sidebar} aria-label="Admin navigation">
+    <aside
+      className={`${styles.sidebar} ${variant === 'drawer' ? styles.drawer : ''}`}
+      aria-label="Admin navigation"
+    >
       <ul className={styles.list}>
         {items.map((item) => (
           <li key={item.to}>
@@ -30,6 +43,11 @@ export function AdminSidebar({ onNavigate }: AdminSidebarProps) {
           </li>
         ))}
       </ul>
+      <div className={styles.footer}>
+        <Button className={styles.logout} variant="secondary" type="button" onClick={() => void handleLogout()}>
+          Log out
+        </Button>
+      </div>
     </aside>
   )
 }

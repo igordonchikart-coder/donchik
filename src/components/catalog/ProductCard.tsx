@@ -11,15 +11,16 @@ import styles from './ProductCard.module.css'
 
 interface ProductCardProps {
   product: Product
+  preview?: boolean
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, preview = false }: ProductCardProps) {
   if (
     (product.categoryId === 'series-panzer-camouflage' && product.volumeNumber <= 6) ||
     product.categoryId === 'series-military-symbols' ||
     product.categoryId === 'series-unit-insignia'
   ) {
-    return <PanzerSeriesCard product={product} />
+    return <PanzerSeriesCard product={product} preview={preview} />
   }
 
   const slides = getProductCardSlides(product)
@@ -27,7 +28,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const safeIndex = Math.min(activeIndex, slides.length - 1)
   const comingSoon = isComingSoon(product)
   const productTo = routes.product(product.slug)
-  const body = product.description
+  const body = product.shortDescription || product.description
 
   return (
     <article className={styles.card}>

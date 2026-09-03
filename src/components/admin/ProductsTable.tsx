@@ -15,10 +15,10 @@ export function ProductsTable({ products, onDelete }: ProductsTableProps) {
         <thead>
           <tr>
             <th>Cover</th>
-            <th>Title</th>
+            <th>Book</th>
             <th>Series</th>
             <th>Price</th>
-            <th>Stock</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -26,14 +26,23 @@ export function ProductsTable({ products, onDelete }: ProductsTableProps) {
           {products.map((product) => (
             <tr key={product.id}>
               <td>
-                <img className={styles.cover} src={product.coverImage} alt="" />
+                {product.coverImage ? (
+                  <img className={styles.cover} src={product.coverImage} alt="" />
+                ) : (
+                  <span className={styles.coverEmpty} />
+                )}
               </td>
               <td>
-                {product.title} {product.volumeLabel}
+                <p className={styles.bookTitle}>{product.title}</p>
+                <p className={styles.bookMeta}>{product.volumeLabel}</p>
               </td>
               <td>{product.category?.title ?? '—'}</td>
               <td>{formatPrice(product.price, product.currency)}</td>
-              <td>{product.stock}</td>
+              <td>
+                <span className={product.status === 'coming-soon' ? styles.badgeSoon : styles.badge}>
+                  {product.status === 'coming-soon' ? 'Coming soon' : 'Available'}
+                </span>
+              </td>
               <td>
                 <div className={styles.actions}>
                   <Button to={`/admin/products/${product.id}/edit`} variant="secondary">

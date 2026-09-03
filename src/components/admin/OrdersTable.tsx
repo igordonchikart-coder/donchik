@@ -47,6 +47,7 @@ export function OrdersTable({ orders, onStatusChange }: OrdersTableProps) {
                 <SelectField
                   label="Order status"
                   name={`status-${order.id}`}
+                  hideLabel
                   value={order.status}
                   onChange={(event) => onStatusChange(order.id, event.target.value as OrderStatus)}
                 >

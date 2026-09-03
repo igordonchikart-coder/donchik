@@ -22,6 +22,7 @@ export interface Product {
   currency: string
   coverImage: string
   gallery: string[]
+  pageGallery: string[]
   categoryId: string
   category?: Category
   stock: number
@@ -52,6 +53,7 @@ export interface ProductInput {
   currency: string
   coverImage: string
   gallery: string[]
+  pageGallery: string[]
   categoryId: string
   stock: number
   isAvailable: boolean

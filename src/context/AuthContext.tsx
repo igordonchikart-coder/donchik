@@ -37,8 +37,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       })
 
+    const unsubscribe = authService.onAuthChange((currentUser) => {
+      if (isMounted) {
+        setUser(currentUser)
+      }
+    })
+
     return () => {
       isMounted = false
+      unsubscribe()
     }
   }, [])
 

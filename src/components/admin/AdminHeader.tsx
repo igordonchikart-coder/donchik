@@ -1,30 +1,32 @@
-import { Link } from 'react-router-dom'
-import { routes } from '@/app/routes'
-import { Button } from '@/components/common/Button'
-import { useAuth } from '@/hooks/useAuth'
-import { SITE_NAME } from '@/utils/constants'
+import { AdminBrand } from './AdminBrand'
+import navLine from '@/assets/ui/nav-line.png'
 import styles from './AdminHeader.module.css'
 
 interface AdminHeaderProps {
-  onMenuToggle: () => void
+  isMenuOpen: boolean
+  onMenuOpen: () => void
 }
 
-export function AdminHeader({ onMenuToggle }: AdminHeaderProps) {
-  const { user, logout } = useAuth()
-
+export function AdminHeader({ isMenuOpen, onMenuOpen }: AdminHeaderProps) {
   return (
     <header className={styles.header}>
-      <Link className={styles.brand} to={routes.admin}>
-        {SITE_NAME} / Admin
-      </Link>
-      <div className={styles.actions}>
-        {user ? <span className={styles.user}>{user.email}</span> : null}
-        <Button variant="secondary" type="button" onClick={() => void logout()}>
-          Log out
-        </Button>
-        <button className={styles.menuButton} type="button" onClick={onMenuToggle}>
-          Menu
-        </button>
+      <AdminBrand />
+      <button
+        className={styles.menuButton}
+        type="button"
+        aria-expanded={isMenuOpen}
+        aria-controls="admin-mobile-menu"
+        aria-label="Open menu"
+        onClick={onMenuOpen}
+      >
+        <span className={styles.menuIcon} aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </span>
+      </button>
+      <div className={styles.navLineTrack} aria-hidden="true">
+        <img className={styles.navLine} src={navLine} alt="" draggable={false} />
       </div>
     </header>
   )

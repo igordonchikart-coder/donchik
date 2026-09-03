@@ -8,6 +8,7 @@ export const authService = {
   login: source.login,
   logout: source.logout,
   getCurrentUser: source.getCurrentUser,
+  onAuthChange: source.onAuthChange,
   isMock: !isSupabaseConfigured(),
   demoCredentials: isSupabaseConfigured() ? null : mockAuth.getDemoCredentials(),
 }

@@ -9,6 +9,7 @@ export async function uploadImage(file: File, folder: string): Promise<string> {
 
   const { error } = await getSupabaseClient().storage.from(bucket).upload(path, file, {
     cacheControl: '3600',
+    contentType: file.type || undefined,
     upsert: false,
   })
 

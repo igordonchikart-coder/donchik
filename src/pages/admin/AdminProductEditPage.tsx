@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { ErrorState } from '@/components/common/ErrorState'
 import { LoadingState } from '@/components/common/LoadingState'
-import { PageHeader } from '@/components/common/PageHeader'
 import { ProductForm } from '@/components/admin/ProductForm'
 import { useCategories } from '@/hooks/useCategories'
 import { useProductById } from '@/hooks/useProducts'
@@ -41,9 +40,8 @@ export function AdminProductEditPage() {
   }
 
   return (
-    <>
-      <PageHeader title={`Edit: ${currentProduct.title}`} />
       <ProductForm
+        heading={`Edit: ${currentProduct.title}`}
         categories={currentCategories}
         initialProduct={currentProduct}
         submitLabel="Save"
@@ -52,6 +50,5 @@ export function AdminProductEditPage() {
           navigate(routes.adminProducts)
         }}
       />
-    </>
   )
 }

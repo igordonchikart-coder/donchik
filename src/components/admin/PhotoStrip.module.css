@@ -1,0 +1,147 @@
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tile,
+.add {
+  position: relative;
+  width: 4.75rem;
+  height: 6.25rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #12100e;
+}
+
+.tile img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  pointer-events: none;
+}
+
+.tile {
+  cursor: grab;
+}
+
+.tileDragging {
+  opacity: 0.45;
+}
+
+.tileCover {
+  outline: 1px solid var(--color-nav-active);
+  outline-offset: -1px;
+}
+
+.badge {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.3rem;
+  padding: 0.12rem 0.28rem;
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-family: var(--font-nav);
+  font-size: 0.55rem;
+  font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.actions {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: rgb(12 10 8 / 78%);
+}
+
+.action {
+  appearance: none;
+  min-height: 1.55rem;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--color-nav);
+  cursor: pointer;
+}
+
+.action svg {
+  width: 0.7rem;
+  height: 0.7rem;
+  display: block;
+}
+
+.action:hover,
+.action:focus-visible {
+  color: var(--color-nav-active);
+  background: rgb(255 255 255 / 8%);
+}
+
+.action:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+
+.actionRemove:hover,
+.actionRemove:focus-visible {
+  color: var(--color-error);
+}
+
+.add {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.15rem;
+  border: 1px dashed var(--color-border);
+  background: transparent;
+  color: var(--color-nav);
+  font-family: var(--font-nav);
+  font-size: 0.62rem;
+  font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.add span:first-child {
+  font-size: 1.15rem;
+  line-height: 1;
+  font-weight: 400;
+}
+
+.add:hover,
+.add:focus-within {
+  color: var(--color-nav-active);
+  border-color: var(--color-nav-active);
+}
+
+.addEmpty {
+  width: 7.25rem;
+}
+
+.addBusy {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.add input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.addBusy input {
+  cursor: wait;
+}

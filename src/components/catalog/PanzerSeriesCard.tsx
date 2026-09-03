@@ -1,33 +1,19 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { routes } from '@/app/routes'
-import { symbolsCardSources } from '@/assets/books/military-symbols'
-import { panzerCardAssets, panzerVolumeSources, panzerVolumeYears } from '@/assets/books/panzer-camouflage'
-import { insigniaCardSources } from '@/assets/books/unit-insignia'
+import { panzerCardAssets, panzerVolumeYears } from '@/assets/books/panzer-camouflage'
 import { LazyImage } from '@/components/common/LazyImage'
 import { useInView } from '@/hooks/useInView'
 import type { Product } from '@/types'
-import { getProductCardSlides, isComingSoon } from '@/utils/product'
+import { getFramedArtwork } from '@/utils/catalogArtwork'
+import { isComingSoon, padProductCardSlides } from '@/utils/product'
 import sliderDots from '@/styles/sliderDots.module.css'
 import { ProductCardFooter } from './ProductCardFooter'
 import styles from './PanzerSeriesCard.module.css'
 
 interface PanzerSeriesCardProps {
   product: Product
-}
-
-function getFramedArtwork(product: Product): string | undefined {
-  if (product.categoryId === 'series-panzer-camouflage') {
-    return panzerVolumeSources[product.volumeNumber as keyof typeof panzerVolumeSources]
-  }
-
-  if (product.categoryId === 'series-military-symbols') {
-    return symbolsCardSources[product.id as keyof typeof symbolsCardSources]
-  }
-
-  if (product.categoryId === 'series-unit-insignia') {
-    return insigniaCardSources[product.volumeNumber as keyof typeof insigniaCardSources]
-  }
+  preview?: boolean
 }
 
 function getYearBadge(product: Product): string | undefined {
@@ -49,14 +35,15 @@ function isDevelopmentCaption(text: string): boolean {
   return text.trim().replace(/\.$/, '').toLowerCase() === 'book in development'
 }
 
-export function PanzerSeriesCard({ product }: PanzerSeriesCardProps) {
+export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardProps) {
   const cardRef = useRef<HTMLElement>(null)
-  const nearViewport = useInView(cardRef, { rootMargin: '640px 0px' })
+  const nearViewport = useInView(cardRef, { rootMargin: '640px 0px', disabled: preview })
   const productTo = routes.product(product.slug)
-  const artwork = getFramedArtwork(product)
-  const slides = getProductCardSlides({
-    coverImage: artwork ?? product.coverImage,
-    gallery: artwork ? [artwork] : product.gallery,
+  const framedArtwork = getFramedArtwork(product)
+  const coverImage = product.coverImage || framedArtwork
+  const slides = padProductCardSlides({
+    coverImage: coverImage ?? '',
+    gallery: product.gallery.filter((image) => image !== coverImage && image !== product.coverImage),
   })
   const [activeIndex, setActiveIndex] = useState(0)
   const [artReady, setArtReady] = useState(false)
@@ -64,10 +51,9 @@ export function PanzerSeriesCard({ product }: PanzerSeriesCardProps) {
   const comingSoon = isComingSoon(product)
   const yearBadge = getYearBadge(product)
   const cropLeft = product.categoryId === 'series-panzer-camouflage' && product.volumeNumber === 6
-  const developmentCaption = isDevelopmentCaption(product.description)
-  const dotCount = Math.max(slides.length, 3)
+  const developmentCaption = isDevelopmentCaption(product.shortDescription) || isDevelopmentCaption(product.description)
 
-  if (!artwork) {
+  if (!coverImage) {
     return null
   }
 
@@ -84,24 +70,28 @@ export function PanzerSeriesCard({ product }: PanzerSeriesCardProps) {
               <img className={styles.underlay} src={panzerCardAssets.cardUnderlay} alt="" aria-hidden="true" />
             ) : null}
             <Link className={styles.mediaLink} to={productTo} aria-label={`${product.title} ${product.volumeLabel}`}>
-              {nearViewport ? (
-                <LazyImage
-                  className={`${styles.artwork} ${cropLeft ? styles.artworkCropLeft : ''}`}
-                  src={slides[safeIndex]}
-                  alt=""
-                  eager
-                  onReady={() => setArtReady(true)}
-                />
-              ) : null}
+              <div className={styles.track} style={{ transform: `translateX(-${safeIndex * 100}%)` }}>
+                {slides.map((src, index) => (
+                  <div className={styles.slide} key={`${src}-${index}`}>
+                    {nearViewport ? (
+                      <LazyImage
+                        className={`${styles.artwork} ${cropLeft ? styles.artworkCropLeft : ''}`}
+                        src={src}
+                        alt=""
+                        eager
+                        onReady={index === 0 ? () => setArtReady(true) : undefined}
+                      />
+                    ) : null}
+                  </div>
+                ))}
+              </div>
             </Link>
             {yearBadge && nearViewport ? (
               <img className={styles.yearBadge} src={yearBadge} alt="" aria-hidden="true" />
             ) : null}
-          </div>
 
-          <div className={styles.bottom}>
-            <div className={sliderDots.dots} role="tablist" aria-label={`${product.title} images`}>
-              {Array.from({ length: dotCount }, (_, index) => {
+            <div className={`${sliderDots.dots} ${styles.dots}`} role="tablist" aria-label={`${product.title} images`}>
+              {slides.map((_, index) => {
                 const isActive = index === safeIndex
 
                 return (
@@ -115,19 +105,19 @@ export function PanzerSeriesCard({ product }: PanzerSeriesCardProps) {
                     onClick={(event) => {
                       event.preventDefault()
                       event.stopPropagation()
-                      if (index < slides.length) {
-                        setActiveIndex(index)
-                      }
+                      setActiveIndex(index)
                     }}
                   />
                 )
               })}
             </div>
+          </div>
 
-            <img className={styles.divider} src={panzerCardAssets.cardDivider} alt="" aria-hidden="true" />
+          <img className={styles.divider} src={panzerCardAssets.cardDivider} alt="" aria-hidden="true" />
 
+          <div className={styles.bottom}>
             <p className={`${styles.description} ${developmentCaption ? styles.descriptionLarge : ''}`}>
-              {developmentCaption ? 'Book in development' : product.description}
+              {developmentCaption ? 'Book in development' : product.shortDescription || product.description}
             </p>
           </div>
         </div>

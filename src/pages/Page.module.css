@@ -30,8 +30,24 @@
 
 .toolbar {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: space-between;
+  align-items: end;
   margin-bottom: var(--space-md);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.filterField {
+  flex: 1 1 12rem;
+  min-width: 0;
 }
 
 .login {

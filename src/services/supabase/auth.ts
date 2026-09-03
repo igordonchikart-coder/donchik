@@ -47,3 +47,14 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 
   return toUser(user.id, user.email)
 }
+
+export function onAuthChange(callback: (user: AuthUser | null) => void): () => void {
+  const { data } = getSupabaseClient().auth.onAuthStateChange((_event, session) => {
+    const next = session?.user
+    callback(next ? toUser(next.id, next.email) : null)
+  })
+
+  return () => {
+    data.subscription.unsubscribe()
+  }
+}

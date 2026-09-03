@@ -1,6 +1,7 @@
 import type { Category } from '@/types'
 import type { BookChapter, Product, ProductInput, ProductStatus } from '@/types/product'
 import { toVolumeLabel } from '@/utils/product'
+import { withCatalogArtwork } from '@/utils/catalogArtwork'
 import { getSupabaseClient } from './client'
 
 interface ProductRow {
@@ -14,6 +15,7 @@ interface ProductRow {
   currency: string
   cover_image: string
   gallery: string[] | null
+  page_gallery?: string[] | null
   category_id: string
   stock: number
   is_available: boolean
@@ -35,7 +37,7 @@ interface ProductRow {
 
 function mapProduct(row: ProductRow): Product {
   const volumeNumber = row.volume_number ?? 1
-  return {
+  return withCatalogArtwork({
     id: row.id,
     slug: row.slug,
     title: row.title,
@@ -43,13 +45,14 @@ function mapProduct(row: ProductRow): Product {
     volumeLabel: toVolumeLabel(volumeNumber),
     shortDescription: row.short_description,
     description: row.description,
-    features: row.features ?? [],
-    chapters: row.chapters ?? [],
+    features: Array.isArray(row.features) ? row.features : [],
+    chapters: Array.isArray(row.chapters) ? row.chapters : [],
     price: row.price,
     originalPrice: row.original_price ?? undefined,
     currency: row.currency,
     coverImage: row.cover_image,
-    gallery: row.gallery ?? [],
+    gallery: Array.isArray(row.gallery) ? row.gallery : [],
+    pageGallery: Array.isArray(row.page_gallery) ? row.page_gallery : [],
     categoryId: row.category_id,
     category: row.category ?? undefined,
     stock: row.stock,
@@ -64,7 +67,7 @@ function mapProduct(row: ProductRow): Product {
     hasVideo: row.has_video ?? false,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-  }
+  })
 }
 
 function toRow(input: ProductInput) {
@@ -78,6 +81,7 @@ function toRow(input: ProductInput) {
     currency: input.currency,
     cover_image: input.coverImage,
     gallery: input.gallery,
+    page_gallery: input.pageGallery,
     category_id: input.categoryId,
     stock: input.stock,
     is_available: input.isAvailable,
@@ -102,6 +106,7 @@ export async function getAll(): Promise<Product[]> {
     .from('products')
     .select(selectQuery)
     .order('created_at', { ascending: false })
+    .order('id', { ascending: true })
 
   if (error) {
     throw error
@@ -157,7 +162,9 @@ export async function getByCategorySlug(slug: string): Promise<Product[]> {
     .from('products')
     .select(selectQuery)
     .eq('category_id', category.id)
-    .order('created_at', { ascending: false })
+    .order('volume_number', { ascending: true })
+    .order('created_at', { ascending: true })
+    .order('id', { ascending: true })
 
   if (error) {
     throw error
@@ -173,6 +180,7 @@ export async function getFeatured(): Promise<Product[]> {
     .eq('is_featured', true)
     .eq('is_available', true)
     .order('created_at', { ascending: false })
+    .order('id', { ascending: true })
 
   if (error) {
     throw error

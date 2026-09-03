@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Container } from '@/components/common/Container'
+import videoFrame from '@/assets/ui/video-frame.webp'
 import { heroSlides } from '@/data/heroSlides'
 import { HeroSlide } from './HeroSlide'
 import { HeroSliderDots } from './HeroSliderDots'
@@ -38,18 +39,21 @@ export function HeroSlider() {
       aria-label="Featured books"
       onKeyDown={handleKeyDown}
     >
-      <Container className={styles.frame}>
-        <div className={styles.viewport}>
-          <div
-            className={styles.track}
-            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-          >
-            {heroSlides.map((slide, index) => (
-              <HeroSlide key={slide.id} slide={slide} isActive={index === activeIndex} />
-            ))}
+      <Container>
+        <div className={styles.shell}>
+          <div className={styles.viewport}>
+            <div
+              className={styles.track}
+              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            >
+              {heroSlides.map((slide, index) => (
+                <HeroSlide key={slide.id} slide={slide} isActive={index === activeIndex} />
+              ))}
+            </div>
+            <HeroSliderDots slides={heroSlides} activeIndex={activeIndex} onSelect={goTo} />
           </div>
+          <img className={styles.frameImage} src={videoFrame} alt="" draggable={false} />
         </div>
-        <HeroSliderDots slides={heroSlides} activeIndex={activeIndex} onSelect={goTo} />
       </Container>
     </section>
   )

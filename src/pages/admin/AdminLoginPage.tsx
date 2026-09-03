@@ -5,7 +5,8 @@ import { Button } from '@/components/common/Button'
 import { TextField } from '@/components/common/Field'
 import { useAuth } from '@/hooks/useAuth'
 import { authService } from '@/services/authService'
-import styles from '../Page.module.css'
+import { SITE_NAME } from '@/utils/constants'
+import styles from './AdminLogin.module.css'
 
 export function AdminLoginPage() {
   const { user, isLoading, login } = useAuth()
@@ -33,14 +34,15 @@ export function AdminLoginPage() {
 
   return (
     <div className={styles.login}>
-      <form className={styles.loginCard} onSubmit={handleSubmit}>
-        <h1>Admin sign in</h1>
+      <form className={styles.card} onSubmit={handleSubmit}>
+        <p className={styles.eyebrow}>Studio access</p>
+        <h1 className={styles.title}>{SITE_NAME}</h1>
         {authService.isMock ? (
-          <p>
+          <p className={styles.hint}>
             Demo login: {authService.demoCredentials?.email} / {authService.demoCredentials?.password}
           </p>
         ) : (
-          <p>Use a Supabase administrator account.</p>
+          <p className={styles.hint}>Sign in with the studio account to edit the catalog.</p>
         )}
         <TextField
           label="Email"

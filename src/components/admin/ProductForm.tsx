@@ -1,17 +1,24 @@
-import { type ChangeEvent, type FormEvent, useMemo, useState } from 'react'
+import { type FormEvent, useMemo, useState } from 'react'
+import { BookPageEditor } from '@/components/admin/BookPageEditor'
+import { PhotoStrip } from '@/components/admin/PhotoStrip'
 import { Button } from '@/components/common/Button'
 import { SelectField, TextAreaField, TextField } from '@/components/common/Field'
+import { PageHeader } from '@/components/common/PageHeader'
 import { ProductCard } from '@/components/catalog/ProductCard'
 import { uploadProductImage } from '@/services/imagesService'
 import type { Category, Product, ProductInput, ProductStatus } from '@/types'
 import { DEFAULT_CURRENCY } from '@/utils/constants'
+import { getFramedArtwork } from '@/utils/catalogArtwork'
 import { toVolumeLabel } from '@/utils/product'
 import { slugify } from '@/utils/slugify'
 import styles from './ProductForm.module.css'
 
+type FormTab = 'card' | 'book'
+
 interface ProductFormProps {
   categories: Category[]
   initialProduct?: Product
+  heading?: string
   submitLabel: string
   onSubmit: (input: ProductInput) => Promise<void>
 }
@@ -29,6 +36,7 @@ interface FormState {
   currency: string
   coverImage: string
   gallery: string[]
+  pageGallery: string[]
   categoryId: string
   stock: string
   isAvailable: boolean
@@ -56,6 +64,7 @@ function toState(product: Product | undefined, categories: Category[]): FormStat
     currency: product?.currency ?? DEFAULT_CURRENCY,
     coverImage: product?.coverImage ?? '',
     gallery: product?.gallery ?? [],
+    pageGallery: product?.pageGallery ?? [],
     categoryId: product?.categoryId ?? categories[0]?.id ?? '',
     stock: product ? String(product.stock) : '0',
     isAvailable: product?.isAvailable ?? true,
@@ -77,50 +86,115 @@ function parseList(value: string): string[] {
     .filter(Boolean)
 }
 
-export function ProductForm({ categories, initialProduct, submitLabel, onSubmit }: ProductFormProps) {
+function tabForSaveError(message: string): FormTab {
+  const cardErrors = ['cover', 'price', 'stock', 'caption']
+  return cardErrors.some((part) => message.toLowerCase().includes(part)) ? 'card' : 'book'
+}
+
+function photoList(coverImage: string, gallery: string[]): string[] {
+  const extras = gallery.filter((image) => image !== coverImage)
+  return coverImage ? [coverImage, ...extras] : extras
+}
+
+function moveItem<T>(list: T[], index: number, direction: -1 | 1): T[] {
+  const nextIndex = index + direction
+  if (nextIndex < 0 || nextIndex >= list.length) {
+    return list
+  }
+  const next = [...list]
+  const current = next[index]
+  const swap = next[nextIndex]
+  if (current === undefined || swap === undefined) {
+    return list
+  }
+  next[index] = swap
+  next[nextIndex] = current
+  return next
+}
+
+function moveItemTo<T>(list: T[], from: number, to: number): T[] {
+  if (from === to || from < 0 || to < 0 || from >= list.length || to >= list.length) {
+    return list
+  }
+  const next = [...list]
+  const [item] = next.splice(from, 1)
+  if (item === undefined) {
+    return list
+  }
+  next.splice(to, 0, item)
+  return next
+}
+
+export function ProductForm({ categories, initialProduct, heading, submitLabel, onSubmit }: ProductFormProps) {
   const [values, setValues] = useState<FormState>(() => toState(initialProduct, categories))
+  const [tab, setTab] = useState<FormTab>('card')
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const photos = photoList(values.coverImage, values.gallery)
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setValues((current) => ({ ...current, [key]: value }))
   }
 
-  async function handleCoverUpload(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (!file) {
+  function setPhotoList(photos: string[]) {
+    setValues((current) => ({
+      ...current,
+      coverImage: photos[0] ?? '',
+      gallery: photos.slice(1),
+    }))
+  }
+
+  async function handleAddPhotos(files: FileList) {
+    if (files.length === 0) {
       return
     }
     setIsUploading(true)
     try {
-      const url = await uploadProductImage(file, 'covers')
-      update('coverImage', url)
+      const uploaded = await Promise.all(Array.from(files).map((file) => uploadProductImage(file, 'gallery')))
+      setValues((current) => {
+        const next = [...photoList(current.coverImage, current.gallery), ...uploaded]
+        return {
+          ...current,
+          coverImage: next[0] ?? '',
+          gallery: next.slice(1),
+        }
+      })
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : 'Could not upload the cover image')
+      setError(caught instanceof Error ? caught.message : 'Could not upload images')
     } finally {
       setIsUploading(false)
-      event.target.value = ''
     }
   }
 
-  async function handleGalleryUpload(event: ChangeEvent<HTMLInputElement>) {
-    const files = event.target.files
-    if (!files || files.length === 0) {
+  async function handleAddPagePhotos(files: FileList) {
+    if (files.length === 0) {
       return
     }
     setIsUploading(true)
     try {
-      const uploaded = await Promise.all(
-        Array.from(files).map((file) => uploadProductImage(file, 'gallery')),
-      )
-      update('gallery', [...values.gallery, ...uploaded])
+      const uploaded = await Promise.all(Array.from(files).map((file) => uploadProductImage(file, 'page')))
+      setValues((current) => ({
+        ...current,
+        pageGallery: [...current.pageGallery, ...uploaded],
+      }))
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : 'Could not upload gallery images')
+      setError(caught instanceof Error ? caught.message : 'Could not upload images')
     } finally {
       setIsUploading(false)
-      event.target.value = ''
     }
+  }
+
+  function movePhoto(index: number, direction: -1 | 1) {
+    setPhotoList(moveItem(photos, index, direction))
+  }
+
+  function movePhotoTo(from: number, to: number) {
+    setPhotoList(moveItemTo(photos, from, to))
+  }
+
+  function removePhoto(index: number) {
+    setPhotoList(photos.filter((_, itemIndex) => itemIndex !== index))
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -132,6 +206,21 @@ export function ProductForm({ categories, initialProduct, submitLabel, onSubmit 
       const price = Number(values.price)
       const stock = Number(values.stock)
       const volumeNumber = Number(values.volumeNumber)
+      if (!values.title.trim()) {
+        throw new Error('Enter a title')
+      }
+      if (!values.categoryId) {
+        throw new Error('Choose a series')
+      }
+      if (!Number.isInteger(volumeNumber) || volumeNumber < 1) {
+        throw new Error('Enter a valid volume number')
+      }
+      if (!values.shortDescription.trim()) {
+        throw new Error('Enter a card caption')
+      }
+      if (!values.description.trim()) {
+        throw new Error('Enter the book story')
+      }
       if (!values.coverImage) {
         throw new Error('Add a cover image')
       }
@@ -140,9 +229,6 @@ export function ProductForm({ categories, initialProduct, submitLabel, onSubmit 
       }
       if (!Number.isFinite(stock) || stock < 0) {
         throw new Error('Enter a valid stock quantity')
-      }
-      if (!Number.isInteger(volumeNumber) || volumeNumber < 1) {
-        throw new Error('Enter a valid volume number')
       }
 
       await onSubmit({
@@ -162,6 +248,7 @@ export function ProductForm({ categories, initialProduct, submitLabel, onSubmit 
         currency: values.currency,
         coverImage: values.coverImage,
         gallery: values.gallery,
+        pageGallery: values.pageGallery,
         categoryId: values.categoryId,
         stock,
         isAvailable: values.isAvailable,
@@ -175,7 +262,9 @@ export function ProductForm({ categories, initialProduct, submitLabel, onSubmit 
         hasVideo: values.hasVideo,
       })
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : 'Could not save the book')
+      const message = caught instanceof Error ? caught.message : 'Could not save the book'
+      setError(message)
+      setTab(tabForSaveError(message))
     } finally {
       setIsSubmitting(false)
     }
@@ -184,6 +273,7 @@ export function ProductForm({ categories, initialProduct, submitLabel, onSubmit 
   const previewProduct = useMemo<Product>(() => {
     const volumeNumber = Number(values.volumeNumber) || 1
     const price = Number(values.price)
+    const category = categories.find((item) => item.id === values.categoryId)
 
     return {
       id: initialProduct?.id ?? 'preview',
@@ -200,7 +290,9 @@ export function ProductForm({ categories, initialProduct, submitLabel, onSubmit 
       currency: values.currency,
       coverImage: values.coverImage,
       gallery: values.gallery,
+      pageGallery: values.pageGallery,
       categoryId: values.categoryId,
+      category,
       stock: Number(values.stock) || 0,
       isAvailable: values.isAvailable,
       isFeatured: values.isFeatured,
@@ -214,240 +306,212 @@ export function ProductForm({ categories, initialProduct, submitLabel, onSubmit 
       createdAt: initialProduct?.createdAt ?? '',
       updatedAt: initialProduct?.updatedAt ?? '',
     }
-  }, [initialProduct, values])
+  }, [categories, initialProduct, values])
+
+  const canPreviewCard = Boolean(previewProduct.coverImage || getFramedArtwork(previewProduct))
 
   return (
-    <div className={styles.layout}>
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <TextField
-        label="Title"
-        name="title"
-        required
-        value={values.title}
-        onChange={(event) => {
-          const title = event.target.value
-          setValues((current) => ({
-            ...current,
-            title,
-            slug: !initialProduct && !current.slug ? slugify(title) : current.slug,
-          }))
-        }}
-      />
-      <TextField
-        label="Slug"
-        name="slug"
-        required
-        value={values.slug}
-        onChange={(event) => update('slug', event.target.value)}
-      />
-      <TextField
-        label="Volume number"
-        name="volumeNumber"
-        type="number"
-        min="1"
-        required
-        value={values.volumeNumber}
-        onChange={(event) => update('volumeNumber', event.target.value)}
-      />
-      <SelectField
-        label="Series"
-        name="categoryId"
-        required
-        value={values.categoryId}
-        onChange={(event) => update('categoryId', event.target.value)}
-      >
-        {categories.map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.title}
-          </option>
-        ))}
-      </SelectField>
-      <TextField
-        label="Short description"
-        name="shortDescription"
-        required
-        value={values.shortDescription}
-        onChange={(event) => update('shortDescription', event.target.value)}
-      />
-      <TextAreaField
-        label="Description"
-        name="description"
-        required
-        value={values.description}
-        onChange={(event) => update('description', event.target.value)}
-      />
-      <TextAreaField
-        label="Features (one per line)"
-        name="features"
-        value={values.features}
-        onChange={(event) => update('features', event.target.value)}
-      />
-      <TextAreaField
-        label="Chapters (Title | Description)"
-        name="chapters"
-        value={values.chapters}
-        onChange={(event) => update('chapters', event.target.value)}
-      />
-      <div className={styles.inline}>
-        <TextField
-          label="Price"
-          name="price"
-          type="number"
-          min="0"
-          step="0.01"
-          required
-          value={values.price}
-          onChange={(event) => update('price', event.target.value)}
-        />
-        <TextField
-          label="Original price"
-          name="originalPrice"
-          type="number"
-          min="0"
-          step="0.01"
-          value={values.originalPrice}
-          onChange={(event) => update('originalPrice', event.target.value)}
-        />
-      </div>
-      <div className={styles.inline}>
-        <TextField
-          label="Currency"
-          name="currency"
-          required
-          value={values.currency}
-          onChange={(event) => update('currency', event.target.value)}
-        />
-        <TextField
-          label="Stock"
-          name="stock"
-          type="number"
-          min="0"
-          required
-          value={values.stock}
-          onChange={(event) => update('stock', event.target.value)}
-        />
-      </div>
-      <SelectField
-        label="Status"
-        name="status"
-        value={values.status}
-        onChange={(event) => update('status', event.target.value as ProductStatus)}
-      >
-        <option value="available">Available</option>
-        <option value="coming-soon">Coming soon</option>
-      </SelectField>
-      <TextField
-        label="Release year"
-        name="releaseYear"
-        type="number"
-        value={values.releaseYear}
-        onChange={(event) => update('releaseYear', event.target.value)}
-      />
-      <TextField
-        label="Sale label"
-        name="saleLabel"
-        value={values.saleLabel}
-        onChange={(event) => update('saleLabel', event.target.value)}
-      />
-      <TextField
-        label="Delivery note"
-        name="deliveryNote"
-        value={values.deliveryNote}
-        onChange={(event) => update('deliveryNote', event.target.value)}
-      />
-      <TextAreaField
-        label="Condition note"
-        name="conditionNote"
-        value={values.conditionNote}
-        onChange={(event) => update('conditionNote', event.target.value)}
-      />
-      <div>
-        <label className={styles.checkbox} htmlFor="coverImage">
-          Cover image
-        </label>
-        <input id="coverImage" type="file" accept="image/*" onChange={handleCoverUpload} />
-        {values.coverImage ? (
-          <div className={styles.previewRow}>
-            <img className={styles.preview} src={values.coverImage} alt="Cover" />
+    <div className={`${styles.layout} ${tab === 'book' ? styles.layoutBook : ''}`}>
+      <div className={styles.main}>
+        {heading ? <PageHeader title={heading} /> : null}
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.tabs} role="tablist" aria-label="What to edit">
+            <button
+              className={`${styles.tab} ${tab === 'card' ? styles.tabActive : ''}`}
+              type="button"
+              role="tab"
+              id="product-tab-card"
+              aria-selected={tab === 'card'}
+              aria-controls="product-panel-card"
+              onClick={() => setTab('card')}
+            >
+              Card
+            </button>
+            <button
+              className={`${styles.tab} ${tab === 'book' ? styles.tabActive : ''}`}
+              type="button"
+              role="tab"
+              id="product-tab-book"
+              aria-selected={tab === 'book'}
+              aria-controls="product-panel-book"
+              onClick={() => setTab('book')}
+            >
+              Book page
+            </button>
           </div>
-        ) : null}
+
+          <div className={styles.formScroll}>
+            {tab === 'card' ? (
+              <div className={styles.panel} id="product-panel-card" role="tabpanel" aria-labelledby="product-tab-card">
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Photos on the card</h2>
+                  <PhotoStrip
+                    photos={photos}
+                    uploading={isUploading}
+                    coverLabel="Cover"
+                    onAdd={handleAddPhotos}
+                    onMove={movePhoto}
+                    onMoveTo={movePhotoTo}
+                    onRemove={removePhoto}
+                  />
+                  <p className={styles.hint}>First photo is the cover. Drag or use arrows to change the order.</p>
+                </section>
+
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Card text and status</h2>
+                  <TextAreaField
+                    label="Caption on the card"
+                    name="shortDescription"
+                    required
+                    value={values.shortDescription}
+                    onChange={(event) => update('shortDescription', event.target.value)}
+                  />
+                  <SelectField
+                    label="Status"
+                    name="status"
+                    value={values.status}
+                    onChange={(event) => update('status', event.target.value as ProductStatus)}
+                  >
+                    <option value="available">Available</option>
+                    <option value="coming-soon">Coming soon</option>
+                  </SelectField>
+                </section>
+
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Price on the card</h2>
+                  <div className={styles.inline}>
+                    <TextField
+                      label="Price"
+                      name="price"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      required
+                      value={values.price}
+                      onChange={(event) => update('price', event.target.value)}
+                    />
+                    <TextField
+                      label="Original price"
+                      name="originalPrice"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={values.originalPrice}
+                      onChange={(event) => update('originalPrice', event.target.value)}
+                    />
+                  </div>
+                  <div className={styles.inline}>
+                    <TextField
+                      label="Currency"
+                      name="currency"
+                      required
+                      value={values.currency}
+                      onChange={(event) => update('currency', event.target.value)}
+                    />
+                    <TextField
+                      label="Stock"
+                      name="stock"
+                      type="number"
+                      min="0"
+                      required
+                      value={values.stock}
+                      onChange={(event) => update('stock', event.target.value)}
+                    />
+                  </div>
+                  <TextField
+                    label="Sale label"
+                    name="saleLabel"
+                    value={values.saleLabel}
+                    onChange={(event) => update('saleLabel', event.target.value)}
+                  />
+                  <TextField
+                    label="Delivery note"
+                    name="deliveryNote"
+                    value={values.deliveryNote}
+                    onChange={(event) => update('deliveryNote', event.target.value)}
+                  />
+                  <div className={styles.flags}>
+                    <label className={styles.checkbox}>
+                      <input
+                        type="checkbox"
+                        checked={values.isAvailable}
+                        onChange={(event) => update('isAvailable', event.target.checked)}
+                      />
+                      In stock
+                    </label>
+                    <label className={styles.checkbox}>
+                      <input
+                        type="checkbox"
+                        checked={values.isOnSale}
+                        onChange={(event) => update('isOnSale', event.target.checked)}
+                      />
+                      On sale
+                    </label>
+                  </div>
+                </section>
+              </div>
+            ) : (
+              <div className={styles.panel} id="product-panel-book" role="tabpanel" aria-labelledby="product-tab-book">
+                <BookPageEditor
+                  values={values}
+                  categories={categories}
+                  uploading={isUploading}
+                  onTitleChange={(title) => {
+                    setValues((current) => ({
+                      ...current,
+                      title,
+                      slug: !initialProduct && !current.slug ? slugify(title) : current.slug,
+                    }))
+                  }}
+                  onChange={(key, value) => {
+                    setValues((current) => ({ ...current, [key]: value }))
+                  }}
+                  onAddPhotos={handleAddPagePhotos}
+                  onMovePhoto={(index, direction) => {
+                    update('pageGallery', moveItem(values.pageGallery, index, direction))
+                  }}
+                  onMovePhotoTo={(from, to) => {
+                    update('pageGallery', moveItemTo(values.pageGallery, from, to))
+                  }}
+                  onRemovePhoto={(index) => {
+                    update(
+                      'pageGallery',
+                      values.pageGallery.filter((_, itemIndex) => itemIndex !== index),
+                    )
+                  }}
+                />
+              </div>
+            )}
+
+            {isUploading ? <p className={styles.status}>Uploading image...</p> : null}
+            {error ? (
+              <p className="fieldError" role="alert">
+                {error}
+              </p>
+            ) : null}
+          </div>
+
+          <div className={`formActions ${styles.formActions}`}>
+            <Button type="submit" disabled={isSubmitting || isUploading}>
+              {isSubmitting ? 'Saving...' : submitLabel}
+            </Button>
+            <Button to="/admin/products" variant="secondary">
+              Cancel
+            </Button>
+          </div>
+        </form>
       </div>
-      <div>
-        <label className={styles.checkbox} htmlFor="gallery">
-          Additional images
-        </label>
-        <input id="gallery" type="file" accept="image/*" multiple onChange={handleGalleryUpload} />
-        <div className={styles.previewRow}>
-          {values.gallery.map((image, index) => (
-            <div className={styles.galleryItem} key={`${image}-${index}`}>
-              <img className={styles.preview} src={image} alt="" />
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => update('gallery', values.gallery.filter((item) => item !== image))}
-              >
-                Remove
-              </Button>
+      {tab === 'card' ? (
+        <aside className={styles.previewPane} aria-label="Catalog card preview">
+          {canPreviewCard ? (
+            <div className={styles.previewLive}>
+              <ProductCard product={previewProduct} preview />
             </div>
-          ))}
-        </div>
-        <p className={styles.hint}>Cover and extra images become the dots on the product card.</p>
-      </div>
-      <label className={styles.checkbox}>
-        <input
-          type="checkbox"
-          checked={values.isAvailable}
-          onChange={(event) => update('isAvailable', event.target.checked)}
-        />
-        In stock
-      </label>
-      <label className={styles.checkbox}>
-        <input
-          type="checkbox"
-          checked={values.isOnSale}
-          onChange={(event) => update('isOnSale', event.target.checked)}
-        />
-        On sale
-      </label>
-      <label className={styles.checkbox}>
-        <input
-          type="checkbox"
-          checked={values.isFeatured}
-          onChange={(event) => update('isFeatured', event.target.checked)}
-        />
-        Featured
-      </label>
-      <label className={styles.checkbox}>
-        <input
-          type="checkbox"
-          checked={values.hasVideo}
-          onChange={(event) => update('hasVideo', event.target.checked)}
-        />
-        Has video section
-      </label>
-      {isUploading ? <p>Uploading image...</p> : null}
-      {error ? (
-        <p className="fieldError" role="alert">
-          {error}
-        </p>
+          ) : (
+            <p className={styles.hint}>Add a cover image to preview the card.</p>
+          )}
+        </aside>
       ) : null}
-      <div className="formActions">
-        <Button type="submit" disabled={isSubmitting || isUploading}>
-          {isSubmitting ? 'Saving...' : submitLabel}
-        </Button>
-        <Button to="/admin/products" variant="secondary">
-          Cancel
-        </Button>
-      </div>
-    </form>
-      <aside className={styles.previewPane} aria-label="Product card preview">
-        <h2 className={styles.previewHeading}>Product card</h2>
-        {values.coverImage ? (
-          <ProductCard product={previewProduct} />
-        ) : (
-          <p>Add a cover image to preview the card.</p>
-        )}
-      </aside>
     </div>
   )
 }
