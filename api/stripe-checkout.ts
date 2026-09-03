@@ -7,7 +7,7 @@ function getStripe(): Stripe {
   if (!key) {
     throw new Error('STRIPE_SECRET_KEY is not configured')
   }
-  return new Stripe(key, { apiVersion: '2024-06-20' })
+  return new Stripe(key)
 }
 
 interface LineItem {

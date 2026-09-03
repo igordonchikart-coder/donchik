@@ -1,6 +1,4 @@
 import { type FormEvent, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { routes } from '@/app/routes'
 import { Button } from '@/components/common/Button'
 import { TextAreaField, TextField } from '@/components/common/Field'
 import { useCart } from '@/hooks/useCart'
@@ -64,7 +62,6 @@ async function redirectToPayPal(orderId: string, items: Array<{ title: string; q
 
 export function CheckoutForm() {
   const { items, totalPrice, clearCart } = useCart()
-  const navigate = useNavigate()
   const [values, setValues] = useState(initialState)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('stripe')
   const [error, setError] = useState<string | null>(null)

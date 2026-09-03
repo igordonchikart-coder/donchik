@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 function getStripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY
   if (!key) throw new Error('STRIPE_SECRET_KEY is not configured')
-  return new Stripe(key, { apiVersion: '2024-06-20' })
+  return new Stripe(key)
 }
 
 function getSupabase() {

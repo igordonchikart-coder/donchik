@@ -68,6 +68,9 @@ export function EmberSparks() {
       return
     }
 
+    const surface = canvas
+    const ctx = context
+
     let frame = 0
     let lastTime = performance.now()
     let lastDraw = 0
@@ -88,11 +91,11 @@ export function EmberSparks() {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.25)
       width = window.innerWidth
       height = window.innerHeight
-      canvas.width = Math.floor(width * dpr)
-      canvas.height = Math.floor(height * dpr)
-      canvas.style.width = `${width}px`
-      canvas.style.height = `${height}px`
-      context.setTransform(dpr, 0, 0, dpr, 0, 0)
+      surface.width = Math.floor(width * dpr)
+      surface.height = Math.floor(height * dpr)
+      surface.style.width = `${width}px`
+      surface.style.height = `${height}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       measureFooter()
       dust = Array.from({ length: DUST_COUNT }, () => createDust(width, height, footerTop))
     }
@@ -126,7 +129,7 @@ export function EmberSparks() {
         measureFooter()
       }
 
-      context.clearRect(0, 0, width, height)
+      ctx.clearRect(0, 0, width, height)
 
       const hideBelow = Math.min(footerTop, height) - 8
 
@@ -143,10 +146,10 @@ export function EmberSparks() {
         const pulse = 0.55 + Math.sin(particle.twinkle) * 0.45
         const alpha = (0.22 + particle.depth * 0.42) * pulse
 
-        context.beginPath()
-        context.fillStyle = dustFill(particle.heat, alpha)
-        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        context.fill()
+        ctx.beginPath()
+        ctx.fillStyle = dustFill(particle.heat, alpha)
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.fill()
       }
     }
 
