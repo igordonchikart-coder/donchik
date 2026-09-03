@@ -1,6 +1,6 @@
 export const STORAGE_KEYS = {
   cart: 'donchik-art-cart',
-  mockStore: 'donchik-art-mock-store-v8',
+  mockStore: 'donchik-art-mock-store-v9',
   mockAuth: 'donchik-art-mock-auth',
 } as const
 

@@ -1,33 +1,28 @@
 .grid {
-  --cols: 1;
+  /* Match PanzerSeriesCard .inner insets so only the frame hangs outside */
   --frame-left: 0.0655;
   --frame-right: 0.0635;
-  --pull: 0px;
-  --card-gap: 0.65rem;
-  --card-span: calc((100% - (var(--cols) - 1) * var(--card-gap)) / (var(--cols) - var(--frame-left) - var(--frame-right)));
-  --frame-box: calc(var(--card-span) + 2 * var(--pull));
+  --cols: 1;
+  --overlap: 0px;
+  --card-span: calc(
+    (100% + (var(--cols) - 1) * var(--overlap)) / (var(--cols) - var(--frame-left) - var(--frame-right))
+  );
   display: grid;
-  column-gap: var(--card-gap);
+  grid-template-columns: repeat(var(--cols), minmax(0, var(--card-span)));
+  column-gap: calc(-1 * var(--overlap));
   row-gap: 0.65rem;
   align-items: start;
   overflow: visible;
-  width: calc(var(--cols) * var(--card-span) + (var(--cols) - 1) * var(--card-gap));
+  width: calc(var(--cols) * var(--card-span) - (var(--cols) - 1) * var(--overlap));
   max-width: none;
-  margin-left: calc(-1 * var(--frame-left) * var(--frame-box));
-  margin-right: calc(-1 * var(--frame-right) * var(--frame-box));
-}
-
-.grid > * {
-  width: calc(100% + 2 * var(--pull));
-  margin-left: calc(-1 * var(--pull));
+  margin-left: calc(-1 * var(--frame-left) * var(--card-span));
+  margin-right: calc(-1 * var(--frame-right) * var(--card-span));
 }
 
 @media (min-width: 640px) {
   .grid {
     --cols: 2;
-    --pull: 0.45rem;
-    --card-gap: 0.2rem;
-    grid-template-columns: repeat(2, 1fr);
+    --overlap: 0.55rem;
     row-gap: 0.45rem;
   }
 }
@@ -35,7 +30,6 @@
 @media (min-width: 1024px) {
   .grid {
     --cols: 3;
-    --pull: 0.55rem;
-    grid-template-columns: repeat(3, 1fr);
+    --overlap: 0.7rem;
   }
 }

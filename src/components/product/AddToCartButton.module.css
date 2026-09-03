@@ -1,25 +1,22 @@
 .button {
-  justify-self: start;
-  flex-direction: column;
-  width: 5.5rem;
-  height: 5.5rem;
-  min-width: 5.5rem;
-  padding: 0.4rem;
-  gap: var(--space-2xs);
-  font-family: var(--font-nav);
-  font-stretch: 87.5%;
+  background: var(--color-nav-active);
+  color: var(--color-accent-contrast);
+  border-color: var(--color-nav-active);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  font-weight: 700;
-  line-height: 1;
+  font-size: 0.95rem;
+  min-height: 48px;
+  padding-inline: 2rem;
+  border-radius: 6px;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.button:hover:not(:disabled) {
+  background: #c4a84f;
+  opacity: 1;
 }
 
 .icon {
-  width: 1.35rem;
-  height: 1.35rem;
-}
-
-.icon {
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 1.1rem;
+  height: 1.1rem;
 }

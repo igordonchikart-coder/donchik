@@ -26,7 +26,7 @@
   font-weight: 300 700;
   font-stretch: 75% 100%;
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
 }
 
 @font-face {
@@ -34,6 +34,5 @@
   src: url('/fonts/guttery.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
 }
-

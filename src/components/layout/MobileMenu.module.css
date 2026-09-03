@@ -86,6 +86,11 @@
   transform: translateY(-50%) rotate(-45deg);
 }
 
+.account {
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .overlay,
   .panel {

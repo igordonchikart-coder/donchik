@@ -7,8 +7,6 @@ import { aboutAuthorPortraits } from '@/data/aboutAuthor'
 import { homeVideo } from '@/data/homeVideo'
 
 export const warmupImageUrls: string[] = [
-  '/fonts/bahnschrift.woff2',
-  '/fonts/guttery.woff2',
   heroImages.title,
   panzerCardAssets.cardFrame,
   panzerCardAssets.cardUnderlay,

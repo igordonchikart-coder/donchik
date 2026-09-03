@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-sm);
+  gap: clamp(0.9rem, 1.35vw, 1.35rem);
   margin: 0;
   padding: 0;
   list-style: none;

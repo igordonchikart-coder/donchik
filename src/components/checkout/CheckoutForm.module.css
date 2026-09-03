@@ -2,3 +2,73 @@
   display: grid;
   gap: var(--space-md);
 }
+
+/* ── Payment method selector ─────────────────────────────────────────────── */
+.paymentFieldset {
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: 8px;
+  padding: var(--space-md);
+  margin: 0;
+}
+
+.paymentLegend {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #666);
+  padding-inline: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.paymentOptions {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.paymentOption {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-border, #e5e5e5);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.paymentOption:hover {
+  border-color: var(--color-primary, #333);
+}
+
+.paymentOptionActive {
+  border-color: var(--color-primary, #333);
+  background: var(--color-surface-raised, #f9f9f9);
+}
+
+.paymentRadio {
+  accent-color: var(--color-primary, #333);
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.paymentLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.paymentIcon {
+  font-size: 1.1rem;
+}
+
+.paymentNotice {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #888);
+  background: var(--color-surface-raised, #f5f5f5);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 0;
+}

@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 import { useProducts } from '@/hooks/useProducts'
 import { startImageWarmup } from '@/media/prefetchImages'
 import { warmupImageUrls } from '@/media/warmupAssets'
+import { EmberSparks } from './EmberSparks'
 import { Footer } from './Footer'
 import { Header } from './Header'
 
@@ -13,6 +14,7 @@ export function PublicLayout() {
 
   return (
     <div className="app-shell">
+      <EmberSparks />
       <Header />
       <main className="app-main">
         <Outlet />

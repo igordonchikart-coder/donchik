@@ -1,13 +1,15 @@
 import { SiteBrand } from './SiteBrand'
+import { LoginButton } from './LoginButton'
 import { Navigation } from './Navigation'
 import styles from './MobileMenu.module.css'
 
 interface MobileMenuProps {
   isOpen: boolean
   onClose: () => void
+  onOpenLogin: () => void
 }
 
-export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+export function MobileMenu({ isOpen, onClose, onOpenLogin }: MobileMenuProps) {
   return (
     <div
       className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ''}`}
@@ -30,6 +32,9 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </button>
         </div>
         <Navigation orientation="vertical" onNavigate={onClose} />
+        <div className={styles.account}>
+          <LoginButton onClick={onOpenLogin} />
+        </div>
       </div>
     </div>
   )

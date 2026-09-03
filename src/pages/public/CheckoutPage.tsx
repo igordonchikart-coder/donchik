@@ -21,20 +21,28 @@ export function CheckoutPage() {
         noIndex
       />
       <Container>
-        <PageHeader
-          title="Checkout"
-          description="Payments are not connected yet. The order is saved as a request."
-        />
         {items.length === 0 ? (
-          <EmptyState
-            title="Nothing to check out"
-            description="Add books to the cart first."
-            actionLabel="Store"
-            actionTo={routes.catalog}
-          />
+          <>
+            <PageHeader
+              title="Checkout"
+              description="Payments are not connected yet. The order is saved as a request."
+            />
+            <EmptyState
+              title="Nothing to check out"
+              description="Add books to the cart first."
+              actionLabel="Store"
+              actionTo={routes.catalog}
+            />
+          </>
         ) : (
           <div className={styles.checkoutLayout}>
-            <CheckoutForm />
+            <div>
+              <PageHeader
+                title="Checkout"
+                description="Payments are not connected yet. The order is saved as a request."
+              />
+              <CheckoutForm />
+            </div>
             <CartSummary showCheckoutButton={false} />
           </div>
         )}

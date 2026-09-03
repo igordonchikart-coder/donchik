@@ -25,21 +25,34 @@
   color: var(--color-nav);
 }
 
-.link {
-  color: inherit;
-  text-decoration: none;
-}
-
-.link:hover,
-.link:focus-visible {
-  color: var(--color-nav-active);
-  text-decoration: none;
-}
-
 .lead {
   max-width: 42rem;
   margin: 0;
   font-family: var(--font-nav);
   font-stretch: 87.5%;
   color: var(--color-text-muted);
+}
+
+.pendingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.pendingCard {
+  aspect-ratio: 2388 / 3680;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #2a2520 0%, #1c1915 100%);
+}
+
+@media (max-width: 1023px) {
+  .pendingGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .pendingGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

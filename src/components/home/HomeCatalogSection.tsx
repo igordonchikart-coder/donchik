@@ -1,14 +1,28 @@
 import { ErrorState } from '@/components/common/ErrorState'
-import { LoadingState } from '@/components/common/LoadingState'
 import { catalogSeriesOrder } from '@/data/catalogSeriesOrder'
+import { getCategoryCopyBySlug } from '@/data/categoryPageCopy'
 import { useCategories } from '@/hooks/useCategories'
 import { useProducts } from '@/hooks/useProducts'
+import type { Category } from '@/types'
 import { BookSeriesSection } from './BookSeriesSection'
 
 interface HomeCatalogSectionProps {
   onlyCategoryId?: string
   excludeCategoryId?: string
   showTitle?: boolean
+}
+
+function placeholderSeries(slug: string): Category {
+  const copy = getCategoryCopyBySlug(slug)
+  return {
+    id: `pending:${slug}`,
+    slug,
+    title: copy?.title ?? slug,
+    description: copy?.lead ?? '',
+    image: '',
+    createdAt: '',
+    updatedAt: '',
+  }
 }
 
 export function HomeCatalogSection({
@@ -18,10 +32,6 @@ export function HomeCatalogSection({
 }: HomeCatalogSectionProps) {
   const series = useCategories()
   const products = useProducts()
-
-  if ((series.isLoading || products.isLoading) && !series.data && !products.data) {
-    return <LoadingState label="Loading store..." />
-  }
 
   if (series.error || products.error) {
     return (
@@ -37,9 +47,22 @@ export function HomeCatalogSection({
 
   const seriesList = series.data
   const productList = products.data
+  const pending = !seriesList || !productList
 
-  if (!seriesList || !productList) {
-    return null
+  if (pending) {
+    return (
+      <>
+        {catalogSeriesOrder.map((slug) => (
+          <BookSeriesSection
+            key={slug}
+            series={placeholderSeries(slug)}
+            products={[]}
+            showTitle={showTitle}
+            pending
+          />
+        ))}
+      </>
+    )
   }
 
   const orderedSeries = catalogSeriesOrder

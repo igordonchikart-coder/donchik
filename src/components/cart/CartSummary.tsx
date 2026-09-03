@@ -15,10 +15,12 @@ export function CartSummary({ showCheckoutButton = true }: CartSummaryProps) {
 
   return (
     <aside className={styles.summary} aria-label="Order summary">
+      <p className={styles.title}>Order summary</p>
       <p className={styles.row}>
-        <span>Items</span>
+        <span>Books</span>
         <span>{totalQuantity}</span>
       </p>
+      <hr className={styles.divider} />
       <p className={`${styles.row} ${styles.total}`}>
         <span>Total</span>
         <span>{formatPrice(totalPrice, currency)}</span>

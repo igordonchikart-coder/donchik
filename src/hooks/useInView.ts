@@ -38,6 +38,18 @@ export function useInView<T extends Element>(
     )
 
     observer.observe(node)
+
+    // Sync check — avoid one-frame empty state before the first callback
+    const rect = node.getBoundingClientRect()
+    const marginY = Number.parseInt(rootMargin, 10) || 0
+    const vh = window.innerHeight || 0
+    if (rect.bottom >= -marginY && rect.top <= vh + marginY) {
+      setInView(true)
+      if (once) {
+        observer.disconnect()
+      }
+    }
+
     return () => observer.disconnect()
   }, [disabled, once, ref, rootMargin])
 

@@ -14,12 +14,13 @@ export function CartItem({ item }: CartItemProps) {
 
   return (
     <article className={styles.item}>
-      <img className={styles.image} src={item.coverImage} alt="" />
+      <img className={styles.image} src={item.coverImage} alt={item.title} />
       <div className={styles.body}>
         <Link className={styles.title} to={routes.product(item.slug)}>
           {item.title}
         </Link>
-        <p className={styles.meta}>{formatPrice(item.price, item.currency)}</p>
+        <p className={styles.meta}>per item: {formatPrice(item.price, item.currency)}</p>
+        <p className={styles.price}>{formatPrice(item.price * item.quantity, item.currency)}</p>
         <div className={styles.controls}>
           <div className={styles.quantity}>
             <button
@@ -30,7 +31,7 @@ export function CartItem({ item }: CartItemProps) {
             >
               −
             </button>
-            <span aria-live="polite">{item.quantity}</span>
+            <span className={styles.quantityValue} aria-live="polite">{item.quantity}</span>
             <button
               className={styles.quantityButton}
               type="button"

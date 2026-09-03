@@ -5,28 +5,43 @@
   background: var(--color-bg);
 }
 
-.inner {
-  min-height: var(--header-height);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-md);
-  padding-block: var(--space-sm);
+.headerPinned {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 40;
 }
 
-.right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: clamp(var(--space-sm), 1.5vw, var(--space-lg));
-  margin-left: auto;
+.headerSpacer {
   flex-shrink: 0;
-  min-width: 0;
+}
+
+.inner {
+  min-height: var(--header-height);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: var(--space-md);
+  padding-block: var(--space-sm);
 }
 
 .desktopNav {
   display: none;
   min-width: 0;
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.loginWrap {
+  display: none;
 }
 
 .navLineTrack {
@@ -85,8 +100,38 @@
 }
 
 @media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 1.75rem;
+  }
+
   .desktopNav {
-    display: block;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .loginWrap {
+    display: inline-flex;
+    align-items: center;
+    height: 3.75rem;
+  }
+
+  .tools {
+    gap: 1rem;
+    padding-left: 1.35rem;
+    position: relative;
+  }
+
+  .tools::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 1px;
+    height: 1.4rem;
+    transform: translateY(-50%);
+    background: color-mix(in srgb, var(--color-nav-active) 42%, transparent);
   }
 
   .menuButton {

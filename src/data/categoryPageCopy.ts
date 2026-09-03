@@ -47,7 +47,7 @@ const copies: Record<string, CategoryPageCopy> = {
   },
 }
 
-export function getCategoryPageCopy(category: Category): CategoryPageCopy {
+export function getCategoryPageCopy(category: Pick<Category, 'slug' | 'title' | 'description'>): CategoryPageCopy {
   return (
     copies[category.slug] ?? {
       title: `«${category.title}» book series`,
@@ -57,4 +57,8 @@ export function getCategoryPageCopy(category: Category): CategoryPageCopy {
       paragraphs: [],
     }
   )
+}
+
+export function getCategoryCopyBySlug(slug: string): CategoryPageCopy | undefined {
+  return copies[slug]
 }

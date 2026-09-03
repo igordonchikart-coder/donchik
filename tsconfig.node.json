@@ -17,5 +17,12 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts", "server/trustpilotSummary.ts", "api/trustpilot.ts"]
+  "include": [
+    "vite.config.ts",
+    "server/trustpilotSummary.ts",
+    "api/trustpilot.ts",
+    "api/stripe-checkout.ts",
+    "api/stripe-webhook.ts",
+    "api/paypal-order.ts"
+  ]
 }

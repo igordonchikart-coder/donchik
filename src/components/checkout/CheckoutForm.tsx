@@ -8,6 +8,8 @@ import { ordersService } from '@/services/ordersService'
 import { DEFAULT_CURRENCY } from '@/utils/constants'
 import styles from './CheckoutForm.module.css'
 
+type PaymentMethod = 'stripe' | 'paypal'
+
 interface FormState {
   fullName: string
   email: string
@@ -28,10 +30,43 @@ const initialState: FormState = {
   notes: '',
 }
 
+async function redirectToStripe(orderId: string, items: Array<{ title: string; quantity: number; price: number; currency: string }>) {
+  const res = await fetch('/api/stripe-checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ orderId, items }),
+  })
+
+  if (!res.ok) {
+    const { error } = await res.json() as { error: string }
+    throw new Error(error ?? 'Could not create Stripe session')
+  }
+
+  const { url } = await res.json() as { url: string }
+  window.location.href = url
+}
+
+async function redirectToPayPal(orderId: string, items: Array<{ title: string; quantity: number; price: number; currency: string }>) {
+  const res = await fetch('/api/paypal-order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ orderId, items }),
+  })
+
+  if (!res.ok) {
+    const { error } = await res.json() as { error: string }
+    throw new Error(error ?? 'Could not create PayPal order')
+  }
+
+  const { approveUrl } = await res.json() as { approveUrl: string }
+  window.location.href = approveUrl
+}
+
 export function CheckoutForm() {
   const { items, totalPrice, clearCart } = useCart()
   const navigate = useNavigate()
   const [values, setValues] = useState(initialState)
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('stripe')
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -45,6 +80,7 @@ export function CheckoutForm() {
     setIsSubmitting(true)
 
     try {
+      // 1. Save the order to Supabase first (status: pending)
       const order = await ordersService.create({
         customer: {
           fullName: values.fullName,
@@ -66,14 +102,30 @@ export function CheckoutForm() {
         notes: values.notes || undefined,
       })
 
-      clearCart()
-      navigate(routes.orderSuccess, { state: { orderId: order.id } })
+      const orderItems = items.map((item) => ({
+        title: item.title,
+        quantity: item.quantity,
+        price: item.price,
+        currency: item.currency,
+      }))
+
+      // 2. Redirect to payment provider
+      if (paymentMethod === 'stripe') {
+        clearCart()
+        await redirectToStripe(order.id, orderItems)
+      } else {
+        clearCart()
+        await redirectToPayPal(order.id, orderItems)
+      }
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : 'Could not place the order')
-    } finally {
       setIsSubmitting(false)
     }
   }
+
+  const isStripeReady = Boolean(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
+  const isPayPalReady = Boolean(import.meta.env.VITE_PAYPAL_CLIENT_ID)
+  const hasAnyPayment = isStripeReady || isPayPalReady
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -133,9 +185,60 @@ export function CheckoutForm() {
         value={values.notes}
         onChange={(event) => updateField('notes', event.target.value)}
       />
+
+      {/* Payment method selector */}
+      {hasAnyPayment ? (
+        <fieldset className={styles.paymentFieldset}>
+          <legend className={styles.paymentLegend}>Payment method</legend>
+          <div className={styles.paymentOptions}>
+            {isStripeReady && (
+              <label className={`${styles.paymentOption} ${paymentMethod === 'stripe' ? styles.paymentOptionActive : ''}`}>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="stripe"
+                  checked={paymentMethod === 'stripe'}
+                  onChange={() => setPaymentMethod('stripe')}
+                  className={styles.paymentRadio}
+                />
+                <span className={styles.paymentLabel}>
+                  <span className={styles.paymentIcon}>💳</span>
+                  Card / Apple Pay / Google Pay
+                </span>
+              </label>
+            )}
+            {isPayPalReady && (
+              <label className={`${styles.paymentOption} ${paymentMethod === 'paypal' ? styles.paymentOptionActive : ''}`}>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="paypal"
+                  checked={paymentMethod === 'paypal'}
+                  onChange={() => setPaymentMethod('paypal')}
+                  className={styles.paymentRadio}
+                />
+                <span className={styles.paymentLabel}>
+                  <span className={styles.paymentIcon}>🅿️</span>
+                  PayPal
+                </span>
+              </label>
+            )}
+          </div>
+        </fieldset>
+      ) : (
+        <p className={styles.paymentNotice}>
+          Payment integration is being set up. Orders placed now will be confirmed manually.
+        </p>
+      )}
+
       {error ? <p className="fieldError" role="alert">{error}</p> : null}
+
       <Button type="submit" disabled={isSubmitting || items.length === 0}>
-        {isSubmitting ? 'Placing order...' : 'Confirm order'}
+        {isSubmitting
+          ? 'Redirecting to payment…'
+          : hasAnyPayment
+            ? `Pay with ${paymentMethod === 'stripe' ? 'Card' : 'PayPal'}`
+            : 'Confirm order'}
       </Button>
     </form>
   )

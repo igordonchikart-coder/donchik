@@ -4,6 +4,7 @@ import {
   panzerVolumeSources,
 } from '@/assets/books/panzer-camouflage'
 import { insigniaCardSources } from '@/assets/books/unit-insignia'
+import { productCardDescriptions } from '@/data/productCardCopy'
 import { getProductCopyBySlug } from '@/data/productPageCopy'
 import { toVolumeLabel } from '@/utils/product'
 
@@ -132,6 +133,7 @@ function book(
   },
 ): Product {
   const copy = getProductCopyBySlug(partial.slug)
+  const cardDescription = productCardDescriptions[partial.slug]
 
   return {
     ...partial,
@@ -139,6 +141,7 @@ function book(
     gallery: partial.gallery ?? [partial.coverImage],
     pageGallery: partial.pageGallery ?? [],
     volumeLabel: toVolumeLabel(partial.volumeNumber),
+    shortDescription: cardDescription ?? partial.shortDescription,
     description: copy?.story.join('\n\n') ?? partial.description,
     features: copy?.features ?? partial.features,
     chapters: copy?.chapters ?? (partial.chapters.length > 0 ? partial.chapters : chaptersFor(partial.categoryId)),

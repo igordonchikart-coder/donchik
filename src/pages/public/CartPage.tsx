@@ -21,17 +21,20 @@ export function CartPage() {
         noIndex
       />
       <Container>
-        <PageHeader title="Cart" description="Review the order before checkout." />
         {items.length === 0 ? (
-          <EmptyState
-            title="Cart is empty"
-            description="Add books from the store to place an order."
-            actionLabel="Store"
-            actionTo={routes.catalog}
-          />
+          <>
+            <PageHeader title="Cart" description="Review the order before checkout." />
+            <EmptyState
+              title="Cart is empty"
+              description="Add books from the store to place an order."
+              actionLabel="Store"
+              actionTo={routes.catalog}
+            />
+          </>
         ) : (
           <div className={styles.cartLayout}>
             <div>
+              <PageHeader title="Cart" description="Review the order before checkout." />
               {items.map((item) => (
                 <CartItem key={item.productId} item={item} />
               ))}
