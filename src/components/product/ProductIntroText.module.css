@@ -6,4 +6,16 @@
 
 .trustpilot {
   color: var(--color-success);
+  text-decoration: none;
+}
+
+.trustpilot:hover,
+.trustpilot:focus-visible {
+  color: var(--color-trustpilot);
+  text-decoration: none;
+}
+
+.trustpilot:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
 }

@@ -1,7 +1,7 @@
 import { routes } from '@/app/routes'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'
-import { homeStats } from '@/data/homeStats'
 import { getProductPageCopy } from '@/data/productPageCopy'
+import { useTrustpilot } from '@/hooks/useTrustpilot'
 import { AddToCartButton } from './AddToCartButton'
 import { ProductIntroText } from './ProductIntroText'
 import type { Product } from '@/types'
@@ -16,7 +16,7 @@ interface ProductBuyPanelProps {
 export function ProductBuyPanel({ product }: ProductBuyPanelProps) {
   const comingSoon = isComingSoon(product)
   const copy = getProductPageCopy(product)
-  const trustpilot = homeStats.find((stat) => stat.id === 'trustpilot')
+  const trustpilot = useTrustpilot()
 
   return (
     <div className={styles.panel}>
@@ -27,6 +27,7 @@ export function ProductBuyPanel({ product }: ProductBuyPanelProps) {
           ...(product.category
             ? [{ label: product.category.title, to: routes.category(product.category.slug) }]
             : []),
+          { label: `${product.title} ${product.volumeLabel}` },
         ]}
       />
       <h1 id="product-title" className={styles.title}>
@@ -52,7 +53,7 @@ export function ProductBuyPanel({ product }: ProductBuyPanelProps) {
       )}
       <AddToCartButton product={product} />
       {copy.intro.map((paragraph) => (
-        <ProductIntroText key={paragraph} text={paragraph} trustpilotLabel={trustpilot ? `${trustpilot.value} Trustpilot rating` : null} />
+        <ProductIntroText key={paragraph} text={paragraph} ratingLabel={trustpilot.ratingLabel} />
       ))}
     </div>
   )

@@ -4,6 +4,7 @@ import {
   panzerVolumeSources,
 } from '@/assets/books/panzer-camouflage'
 import { insigniaCardSources } from '@/assets/books/unit-insignia'
+import { getProductCopyBySlug } from '@/data/productPageCopy'
 import { toVolumeLabel } from '@/utils/product'
 
 const panzerChapters = [
@@ -130,13 +131,17 @@ function book(
     createdAt?: string
   },
 ): Product {
+  const copy = getProductCopyBySlug(partial.slug)
+
   return {
     ...partial,
     currency: 'EUR',
     gallery: partial.gallery ?? [partial.coverImage],
     pageGallery: partial.pageGallery ?? [],
     volumeLabel: toVolumeLabel(partial.volumeNumber),
-    chapters: partial.chapters.length > 0 ? partial.chapters : chaptersFor(partial.categoryId),
+    description: copy?.story.join('\n\n') ?? partial.description,
+    features: copy?.features ?? partial.features,
+    chapters: copy?.chapters ?? (partial.chapters.length > 0 ? partial.chapters : chaptersFor(partial.categoryId)),
     hasVideo: true,
     createdAt: partial.createdAt ?? '2026-02-01T12:00:00.000Z',
     updatedAt: partial.createdAt ?? '2026-02-01T12:00:00.000Z',
@@ -171,7 +176,7 @@ export const mockProducts: Product[] = [
     slug: 'panzer-camouflage-volume-ii',
     title: 'Panzer Camouflage',
     volumeNumber: 2,
-    shortDescription: 'Wehrmacht tank divisions from 1939 to 1945.',
+    shortDescription: 'Wehrmacht divisions camouflage patterns in WWII.',
     description:
       'The second volume of the series is devoted to the camouflage schemes of Wehrmacht tank divisions from 1939 to 1945. The book presents detailed reconstructions of armored vehicle paint schemes, tactical markings, divisional emblems, and actual camouflage patterns used throughout the war, from the Polish campaign to the final battles of 1945.',
     features: ['Division-by-division plates', 'Color notes', 'Insignia details'],
@@ -193,7 +198,7 @@ export const mockProducts: Product[] = [
     slug: 'panzer-camouflage-volume-iii',
     title: 'Panzer Camouflage',
     volumeNumber: 3,
-    shortDescription: 'Red Army armored vehicles, 1939 to 1945.',
+    shortDescription: 'Red Army divisions camouflage patterns in WWII.',
     description:
       'The third volume is devoted to the armored vehicles of the Red Army from 1939 to 1945. The emergence of the Soviet camouflage system and its practical application in combat conditions. The book also discusses the use of captured Soviet equipment in the German army.',
     features: ['Beutepanzer studies', 'Comparative plates'],
@@ -214,7 +219,7 @@ export const mockProducts: Product[] = [
     slug: 'panzer-camouflage-volume-iv',
     title: 'Panzer Camouflage',
     volumeNumber: 4,
-    shortDescription: 'Later camouflage schemes and unit practice.',
+    shortDescription: 'Reichswehr divisions camouflage patterns.',
     description:
       'The fourth volume is devoted to the emergence and development of the camouflage system in Germany. The end of World War I, the emergence of the Freikorps, the first tank trials in the Reichswehr. You will find all this in this book.',
     features: ['Late-war schemes', 'Unit examples'],
@@ -235,7 +240,7 @@ export const mockProducts: Product[] = [
     slug: 'panzer-camouflage-volume-v',
     title: 'Panzer Camouflage',
     volumeNumber: 5,
-    shortDescription: 'Next volume in the camouflage series.',
+    shortDescription: 'DAK divisions camouflage patterns in WWII.',
     description:
       "The book is dedicated to Rommel's African Corps, armored vehicles, tactical insignia, and camouflage patterns of the tropical version.",
     features: [],
@@ -299,7 +304,7 @@ export const mockProducts: Product[] = [
     slug: 'german-military-unit-insignia-volume-ii',
     title: 'German Military Unit Insignia',
     volumeNumber: 2,
-    shortDescription: 'Further WWII German divisions.',
+    shortDescription: 'German military symbols in WWII.',
     description:
       'This volume documents the insignia of German divisions active during World War II. It covers panzergrenadier, Panzer Division, Elite units Division. In addition, it includes army groups, corps and observation battalions.',
     features: [],
@@ -342,7 +347,7 @@ export const mockProducts: Product[] = [
     slug: 'german-military-symbols-volume-i',
     title: 'German Military Symbols',
     volumeNumber: 1,
-    shortDescription: 'Encyclopedia of authentic tactical symbols.',
+    shortDescription: 'German military symbols in WWII.',
     description:
       'German Military Symbols is a groundbreaking encyclopedia series that explores the tactical markings used by the German army during World War II. This first volume offers an in-depth look at over 1,000 authentic symbols found on Wehrmacht vehicles and military maps.',
     features: ['Over 1,000 symbols', 'Ground encyclopedia'],
@@ -363,7 +368,7 @@ export const mockProducts: Product[] = [
     slug: 'german-military-symbols-volume-ii',
     title: 'German Military Symbols',
     volumeNumber: 2,
-    shortDescription: 'Further tactical symbols and vehicle markings.',
+    shortDescription: 'German military symbols in WWII.',
     description:
       'Explore over 1,000 WWII German tactical symbols in this guide by Igor Donchik. Essential for historians, modelers, and reenactors, featuring detailed markings from Wehrmacht, Luftwaffe, and Kriegsmarine.',
     features: ['Additional plates', 'Vehicle markings'],

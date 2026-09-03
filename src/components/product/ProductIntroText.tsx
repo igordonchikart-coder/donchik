@@ -1,22 +1,27 @@
+import { applyTrustpilotRating } from '@/data/trustpilot'
+import { TRUSTPILOT_URL } from '@/data/homeStats'
 import styles from './ProductIntroText.module.css'
 
 interface ProductIntroTextProps {
   text: string
-  trustpilotLabel: string | null
+  ratingLabel: string | null
 }
 
-export function ProductIntroText({ text, trustpilotLabel }: ProductIntroTextProps) {
-  if (!trustpilotLabel || !text.includes(trustpilotLabel)) {
-    return <p className={styles.intro}>{text}</p>
+export function ProductIntroText({ text, ratingLabel }: ProductIntroTextProps) {
+  const resolved = ratingLabel ? applyTrustpilotRating(text, ratingLabel) : text
+  const phrase = ratingLabel ? `${ratingLabel} Trustpilot rating` : null
+
+  if (!phrase || !resolved.includes(phrase)) {
+    return <p className={styles.intro}>{resolved}</p>
   }
 
-  const [before, after] = text.split(trustpilotLabel)
+  const [before, after] = resolved.split(phrase)
 
   return (
     <p className={styles.intro}>
       {before}
-      <a className={styles.trustpilot} href="https://www.trustpilot.com" target="_blank" rel="noreferrer">
-        {trustpilotLabel}
+      <a className={styles.trustpilot} href={TRUSTPILOT_URL} target="_blank" rel="noreferrer">
+        {phrase}
       </a>
       {after}
     </p>

@@ -1,0 +1,27 @@
+.prose {
+  display: grid;
+  gap: var(--space-md);
+  max-width: 46rem;
+  margin-bottom: var(--space-xl);
+  font-family: var(--font-nav);
+  font-stretch: 87.5%;
+  letter-spacing: 0.02em;
+  color: var(--color-nav);
+}
+
+.prose p {
+  color: var(--color-nav);
+}
+
+.lead {
+  font-weight: 700;
+}
+
+.title {
+  font-family: var(--font-nav);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.03em;
+  color: var(--color-nav);
+}

@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Container } from '@/components/common/Container'
 import { PageHeader } from '@/components/common/PageHeader'
+import { PageSeo } from '@/components/seo/PageSeo'
 import { routes } from '@/app/routes'
 import styles from '../Page.module.css'
 
@@ -15,6 +16,12 @@ export function OrderSuccessPage() {
 
   return (
     <div className={styles.page}>
+      <PageSeo
+        title="Order received"
+        description="Your book order request was saved. Igor Donchik Art will confirm it separately."
+        path={routes.orderSuccess}
+        noIndex
+      />
       <Container>
         <PageHeader
           title="Order received"

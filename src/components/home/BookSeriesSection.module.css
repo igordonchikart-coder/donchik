@@ -7,13 +7,39 @@
   padding-top: 0;
 }
 
-.title {
+.header {
+  display: grid;
+  gap: var(--space-sm);
   margin-bottom: var(--space-lg);
+  justify-items: center;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
   font-family: var(--font-nav);
   font-size: var(--font-size-section);
   font-weight: 700;
   font-stretch: 87.5%;
   letter-spacing: 0.03em;
-  text-align: center;
   color: var(--color-nav);
+}
+
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--color-nav-active);
+  text-decoration: none;
+}
+
+.lead {
+  max-width: 42rem;
+  margin: 0;
+  font-family: var(--font-nav);
+  font-stretch: 87.5%;
+  color: var(--color-text-muted);
 }

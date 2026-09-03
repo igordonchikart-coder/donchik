@@ -16,11 +16,11 @@ export interface AboutAuthorSocial {
 export const aboutAuthorHeading = 'Who Is Igor Donchik?'
 
 export const aboutAuthorParagraphs = [
-  'My name is Igor Donchik. I am a military illustrator, historical researcher, and author specializing in the reconstruction of armored vehicles, camouflage systems, and tactical markings of the World War II.',
-  'I am the creator of the Panzer Camouflage book series — a multi-volume project dedicated to historically accurate camouflage schemes of German armored units from 1939 to 1945. Each volume is based on deep archival research, original wartime photographs, and documentary video materials. I carefully analyze visual sources frame by frame to reconstruct authentic paint patterns, divisional emblems, and field-applied markings.',
-  'All armored vehicle models in my books are drawn entirely by hand. I do not use AI for the reconstruction process. Every illustration is the result of manual work, historical comparison, and artistic precision.',
-  'Beyond publishing, I am also developing tabletop wargames inspired by historical events. These projects combine visual authenticity, operational mechanics, and immersive design. My goal is to create strategic games where historical detail and gameplay depth coexist in balance.',
-  'Looking ahead, I continue expanding the Panzer Camouflage series, launching new research projects, and developing original wargame systems set in both historical and alternative-history environments. My work is dedicated to preserving visual military history through accuracy, discipline, and artistic craftsmanship.',
+  'My name is Igor Donchik. I am a military illustrator, historical researcher, and author specializing in armored vehicles, camouflage systems, unit insignia, and tactical markings of the Second World War.',
+  'This official site gathers the encyclopedias I publish: Panzer Camouflage for armor paint schemes, German Military Unit Insignia for divisional emblems, and German Military Symbols for the signs used on vehicles and maps. Each volume is based on archival research, original wartime photographs, and documentary film — compared frame by frame before a plate is drawn.',
+  'All vehicle profiles, badges, and symbols in the current catalog are drawn by hand. I do not use generative AI for reconstruction. Every illustration is manual work, historical comparison, and line control meant to stay useful on a modeler’s bench.',
+  'Beyond the books, I also develop tabletop wargames rooted in historical events. Those projects combine visual authenticity with operational mechanics. The same research that feeds a camouflage plate can feed a scenario.',
+  'Looking ahead, I continue the Panzer Camouflage and insignia series, open new research files, and keep the official catalog here — with honest coming-soon dates rather than empty pre-order carts. The work is dedicated to preserving visual military history through accuracy, discipline, and craft.',
 ]
 
 export const aboutAuthorPortraits: AboutAuthorPortrait[] = [

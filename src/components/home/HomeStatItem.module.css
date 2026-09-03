@@ -5,6 +5,24 @@
   text-align: center;
 }
 
+.link {
+  display: grid;
+  justify-items: center;
+  gap: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:hover,
+.link:focus-visible {
+  text-decoration: none;
+}
+
+.link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 6px;
+}
+
 .default {
   color: var(--color-nav);
 }
@@ -16,12 +34,13 @@
 .valueRow {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  justify-content: center;
+  gap: 0.4rem;
   margin: 0;
 }
 
 .star {
-  width: clamp(1.6rem, 3.2vw, 2.35rem);
+  width: clamp(1.35rem, 2.6vw, 1.9rem);
   height: auto;
   flex-shrink: 0;
   display: block;

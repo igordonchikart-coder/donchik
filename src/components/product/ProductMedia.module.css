@@ -3,4 +3,5 @@
   gap: var(--space-md);
   min-width: 0;
   align-content: start;
+  justify-items: stretch;
 }

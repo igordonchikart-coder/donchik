@@ -13,3 +13,26 @@
   line-height: 1.2;
   color: var(--color-nav);
 }
+
+.audience {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.audienceTitle {
+  font-family: var(--font-nav);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  font-stretch: 87.5%;
+  letter-spacing: 0.03em;
+  color: var(--color-nav);
+}
+
+.audienceList {
+  display: grid;
+  gap: var(--space-xs);
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--color-text-muted);
+}

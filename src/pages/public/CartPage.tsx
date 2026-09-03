@@ -3,6 +3,8 @@ import { CartSummary } from '@/components/cart/CartSummary'
 import { Container } from '@/components/common/Container'
 import { EmptyState } from '@/components/common/EmptyState'
 import { PageHeader } from '@/components/common/PageHeader'
+import { PageSeo } from '@/components/seo/PageSeo'
+import { cartPageCopy } from '@/data/staticPageCopy'
 import { useCart } from '@/hooks/useCart'
 import { routes } from '@/app/routes'
 import styles from '../Page.module.css'
@@ -12,6 +14,12 @@ export function CartPage() {
 
   return (
     <div className={styles.page}>
+      <PageSeo
+        title={cartPageCopy.seoTitle}
+        description={cartPageCopy.seoDescription}
+        path={routes.cart}
+        noIndex
+      />
       <Container>
         <PageHeader title="Cart" description="Review the order before checkout." />
         {items.length === 0 ? (
