@@ -49,6 +49,9 @@ export function LazyImage({
       decoding="async"
       fetchPriority={eager ? 'high' : 'low'}
       draggable={false}
+      onError={() => {
+        onReadyRef.current?.()
+      }}
       onLoad={(event) => {
         setReady(true)
         onReadyRef.current?.()

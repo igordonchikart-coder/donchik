@@ -8,7 +8,7 @@ import { ProductCard } from '@/components/catalog/ProductCard'
 import { uploadProductImage } from '@/services/imagesService'
 import type { Category, Product, ProductInput, ProductStatus } from '@/types'
 import { DEFAULT_CURRENCY } from '@/utils/constants'
-import { getFramedArtwork } from '@/utils/catalogArtwork'
+import { getFramedArtwork, usableCatalogImages, withCatalogArtwork } from '@/utils/catalogArtwork'
 import { toVolumeLabel } from '@/utils/product'
 import { slugify } from '@/utils/slugify'
 import styles from './ProductForm.module.css'
@@ -51,6 +51,7 @@ interface FormState {
 }
 
 function toState(product: Product | undefined, categories: Category[]): FormState {
+  const photos = usableCatalogImages([product?.coverImage, ...(product?.gallery ?? [])])
   return {
     title: product?.title ?? '',
     slug: product?.slug ?? '',
@@ -62,9 +63,9 @@ function toState(product: Product | undefined, categories: Category[]): FormStat
     price: product ? String(product.price) : '',
     originalPrice: product?.originalPrice ? String(product.originalPrice) : '',
     currency: product?.currency ?? DEFAULT_CURRENCY,
-    coverImage: product?.coverImage ?? '',
-    gallery: product?.gallery ?? [],
-    pageGallery: product?.pageGallery ?? [],
+    coverImage: photos[0] ?? '',
+    gallery: photos.slice(1),
+    pageGallery: usableCatalogImages(product?.pageGallery ?? []),
     categoryId: product?.categoryId ?? categories[0]?.id ?? '',
     stock: product ? String(product.stock) : '0',
     isAvailable: product?.isAvailable ?? true,
@@ -221,7 +222,14 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
       if (!values.description.trim()) {
         throw new Error('Enter the book story')
       }
-      if (!values.coverImage) {
+      const photos = usableCatalogImages([values.coverImage, ...values.gallery])
+      const pageGallery = usableCatalogImages(values.pageGallery)
+      const framedArtwork = getFramedArtwork({
+        categoryId: values.categoryId,
+        volumeNumber,
+        isOnSale: values.isOnSale,
+      })
+      if (!photos[0] && !framedArtwork) {
         throw new Error('Add a cover image')
       }
       if (!Number.isFinite(price) || price < 0) {
@@ -246,9 +254,9 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
         price,
         originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
         currency: values.currency,
-        coverImage: values.coverImage,
-        gallery: values.gallery,
-        pageGallery: values.pageGallery,
+        coverImage: photos[0] ?? '',
+        gallery: photos.slice(1),
+        pageGallery,
         categoryId: values.categoryId,
         stock,
         isAvailable: values.isAvailable,
@@ -275,7 +283,7 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
     const price = Number(values.price)
     const category = categories.find((item) => item.id === values.categoryId)
 
-    return {
+    return withCatalogArtwork({
       id: initialProduct?.id ?? 'preview',
       slug: values.slug || 'preview',
       title: values.title || 'Untitled book',
@@ -305,7 +313,7 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
       hasVideo: values.hasVideo,
       createdAt: initialProduct?.createdAt ?? '',
       updatedAt: initialProduct?.updatedAt ?? '',
-    }
+    })
   }, [categories, initialProduct, values])
 
   const canPreviewCard = Boolean(previewProduct.coverImage || getFramedArtwork(previewProduct))

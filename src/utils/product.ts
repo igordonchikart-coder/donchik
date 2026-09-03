@@ -1,4 +1,5 @@
 import type { Product } from '@/types'
+import { usableCatalogImages } from '@/utils/catalogArtwork'
 
 export function isPurchasable(product: Product): boolean {
   return product.status === 'available' && product.isAvailable && product.stock > 0
@@ -20,7 +21,7 @@ export function getProductHeadline(product: Pick<Product, 'title' | 'volumeNumbe
 export function getProductPageSlides(
   product: Pick<Product, 'pageGallery' | 'coverImage' | 'gallery'>,
 ): string[] {
-  const pageSlides = (product.pageGallery ?? []).filter(Boolean)
+  const pageSlides = usableCatalogImages(product.pageGallery ?? [])
   if (pageSlides.length > 0) {
     return pageSlides
   }
@@ -29,15 +30,7 @@ export function getProductPageSlides(
 }
 
 export function getProductCardSlides(product: Pick<Product, 'coverImage' | 'gallery'>): string[] {
-  const slides: string[] = []
-
-  for (const image of [product.coverImage, ...product.gallery]) {
-    if (image && !slides.includes(image)) {
-      slides.push(image)
-    }
-  }
-
-  return slides.length > 0 ? slides : [product.coverImage]
+  return usableCatalogImages([product.coverImage, ...product.gallery])
 }
 
 export function padProductCardSlides(
@@ -45,7 +38,7 @@ export function padProductCardSlides(
   count = 3,
 ): string[] {
   const slides = getProductCardSlides(product)
-  const fill = slides[0] ?? product.coverImage
+  const fill = slides[0]
 
   if (!fill) {
     return slides

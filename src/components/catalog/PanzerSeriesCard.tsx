@@ -6,7 +6,7 @@ import { LazyImage } from '@/components/common/LazyImage'
 import { getProductCardDescription } from '@/data/productCardCopy'
 import { useCardTilt, scheduleCardNavigation } from '@/hooks/useCardTilt'
 import type { Product } from '@/types'
-import { getFramedArtwork } from '@/utils/catalogArtwork'
+import { getFramedArtwork, isUsableCatalogImage, usableCatalogImages } from '@/utils/catalogArtwork'
 import { isComingSoon, padProductCardSlides } from '@/utils/product'
 import sliderDots from '@/styles/sliderDots.module.css'
 import { ProductCardFooter } from './ProductCardFooter'
@@ -57,10 +57,10 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
     })
   const productTo = routes.product(product.slug)
   const framedArtwork = getFramedArtwork(product)
-  const coverImage = product.coverImage || framedArtwork
+  const coverImage = (isUsableCatalogImage(product.coverImage) ? product.coverImage : '') || framedArtwork
   const slides = padProductCardSlides({
     coverImage: coverImage ?? '',
-    gallery: product.gallery.filter((image) => image !== coverImage && image !== product.coverImage),
+    gallery: usableCatalogImages(product.gallery).filter((image) => image !== coverImage),
   })
   const [activeIndex, setActiveIndex] = useState(0)
   const safeIndex = Math.min(activeIndex, Math.max(slides.length - 1, 0))
