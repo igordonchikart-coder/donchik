@@ -58,26 +58,28 @@ export function withCatalogArtwork<T extends Product>(product: T): T {
   const coverImage = isUsableCatalogImage(product.coverImage)
     ? product.coverImage
     : (gallery[0] ?? '')
+  const restGallery = coverImage ? gallery.filter((image) => image !== coverImage) : gallery
+
+  if (coverImage) {
+    return {
+      ...product,
+      coverImage,
+      gallery: restGallery,
+    }
+  }
 
   if (!artwork) {
     return {
       ...product,
-      coverImage,
-      gallery,
+      coverImage: '',
+      gallery: restGallery,
     }
   }
 
-  if (coverImage && gallery.length > 0) {
-    return {
-      ...product,
-      coverImage,
-      gallery,
-    }
-  }
-
+  // No uploaded cover — use the framed series artwork as a single slide.
   return {
     ...product,
-    coverImage: coverImage || artwork,
-    gallery: gallery.length > 0 ? gallery : [artwork],
+    coverImage: artwork,
+    gallery: [],
   }
 }

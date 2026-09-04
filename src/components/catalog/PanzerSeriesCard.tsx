@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import { panzerCardAssets, panzerVolumeYears } from '@/assets/books/panzer-camouflage'
@@ -6,8 +6,8 @@ import { LazyImage } from '@/components/common/LazyImage'
 import { getProductCardDescription } from '@/data/productCardCopy'
 import { useCardTilt, scheduleCardNavigation } from '@/hooks/useCardTilt'
 import type { Product } from '@/types'
-import { getFramedArtwork, isUsableCatalogImage, usableCatalogImages } from '@/utils/catalogArtwork'
-import { isComingSoon, padProductCardSlides } from '@/utils/product'
+import { getFramedArtwork } from '@/utils/catalogArtwork'
+import { getProductCardSlides, isComingSoon } from '@/utils/product'
 import sliderDots from '@/styles/sliderDots.module.css'
 import { ProductCardFooter } from './ProductCardFooter'
 import styles from './PanzerSeriesCard.module.css'
@@ -57,11 +57,9 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
     })
   const productTo = routes.product(product.slug)
   const framedArtwork = getFramedArtwork(product)
-  const coverImage = (isUsableCatalogImage(product.coverImage) ? product.coverImage : '') || framedArtwork
-  const slides = padProductCardSlides({
-    coverImage: coverImage ?? '',
-    gallery: usableCatalogImages(product.gallery).filter((image) => image !== coverImage),
-  })
+  const uploadedSlides = getProductCardSlides(product)
+  const slides = uploadedSlides.length > 0 ? uploadedSlides : framedArtwork ? [framedArtwork] : []
+  const coverImage = slides[0]
   const [activeIndex, setActiveIndex] = useState(0)
   const safeIndex = Math.min(activeIndex, Math.max(slides.length - 1, 0))
   const comingSoon = isComingSoon(product)
@@ -77,6 +75,11 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
     return null
   }
 
+  function handlePointerLeave(event: ReactPointerEvent<HTMLDivElement>) {
+    setActiveIndex(0)
+    onPointerLeave(event)
+  }
+
   return (
     <article ref={cardRef} className={`${styles.card} ${artReady ? styles.cardReady : ''}`}>
       <div
@@ -85,7 +88,7 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
         onPointerMove={onPointerMove}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
-        onPointerLeave={onPointerLeave}
+        onPointerLeave={handlePointerLeave}
         onDragStart={onDragStart}
         onClick={(event) => {
           if (preview || !artReady || (event.target as HTMLElement).closest('button')) {
@@ -131,27 +134,29 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
                 <img className={styles.yearBadge} src={yearBadge} alt="" aria-hidden="true" />
               ) : null}
 
-              <div className={`${sliderDots.dots} ${styles.dots}`} role="tablist" aria-label={`${product.title} images`}>
-                {slides.map((_, index) => {
-                  const isActive = index === safeIndex
+              {slides.length > 1 ? (
+                <div className={`${sliderDots.dots} ${styles.dots}`} role="tablist" aria-label={`${product.title} images`}>
+                  {slides.map((_, index) => {
+                    const isActive = index === safeIndex
 
-                  return (
-                    <button
-                      key={index}
-                      className={`${sliderDots.dot} ${isActive ? sliderDots.dotActive : ''}`}
-                      type="button"
-                      role="tab"
-                      aria-selected={isActive}
-                      aria-label={`Image ${index + 1}`}
-                      onClick={(event) => {
-                        event.preventDefault()
-                        event.stopPropagation()
-                        setActiveIndex(index)
-                      }}
-                    />
-                  )
-                })}
-              </div>
+                    return (
+                      <button
+                        key={index}
+                        className={`${sliderDots.dot} ${isActive ? sliderDots.dotActive : ''}`}
+                        type="button"
+                        role="tab"
+                        aria-selected={isActive}
+                        aria-label={`Image ${index + 1}`}
+                        onClick={(event) => {
+                          event.preventDefault()
+                          event.stopPropagation()
+                          setActiveIndex(index)
+                        }}
+                      />
+                    )
+                  })}
+                </div>
+              ) : null}
             </div>
 
             <img className={styles.divider} src={panzerCardAssets.cardDivider} alt="" aria-hidden="true" />

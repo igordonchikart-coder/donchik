@@ -30,24 +30,7 @@ export function getProductPageSlides(
 }
 
 export function getProductCardSlides(product: Pick<Product, 'coverImage' | 'gallery'>): string[] {
-  return usableCatalogImages([product.coverImage, ...product.gallery])
-}
-
-export function padProductCardSlides(
-  product: Pick<Product, 'coverImage' | 'gallery'>,
-  count = 3,
-): string[] {
-  const slides = getProductCardSlides(product)
-  const fill = slides[0]
-
-  if (!fill) {
-    return slides
-  }
-
-  const padded = [...slides]
-  while (padded.length < count) {
-    padded.push(fill)
-  }
-
-  return padded
+  const all = usableCatalogImages([product.coverImage, ...product.gallery])
+  const uploaded = all.filter((url) => /\/storage\/v1\/object\/public\//.test(url) || /supabase\.co\/storage\//.test(url))
+  return uploaded.length > 0 ? uploaded : all
 }

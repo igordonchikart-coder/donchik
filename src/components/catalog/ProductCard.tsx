@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import type { Product } from '@/types'
@@ -32,10 +32,15 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
     useCardTilt<HTMLDivElement>({
       maxTilt: 10,
     })
-  const safeIndex = Math.min(activeIndex, slides.length - 1)
+  const safeIndex = Math.min(activeIndex, Math.max(slides.length - 1, 0))
   const comingSoon = isComingSoon(product)
   const productTo = routes.product(product.slug)
   const body = getProductCardDescription(product)
+
+  function handlePointerLeave(event: ReactPointerEvent<HTMLDivElement>) {
+    setActiveIndex(0)
+    onPointerLeave(event)
+  }
 
   return (
     <article className={styles.card}>
@@ -45,7 +50,7 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
         onPointerMove={onPointerMove}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
-        onPointerLeave={onPointerLeave}
+        onPointerLeave={handlePointerLeave}
         onDragStart={onDragStart}
         onClick={(event) => {
           if ((event.target as HTMLElement).closest('button')) {
