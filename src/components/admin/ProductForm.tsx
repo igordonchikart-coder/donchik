@@ -8,7 +8,7 @@ import { ProductCard } from '@/components/catalog/ProductCard'
 import { uploadProductImage } from '@/services/imagesService'
 import type { Category, Product, ProductInput, ProductStatus } from '@/types'
 import { DEFAULT_CURRENCY } from '@/utils/constants'
-import { getFramedArtwork, usableCatalogImages, withCatalogArtwork } from '@/utils/catalogArtwork'
+import { usableCatalogImages, withCatalogArtwork } from '@/utils/catalogArtwork'
 import { toVolumeLabel } from '@/utils/product'
 import { slugify } from '@/utils/slugify'
 import styles from './ProductForm.module.css'
@@ -224,12 +224,7 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
       }
       const photos = usableCatalogImages([values.coverImage, ...values.gallery])
       const pageGallery = usableCatalogImages(values.pageGallery)
-      const framedArtwork = getFramedArtwork({
-        categoryId: values.categoryId,
-        volumeNumber,
-        isOnSale: values.isOnSale,
-      })
-      if (!photos[0] && !framedArtwork) {
+      if (!photos[0]) {
         throw new Error('Add a cover image')
       }
       if (!Number.isFinite(price) || price < 0) {
@@ -316,7 +311,7 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
     })
   }, [categories, initialProduct, values])
 
-  const canPreviewCard = Boolean(previewProduct.coverImage || getFramedArtwork(previewProduct))
+  const canPreviewCard = Boolean(previewProduct.coverImage)
 
   return (
     <div className={`${styles.layout} ${tab === 'book' ? styles.layoutBook : ''}`}>

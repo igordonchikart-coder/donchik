@@ -15,6 +15,11 @@ export function isUsableCatalogImage(url: string | undefined | null): boolean {
     return false
   }
 
+  // Bundled hashed assets used as temporary stubs — not real admin uploads.
+  if (value.startsWith('/assets/') || /\/assets\/[^/?#]+\.(webp|png|jpe?g)(\?|$)/i.test(value)) {
+    return false
+  }
+
   if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(value)) {
     return false
   }
@@ -53,33 +58,15 @@ export function getFramedArtwork(product: Pick<Product, 'categoryId' | 'volumeNu
 }
 
 export function withCatalogArtwork<T extends Product>(product: T): T {
-  const artwork = getFramedArtwork(product)
   const gallery = usableCatalogImages(product.gallery)
   const coverImage = isUsableCatalogImage(product.coverImage)
     ? product.coverImage
     : (gallery[0] ?? '')
   const restGallery = coverImage ? gallery.filter((image) => image !== coverImage) : gallery
 
-  if (coverImage) {
-    return {
-      ...product,
-      coverImage,
-      gallery: restGallery,
-    }
-  }
-
-  if (!artwork) {
-    return {
-      ...product,
-      coverImage: '',
-      gallery: restGallery,
-    }
-  }
-
-  // No uploaded cover — use the framed series artwork as a single slide.
   return {
     ...product,
-    coverImage: artwork,
-    gallery: [],
+    coverImage,
+    gallery: restGallery,
   }
 }

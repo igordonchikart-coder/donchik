@@ -30,7 +30,5 @@ export function getProductPageSlides(
 }
 
 export function getProductCardSlides(product: Pick<Product, 'coverImage' | 'gallery'>): string[] {
-  const all = usableCatalogImages([product.coverImage, ...product.gallery])
-  const uploaded = all.filter((url) => /\/storage\/v1\/object\/public\//.test(url) || /supabase\.co\/storage\//.test(url))
-  return uploaded.length > 0 ? uploaded : all
+  return usableCatalogImages([product.coverImage, ...product.gallery])
 }
