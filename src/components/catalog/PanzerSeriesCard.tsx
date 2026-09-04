@@ -5,6 +5,7 @@ import { panzerCardAssets, panzerVolumeYears } from '@/assets/books/panzer-camou
 import { LazyImage } from '@/components/common/LazyImage'
 import { getProductCardDescription } from '@/data/productCardCopy'
 import { useCardTilt, scheduleCardNavigation } from '@/hooks/useCardTilt'
+import { useCardSlideshow } from '@/hooks/useCardSlideshow'
 import type { Product } from '@/types'
 import { getProductCardSlides, isComingSoon } from '@/utils/product'
 import sliderDots from '@/styles/sliderDots.module.css'
@@ -57,8 +58,7 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
   const productTo = routes.product(product.slug)
   const slides = getProductCardSlides(product)
   const coverImage = slides[0]
-  const [activeIndex, setActiveIndex] = useState(0)
-  const safeIndex = Math.min(activeIndex, Math.max(slides.length - 1, 0))
+  const { activeIndex: safeIndex, warmed, onHoverStart, onHoverEnd, selectSlide } = useCardSlideshow(slides)
   const comingSoon = isComingSoon(product)
   const yearBadge = getYearBadge(product)
   const cropLeft = product.categoryId === 'series-panzer-camouflage' && product.volumeNumber === 6
@@ -72,8 +72,13 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
     return null
   }
 
+  function handlePointerEnter(event: ReactPointerEvent<HTMLDivElement>) {
+    onHoverStart()
+    onPointerEnter(event)
+  }
+
   function handlePointerLeave(event: ReactPointerEvent<HTMLDivElement>) {
-    setActiveIndex(0)
+    onHoverEnd()
     onPointerLeave(event)
   }
 
@@ -81,7 +86,7 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
     <article ref={cardRef} className={`${styles.card} ${artReady ? styles.cardReady : ''}`}>
       <div
         className={styles.frameWrap}
-        onPointerEnter={onPointerEnter}
+        onPointerEnter={handlePointerEnter}
         onPointerMove={onPointerMove}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
@@ -119,7 +124,7 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
                         className={`${styles.artwork} ${cropLeft ? styles.artworkCropLeft : ''}`}
                         src={src}
                         alt=""
-                        eager={index === 0}
+                        eager={index === 0 || warmed}
                         rootMargin="900px 0px"
                         onReady={index === 0 ? () => setArtReady(true) : undefined}
                       />
@@ -147,7 +152,7 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
                         onClick={(event) => {
                           event.preventDefault()
                           event.stopPropagation()
-                          setActiveIndex(index)
+                          selectSlide(index)
                         }}
                       />
                     )

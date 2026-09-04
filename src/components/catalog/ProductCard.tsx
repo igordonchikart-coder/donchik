@@ -1,9 +1,10 @@
-import { useState, type PointerEvent as ReactPointerEvent } from 'react'
+import { type PointerEvent as ReactPointerEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import type { Product } from '@/types'
 import { getProductCardDescription } from '@/data/productCardCopy'
 import { scheduleCardNavigation, useCardTilt } from '@/hooks/useCardTilt'
+import { useCardSlideshow } from '@/hooks/useCardSlideshow'
 import { getProductCardSlides, isComingSoon } from '@/utils/product'
 import { PanzerSeriesCard } from './PanzerSeriesCard'
 import { ProductCardDots } from './ProductCardDots'
@@ -26,19 +27,23 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
   }
 
   const slides = getProductCardSlides(product)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const { activeIndex: safeIndex, onHoverStart, onHoverEnd, selectSlide } = useCardSlideshow(slides)
   const navigate = useNavigate()
   const { tiltRef, onPointerEnter, onPointerMove, onPointerDown, onPointerUp, onPointerLeave, onDragStart } =
     useCardTilt<HTMLDivElement>({
       maxTilt: 10,
     })
-  const safeIndex = Math.min(activeIndex, Math.max(slides.length - 1, 0))
   const comingSoon = isComingSoon(product)
   const productTo = routes.product(product.slug)
   const body = getProductCardDescription(product)
 
+  function handlePointerEnter(event: ReactPointerEvent<HTMLDivElement>) {
+    onHoverStart()
+    onPointerEnter(event)
+  }
+
   function handlePointerLeave(event: ReactPointerEvent<HTMLDivElement>) {
-    setActiveIndex(0)
+    onHoverEnd()
     onPointerLeave(event)
   }
 
@@ -46,7 +51,7 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
     <article className={styles.card}>
       <div
         className={styles.frame}
-        onPointerEnter={onPointerEnter}
+        onPointerEnter={handlePointerEnter}
         onPointerMove={onPointerMove}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
@@ -74,7 +79,7 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
           </div>
           <ProductCardMedia
             product={product}
-            image={slides[safeIndex]}
+            image={slides[safeIndex] ?? ''}
             to={productTo}
             comingSoon={comingSoon}
           >
@@ -83,7 +88,7 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
                 count={slides.length}
                 activeIndex={safeIndex}
                 label={product.title}
-                onSelect={setActiveIndex}
+                onSelect={selectSlide}
               />
             </div>
           </ProductCardMedia>
