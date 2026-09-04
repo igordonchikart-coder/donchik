@@ -46,6 +46,7 @@ function loadState(): MockStoreState {
         description: fresh.description,
         shortDescription: fresh.shortDescription,
         chapters: fresh.chapters,
+        pageCopy: fresh.pageCopy,
         hasVideo: fresh.hasVideo,
         features: fresh.features,
       }
