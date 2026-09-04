@@ -36,7 +36,7 @@ function createDust(width: number, height: number, footerTop: number): Dust {
     y: Math.random() * usableHeight,
     vx: (Math.random() - 0.5) * (0.012 + depth * 0.02),
     vy: -(0.004 + Math.random() * 0.012) * (0.45 + depth * 0.7),
-    size: 0.55 + depth * 1.35,
+    size: 0.65 + depth * 1.55,
     heat: Math.random(),
     twinkle: Math.random() * Math.PI * 2,
     twinkleSpeed: 0.0008 + Math.random() * 0.0018,
@@ -44,14 +44,34 @@ function createDust(width: number, height: number, footerTop: number): Dust {
   }
 }
 
-function dustFill(heat: number, alpha: number) {
-  if (heat > 0.82) {
-    return `rgba(255, 246, 220, ${alpha})`
-  }
-  if (heat > 0.45) {
-    return `rgba(232, 196, 92, ${alpha})`
-  }
-  return `rgba(186, 148, 78, ${alpha})`
+function drawSpark(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  heat: number,
+  alpha: number,
+) {
+  const glowRadius = size * (2.6 + heat * 2.4)
+  const glow = ctx.createRadialGradient(x, y, 0, x, y, glowRadius)
+  glow.addColorStop(0, `rgba(255, 200, 70, ${alpha * 0.42})`)
+  glow.addColorStop(0.28, `rgba(255, 120, 36, ${alpha * 0.28})`)
+  glow.addColorStop(0.62, `rgba(220, 55, 18, ${alpha * 0.12})`)
+  glow.addColorStop(1, 'rgba(160, 20, 8, 0)')
+  ctx.fillStyle = glow
+  ctx.beginPath()
+  ctx.arc(x, y, glowRadius, 0, Math.PI * 2)
+  ctx.fill()
+
+  const coreRadius = size * (0.5 + heat * 0.4)
+  const core = ctx.createRadialGradient(x, y, 0, x, y, coreRadius)
+  core.addColorStop(0, `rgba(255, 252, 235, ${Math.min(1, alpha * 1.4)})`)
+  core.addColorStop(0.4, `rgba(255, 228, 110, ${alpha * 0.95})`)
+  core.addColorStop(1, 'rgba(255, 150, 40, 0)')
+  ctx.fillStyle = core
+  ctx.beginPath()
+  ctx.arc(x, y, coreRadius, 0, Math.PI * 2)
+  ctx.fill()
 }
 
 export function EmberSparks() {
@@ -144,12 +164,8 @@ export function EmberSparks() {
         }
 
         const pulse = 0.55 + Math.sin(particle.twinkle) * 0.45
-        const alpha = (0.22 + particle.depth * 0.42) * pulse
-
-        ctx.beginPath()
-        ctx.fillStyle = dustFill(particle.heat, alpha)
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fill()
+        const alpha = (0.28 + particle.depth * 0.5) * pulse
+        drawSpark(ctx, particle.x, particle.y, particle.size, particle.heat, alpha)
       }
     }
 
