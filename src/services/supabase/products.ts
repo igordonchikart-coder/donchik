@@ -1,7 +1,8 @@
 import type { Category } from '@/types'
 import type { BookChapter, Product, ProductInput, ProductStatus } from '@/types/product'
-import { toVolumeLabel } from '@/utils/product'
 import { withCatalogArtwork } from '@/utils/catalogArtwork'
+import { toVolumeLabel } from '@/utils/product'
+import { packChapters, unpackChapters } from '@/utils/productPageMeta'
 import { getSupabaseClient } from './client'
 
 interface ProductRow {
@@ -37,6 +38,7 @@ interface ProductRow {
 
 function mapProduct(row: ProductRow): Product {
   const volumeNumber = row.volume_number ?? 1
+  const { chapters, pageCopy } = unpackChapters(Array.isArray(row.chapters) ? row.chapters : [])
   return withCatalogArtwork({
     id: row.id,
     slug: row.slug,
@@ -46,7 +48,8 @@ function mapProduct(row: ProductRow): Product {
     shortDescription: row.short_description,
     description: row.description,
     features: Array.isArray(row.features) ? row.features : [],
-    chapters: Array.isArray(row.chapters) ? row.chapters : [],
+    chapters,
+    pageCopy,
     price: row.price,
     originalPrice: row.original_price ?? undefined,
     currency: row.currency,
@@ -93,7 +96,7 @@ function toRow(input: ProductInput) {
     status: input.status,
     volume_number: input.volumeNumber,
     features: input.features,
-    chapters: input.chapters,
+    chapters: packChapters(input.chapters, input.pageCopy),
     release_year: input.releaseYear ?? null,
     has_video: input.hasVideo,
   }

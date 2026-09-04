@@ -145,6 +145,19 @@ function book(
     description: copy?.story.join('\n\n') ?? partial.description,
     features: copy?.features ?? partial.features,
     chapters: copy?.chapters ?? (partial.chapters.length > 0 ? partial.chapters : chaptersFor(partial.categoryId)),
+    pageCopy: copy
+      ? {
+          headline: copy.headline,
+          seoTitle: copy.seoTitle,
+          seoDescription: copy.seoDescription,
+          intro: copy.intro,
+          storyTitle: copy.storyTitle,
+          audienceTitle: copy.audienceTitle,
+          audience: copy.audience,
+          specs: copy.specs,
+          isbn: copy.isbn,
+        }
+      : partial.pageCopy,
     hasVideo: true,
     createdAt: partial.createdAt ?? '2026-02-01T12:00:00.000Z',
     updatedAt: partial.createdAt ?? '2026-02-01T12:00:00.000Z',

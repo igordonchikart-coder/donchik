@@ -7,6 +7,24 @@ export interface BookChapter {
   description: string
 }
 
+export interface ProductSpec {
+  label: string
+  value: string
+}
+
+/** Editable book-page fields beyond story / features / chapters. */
+export interface ProductPageMeta {
+  headline?: string
+  seoTitle?: string
+  seoDescription?: string
+  intro?: string[]
+  storyTitle?: string
+  audienceTitle?: string
+  audience?: string[]
+  specs?: ProductSpec[]
+  isbn?: string
+}
+
 export interface Product {
   id: string
   slug: string
@@ -17,6 +35,7 @@ export interface Product {
   description: string
   features: string[]
   chapters: BookChapter[]
+  pageCopy?: ProductPageMeta
   price: number
   originalPrice?: number
   currency: string
@@ -48,6 +67,7 @@ export interface ProductInput {
   description: string
   features: string[]
   chapters: BookChapter[]
+  pageCopy?: ProductPageMeta
   price: number
   originalPrice?: number
   currency: string

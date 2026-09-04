@@ -1,5 +1,12 @@
 export type { Category, CategoryInput } from './category'
-export type { Product, ProductInput, ProductStatus, BookChapter } from './product'
+export type {
+  Product,
+  ProductInput,
+  ProductStatus,
+  BookChapter,
+  ProductPageMeta,
+  ProductSpec,
+} from './product'
 export type { CartItem } from './cart'
 export type { Customer, CustomerInput } from './customer'
 export type { OrderStatus, OrderItem, Order, CreateOrderInput } from './order'

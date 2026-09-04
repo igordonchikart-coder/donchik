@@ -1,15 +1,23 @@
 import { type FormEvent, useMemo, useState } from 'react'
-import { BookPageEditor } from '@/components/admin/BookPageEditor'
+import { BookPageEditor, type BookPageEditorValues } from '@/components/admin/BookPageEditor'
 import { PhotoStrip } from '@/components/admin/PhotoStrip'
 import { Button } from '@/components/common/Button'
 import { SelectField, TextAreaField, TextField } from '@/components/common/Field'
 import { PageHeader } from '@/components/common/PageHeader'
 import { ProductCard } from '@/components/catalog/ProductCard'
+import { getCatalogPageMeta, getProductCopyBySlug } from '@/data/productPageCopy'
 import { uploadProductImage } from '@/services/imagesService'
 import type { Category, Product, ProductInput, ProductStatus } from '@/types'
 import { DEFAULT_CURRENCY } from '@/utils/constants'
 import { usableCatalogImages, withCatalogArtwork } from '@/utils/catalogArtwork'
 import { toVolumeLabel } from '@/utils/product'
+import {
+  paragraphsToText,
+  sanitizePageMeta,
+  specsToText,
+  textToParagraphs,
+  textToSpecs,
+} from '@/utils/productPageMeta'
 import { slugify } from '@/utils/slugify'
 import styles from './ProductForm.module.css'
 
@@ -23,43 +31,53 @@ interface ProductFormProps {
   onSubmit: (input: ProductInput) => Promise<void>
 }
 
-interface FormState {
-  title: string
-  slug: string
-  volumeNumber: string
+interface FormState extends BookPageEditorValues {
   shortDescription: string
-  description: string
-  features: string
-  chapters: string
   price: string
   originalPrice: string
   currency: string
   coverImage: string
   gallery: string[]
-  pageGallery: string[]
-  categoryId: string
   stock: string
   isAvailable: boolean
-  isFeatured: boolean
   isOnSale: boolean
   saleLabel: string
   deliveryNote: string
-  conditionNote: string
   status: ProductStatus
-  releaseYear: string
-  hasVideo: boolean
 }
 
 function toState(product: Product | undefined, categories: Category[]): FormState {
   const photos = usableCatalogImages([product?.coverImage, ...(product?.gallery ?? [])])
+  const catalog = product ? getProductCopyBySlug(product.slug) : undefined
+  const catalogMeta = product ? getCatalogPageMeta(product.slug) : undefined
+  const pageCopy = sanitizePageMeta({
+    ...catalogMeta,
+    ...product?.pageCopy,
+  })
+  const story =
+    product?.description.trim() ||
+    (catalog?.story.length ? catalog.story.join('\n\n') : '') ||
+    ''
+  const features = product?.features.length ? product.features : (catalog?.features ?? [])
+  const chapters = product?.chapters.length ? product.chapters : (catalog?.chapters ?? [])
+
   return {
     title: product?.title ?? '',
     slug: product?.slug ?? '',
     volumeNumber: product ? String(product.volumeNumber) : '1',
     shortDescription: product?.shortDescription ?? '',
-    description: product?.description ?? '',
-    features: product?.features.join('\n') ?? '',
-    chapters: (product?.chapters ?? []).map((chapter) => `${chapter.title} | ${chapter.description}`).join('\n'),
+    headline: pageCopy.headline ?? '',
+    seoTitle: pageCopy.seoTitle ?? '',
+    seoDescription: pageCopy.seoDescription ?? '',
+    intro: paragraphsToText(pageCopy.intro),
+    storyTitle: pageCopy.storyTitle ?? '',
+    description: story,
+    features: features.join('\n'),
+    chapters: chapters.map((chapter) => `${chapter.title} | ${chapter.description}`).join('\n'),
+    specs: specsToText(pageCopy.specs),
+    audienceTitle: pageCopy.audienceTitle ?? '',
+    audience: (pageCopy.audience ?? []).join('\n'),
+    isbn: pageCopy.isbn ?? '',
     price: product ? String(product.price) : '',
     originalPrice: product?.originalPrice ? String(product.originalPrice) : '',
     currency: product?.currency ?? DEFAULT_CURRENCY,
@@ -85,6 +103,20 @@ function parseList(value: string): string[] {
     .split('\n')
     .map((item) => item.trim())
     .filter(Boolean)
+}
+
+function pageCopyFromValues(values: FormState) {
+  return sanitizePageMeta({
+    headline: values.headline,
+    seoTitle: values.seoTitle,
+    seoDescription: values.seoDescription,
+    intro: textToParagraphs(values.intro),
+    storyTitle: values.storyTitle,
+    audienceTitle: values.audienceTitle,
+    audience: parseList(values.audience),
+    specs: textToSpecs(values.specs),
+    isbn: values.isbn,
+  })
 }
 
 function tabForSaveError(message: string): FormTab {
@@ -138,11 +170,11 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
     setValues((current) => ({ ...current, [key]: value }))
   }
 
-  function setPhotoList(photos: string[]) {
+  function setPhotoList(nextPhotos: string[]) {
     setValues((current) => ({
       ...current,
-      coverImage: photos[0] ?? '',
-      gallery: photos.slice(1),
+      coverImage: nextPhotos[0] ?? '',
+      gallery: nextPhotos.slice(1),
     }))
   }
 
@@ -222,9 +254,9 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
       if (!values.description.trim()) {
         throw new Error('Enter the book story')
       }
-      const photos = usableCatalogImages([values.coverImage, ...values.gallery])
+      const nextPhotos = usableCatalogImages([values.coverImage, ...values.gallery])
       const pageGallery = usableCatalogImages(values.pageGallery)
-      if (!photos[0]) {
+      if (!nextPhotos[0]) {
         throw new Error('Add a cover image')
       }
       if (!Number.isFinite(price) || price < 0) {
@@ -246,11 +278,12 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
           const [title, description = ''] = line.split('|').map((part) => part.trim())
           return { title, description }
         }),
+        pageCopy: pageCopyFromValues(values),
         price,
         originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
         currency: values.currency,
-        coverImage: photos[0] ?? '',
-        gallery: photos.slice(1),
+        coverImage: nextPhotos[0] ?? '',
+        gallery: nextPhotos.slice(1),
         pageGallery,
         categoryId: values.categoryId,
         stock,
@@ -287,7 +320,11 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
       shortDescription: values.shortDescription,
       description: values.description,
       features: parseList(values.features),
-      chapters: [],
+      chapters: parseList(values.chapters).map((line) => {
+        const [title, description = ''] = line.split('|').map((part) => part.trim())
+        return { title, description }
+      }),
+      pageCopy: pageCopyFromValues(values),
       price: Number.isFinite(price) ? price : 0,
       originalPrice: values.originalPrice ? Number(values.originalPrice) : undefined,
       currency: values.currency,

@@ -1,10 +1,7 @@
-import type { BookChapter, Product } from '@/types'
+import type { BookChapter, Product, ProductPageMeta, ProductSpec } from '@/types'
 import { getProductHeadline } from '@/utils/product'
 
-export interface ProductSpec {
-  label: string
-  value: string
-}
+export type { ProductSpec }
 
 export interface ProductPageCopy {
   headline: string
@@ -814,26 +811,58 @@ export function getProductCopyBySlug(slug: string): ProductPageCopy | undefined 
   return copies[slug]
 }
 
+export function getCatalogPageMeta(slug: string): ProductPageMeta | undefined {
+  const copy = copies[slug]
+  if (!copy) {
+    return undefined
+  }
+
+  return {
+    headline: copy.headline,
+    seoTitle: copy.seoTitle,
+    seoDescription: copy.seoDescription,
+    intro: copy.intro,
+    storyTitle: copy.storyTitle,
+    audienceTitle: copy.audienceTitle,
+    audience: copy.audience,
+    specs: copy.specs,
+    isbn: copy.isbn,
+  }
+}
+
 function storyFromProduct(product: Product): string[] {
   return product.description
-    .split(/(?<=\.)\s+/)
+    .split(/\n\s*\n|(?<=\.)\s+(?=[A-ZА-Я])/)
     .map((part) => part.trim())
     .filter(Boolean)
 }
 
+function pickText(primary: string | undefined, fallback: string): string {
+  const value = primary?.trim()
+  return value ? value : fallback
+}
+
+function pickList<T>(primary: T[] | undefined, fallback: T[]): T[] {
+  return primary && primary.length > 0 ? primary : fallback
+}
+
 export function getProductPageCopy(product: Product): ProductPageCopy {
   const base = copies[product.slug] ?? fallbackCopy(product)
+  const meta = product.pageCopy ?? {}
   const story = storyFromProduct(product)
 
   return {
-    ...base,
-    seoDescription: product.shortDescription.trim() || base.seoDescription,
-    intro:
-      product.shortDescription.trim().length > 0
-        ? [product.shortDescription.trim(), ...(base.intro.slice(1) || [])]
-        : base.intro,
+    headline: pickText(meta.headline, base.headline),
+    seoTitle: pickText(meta.seoTitle, base.seoTitle),
+    seoDescription: pickText(meta.seoDescription, pickText(product.shortDescription, base.seoDescription)),
+    intro: pickList(meta.intro, base.intro),
+    storyTitle: pickText(meta.storyTitle, base.storyTitle),
     story: story.length > 0 ? story : base.story,
-    features: product.features.length > 0 ? product.features : base.features,
-    chapters: product.chapters.length > 0 ? product.chapters : base.chapters,
+    features: pickList(product.features, base.features),
+    specs: pickList(meta.specs, base.specs),
+    chapters: pickList(product.chapters, base.chapters),
+    audienceTitle: pickText(meta.audienceTitle, base.audienceTitle),
+    audience: pickList(meta.audience, base.audience),
+    isbn: meta.isbn ?? base.isbn,
   }
 }

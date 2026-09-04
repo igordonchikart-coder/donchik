@@ -5,13 +5,22 @@ import type { Category } from '@/types'
 import { toVolumeLabel } from '@/utils/product'
 import styles from './BookPageEditor.module.css'
 
-interface BookPageEditorValues {
+export interface BookPageEditorValues {
   title: string
   slug: string
   volumeNumber: string
+  headline: string
+  seoTitle: string
+  seoDescription: string
+  intro: string
+  storyTitle: string
   description: string
   features: string
   chapters: string
+  specs: string
+  audienceTitle: string
+  audience: string
+  isbn: string
   conditionNote: string
   releaseYear: string
   categoryId: string
@@ -48,9 +57,11 @@ export function BookPageEditor({
   const safeIndex = photos.length === 0 ? 0 : Math.min(activeIndex, photos.length - 1)
   const activePhoto = photos[safeIndex]
   const volumeLabel = toVolumeLabel(Number(values.volumeNumber) || 1)
-  const headline = values.title
-    ? `${values.title} ${volumeLabel}`
-    : 'Book title'
+  const headline = values.headline.trim()
+    ? values.headline
+    : values.title
+      ? `${values.title} ${volumeLabel}`
+      : 'Book title'
 
   return (
     <div className={styles.page}>
@@ -61,12 +72,18 @@ export function BookPageEditor({
           ) : (
             <label className={styles.heroEmpty}>
               Add photos for the book page
-              <input type="file" accept="image/*" multiple disabled={uploading} onChange={(event) => {
-                if (event.target.files && event.target.files.length > 0) {
-                  onAddPhotos(event.target.files)
-                }
-                event.target.value = ''
-              }} />
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                disabled={uploading}
+                onChange={(event) => {
+                  if (event.target.files && event.target.files.length > 0) {
+                    onAddPhotos(event.target.files)
+                  }
+                  event.target.value = ''
+                }}
+              />
             </label>
           )}
           <PhotoStrip
@@ -144,17 +161,73 @@ export function BookPageEditor({
             value={values.slug}
             onChange={(event) => onChange('slug', event.target.value)}
           />
+          <TextField
+            label="Headline on the book page"
+            name="headline"
+            value={values.headline}
+            onChange={(event) => onChange('headline', event.target.value)}
+          />
         </div>
       </section>
 
       <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>SEO</h3>
+        <TextField
+          label="SEO title"
+          name="seoTitle"
+          value={values.seoTitle}
+          onChange={(event) => onChange('seoTitle', event.target.value)}
+        />
+        <TextAreaField
+          label="SEO description"
+          name="seoDescription"
+          value={values.seoDescription}
+          onChange={(event) => onChange('seoDescription', event.target.value)}
+        />
+        <TextField
+          label="ISBN"
+          name="isbn"
+          value={values.isbn}
+          onChange={(event) => onChange('isbn', event.target.value)}
+        />
+      </section>
+
+      <section className={styles.section}>
+        <h3 className={styles.sectionTitle}>Buy panel intro</h3>
+        <TextAreaField
+          label="Intro paragraphs (blank line between paragraphs)"
+          name="intro"
+          value={values.intro}
+          onChange={(event) => onChange('intro', event.target.value)}
+        />
+      </section>
+
+      <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Story</h3>
+        <TextField
+          label="Story title"
+          name="storyTitle"
+          value={values.storyTitle}
+          onChange={(event) => onChange('storyTitle', event.target.value)}
+        />
         <TextAreaField
           label="Story on the book page"
           name="description"
           required
           value={values.description}
           onChange={(event) => onChange('description', event.target.value)}
+        />
+        <TextField
+          label="Audience title"
+          name="audienceTitle"
+          value={values.audienceTitle}
+          onChange={(event) => onChange('audienceTitle', event.target.value)}
+        />
+        <TextAreaField
+          label="Audience (one line per item)"
+          name="audience"
+          value={values.audience}
+          onChange={(event) => onChange('audience', event.target.value)}
         />
       </section>
 
@@ -171,6 +244,12 @@ export function BookPageEditor({
           name="features"
           value={values.features}
           onChange={(event) => onChange('features', event.target.value)}
+        />
+        <TextAreaField
+          label="Specs (Label | Value)"
+          name="specs"
+          value={values.specs}
+          onChange={(event) => onChange('specs', event.target.value)}
         />
         <TextAreaField
           label="Condition note"

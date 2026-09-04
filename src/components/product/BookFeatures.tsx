@@ -1,4 +1,4 @@
-import type { ProductSpec } from '@/data/productPageCopy'
+import type { ProductSpec } from '@/types'
 import styles from './BookFeatures.module.css'
 
 interface BookFeaturesProps {
