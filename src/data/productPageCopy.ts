@@ -814,6 +814,26 @@ export function getProductCopyBySlug(slug: string): ProductPageCopy | undefined 
   return copies[slug]
 }
 
+function storyFromProduct(product: Product): string[] {
+  return product.description
+    .split(/(?<=\.)\s+/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+}
+
 export function getProductPageCopy(product: Product): ProductPageCopy {
-  return copies[product.slug] ?? fallbackCopy(product)
+  const base = copies[product.slug] ?? fallbackCopy(product)
+  const story = storyFromProduct(product)
+
+  return {
+    ...base,
+    seoDescription: product.shortDescription.trim() || base.seoDescription,
+    intro:
+      product.shortDescription.trim().length > 0
+        ? [product.shortDescription.trim(), ...(base.intro.slice(1) || [])]
+        : base.intro,
+    story: story.length > 0 ? story : base.story,
+    features: product.features.length > 0 ? product.features : base.features,
+    chapters: product.chapters.length > 0 ? product.chapters : base.chapters,
+  }
 }

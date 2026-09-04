@@ -36,13 +36,18 @@ export function preventOrphanLine(text: string): string {
 }
 
 export function getProductCardDescription(product: Pick<Product, 'slug' | 'shortDescription'>): string {
+  const fromProduct = product.shortDescription.trim()
+  if (fromProduct) {
+    return preventOrphanLine(fromProduct)
+  }
+
   const fromCatalog = cardDescriptions[product.slug]
   if (fromCatalog) {
     return preventOrphanLine(fromCatalog)
   }
 
   const pageCopy = getProductPageCopy(product as Product)
-  return preventOrphanLine(pageCopy.intro[0] ?? product.shortDescription)
+  return preventOrphanLine(pageCopy.intro[0] ?? '')
 }
 
 export const productCardDescriptions = cardDescriptions
