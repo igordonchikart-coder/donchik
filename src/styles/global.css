@@ -103,7 +103,7 @@ button {
       Side gutter must cover Panzer card frame hang (~7.5% of content width)
       so artwork aligns to the same inset as desktop, without sideways scroll.
     */
-    --page-inline-gutter: clamp(1.4rem, 7.5vw, 1.85rem);
+    --page-inline-gutter: clamp(1.05rem, 5.5vw, 1.4rem);
   }
 
   .container {
