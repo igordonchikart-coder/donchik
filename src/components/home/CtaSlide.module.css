@@ -21,32 +21,9 @@
   background: var(--color-border);
 }
 
-.title {
-  position: absolute;
-  z-index: 1;
-  top: var(--space-md);
-  left: var(--space-md);
-  right: 7rem;
-  max-width: 22rem;
-  font-family: var(--font-nav);
-  font-size: clamp(1.15rem, 3.4vw, 2rem);
-  font-weight: 700;
-  font-stretch: 87.5%;
-  letter-spacing: 0.03em;
-  line-height: 1.15;
-  color: var(--color-nav);
-}
-
 @media (min-width: 768px) {
   .slide {
     aspect-ratio: 21 / 8;
     min-height: 18rem;
-  }
-
-  .title {
-    top: var(--space-lg);
-    left: var(--space-lg);
-    right: auto;
-    max-width: min(48%, 28rem);
   }
 }
