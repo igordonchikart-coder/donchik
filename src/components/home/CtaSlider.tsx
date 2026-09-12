@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Container } from '@/components/common/Container'
 import videoFrame from '@/assets/ui/video-frame.webp'
 import { ctaSlides as fallbackCtaSlides } from '@/data/ctaSlides'
 import { useHomepageSlides } from '@/hooks/useHomepageSlides'
+import { useVisibleSlideshow } from '@/hooks/useVisibleSlideshow'
 import { toCtaSlideView } from '@/utils/homepageSlides'
 import { CtaSlide } from './CtaSlide'
 import { CtaSliderDots } from './CtaSliderDots'
@@ -18,36 +19,28 @@ export function CtaSlider() {
     return fallbackCtaSlides
   }, [dbSlides])
 
-  const [activeIndex, setActiveIndex] = useState(0)
-  const slideCount = slides.length
-  const safeIndex = slideCount === 0 ? 0 : Math.min(activeIndex, slideCount - 1)
-
-  function goTo(index: number) {
-    if (slideCount === 0) {
-      return
-    }
-    const next = ((index % slideCount) + slideCount) % slideCount
-    setActiveIndex(next)
-  }
+  const sectionRef = useRef<HTMLElement>(null)
+  const { activeIndex, goTo } = useVisibleSlideshow(sectionRef, slides.length)
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === 'ArrowRight') {
       event.preventDefault()
-      goTo(safeIndex + 1)
+      goTo(activeIndex + 1)
     }
 
     if (event.key === 'ArrowLeft') {
       event.preventDefault()
-      goTo(safeIndex - 1)
+      goTo(activeIndex - 1)
     }
   }
 
-  if (slideCount === 0) {
+  if (slides.length === 0) {
     return null
   }
 
   return (
     <section
+      ref={sectionRef}
       className={styles.section}
       aria-labelledby="cta-slider-title"
       aria-roledescription="carousel"
@@ -61,13 +54,13 @@ export function CtaSlider() {
           <div className={styles.viewport}>
             <div
               className={styles.track}
-              style={{ transform: `translateX(-${safeIndex * 100}%)` }}
+              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
             >
               {slides.map((slide, index) => (
-                <CtaSlide key={slide.id} slide={slide} isActive={index === safeIndex} />
+                <CtaSlide key={slide.id} slide={slide} isActive={index === activeIndex} />
               ))}
             </div>
-            <CtaSliderDots slides={slides} activeIndex={safeIndex} onSelect={goTo} />
+            <CtaSliderDots slides={slides} activeIndex={activeIndex} onSelect={goTo} />
           </div>
           <img className={styles.frameImage} src={videoFrame} alt="" draggable={false} />
         </div>
