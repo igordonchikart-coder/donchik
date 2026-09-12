@@ -13,6 +13,7 @@ import { breadcrumbJsonLd, organizationJsonLd } from '@/data/siteSeo'
 import { useCategoryBySlug } from '@/hooks/useCategories'
 import { useProductsByCategory } from '@/hooks/useProducts'
 import { SITE_URL } from '@/utils/constants'
+import { isBundleProduct } from '@/utils/product'
 import styles from '../Page.module.css'
 
 export function CategoryPage() {
@@ -75,7 +76,7 @@ export function CategoryPage() {
             ) : null}
             {products.data ? (
               <ProductGrid
-                products={products.data}
+                products={products.data.filter((product) => !isBundleProduct(product))}
                 emptyTitle="No volumes in this series yet"
                 emptyDescription="Books for this series will appear here."
               />

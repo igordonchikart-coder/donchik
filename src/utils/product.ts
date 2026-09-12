@@ -9,6 +9,11 @@ export function isComingSoon(product: Product): boolean {
   return product.status === 'coming-soon'
 }
 
+/** Multi-book combo / bundle SKUs — shown on Discounts only, not in series grids. */
+export function isBundleProduct(product: Pick<Product, 'volumeNumber'>): boolean {
+  return product.volumeNumber <= 0
+}
+
 export function toVolumeLabel(volumeNumber: number): string {
   if (volumeNumber <= 0) {
     return 'Bundle'
