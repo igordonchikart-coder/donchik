@@ -59,10 +59,9 @@
   }
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none), (pointer: coarse), (max-width: 1023px) {
   .arrow {
-    opacity: 0.75;
-    pointer-events: auto;
+    display: none;
   }
 }
 
