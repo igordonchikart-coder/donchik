@@ -1,11 +1,12 @@
-import { placeholders } from '@/data/placeholders'
+import logo from '@/assets/ui/logo.webp'
 import { supportProject } from '@/data/supportProject'
+import { SITE_NAME } from '@/utils/constants'
 import styles from './SupportIntro.module.css'
 
 export function SupportIntro() {
   return (
     <div className={styles.intro}>
-      <img className={styles.logo} src={placeholders.logo} alt="" />
+      <img className={styles.logo} src={logo} alt={SITE_NAME} width={120} height={120} decoding="async" />
       <div className={styles.copy}>
         <h2 id="support-title" className={styles.title}>
           {supportProject.heading}
