@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import { SiteBrand } from './SiteBrand'
 import { LoginButton } from './LoginButton'
 import { Navigation } from './Navigation'
@@ -10,7 +11,7 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose, onOpenLogin }: MobileMenuProps) {
-  return (
+  const menu = (
     <div
       className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ''}`}
       role="presentation"
@@ -38,4 +39,10 @@ export function MobileMenu({ isOpen, onClose, onOpenLogin }: MobileMenuProps) {
       </div>
     </div>
   )
+
+  if (typeof document === 'undefined') {
+    return null
+  }
+
+  return createPortal(menu, document.body)
 }
