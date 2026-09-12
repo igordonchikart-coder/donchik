@@ -6,13 +6,12 @@ const MOBILE_COUNT = 26
 const DESKTOP_FRAME_MS = 40
 const MOBILE_FRAME_MS = 50
 
-interface Ember {
+interface Dust {
   x: number
   y: number
   vx: number
   vy: number
   size: number
-  length: number
   heat: number
   twinkle: number
   twinkleSpeed: number
@@ -31,93 +30,51 @@ function canAnimate() {
   return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-function createEmber(width: number, height: number, footerTop: number): Ember {
+function createDust(width: number, height: number, footerTop: number): Dust {
   const usableHeight = Math.max(height * 0.55, Math.min(footerTop, height) - 24)
   const depth = Math.random()
-  const size = 1.35 + depth * 2.8 + Math.random() * 1.1
 
   return {
     x: Math.random() * width,
     y: Math.random() * usableHeight,
-    vx: (Math.random() - 0.5) * (0.018 + depth * 0.028),
-    vy: -(0.01 + Math.random() * 0.028) * (0.55 + depth * 0.85),
-    size,
-    length: size * (9 + Math.random() * 11 + depth * 6),
+    vx: (Math.random() - 0.5) * (0.012 + depth * 0.02),
+    vy: -(0.004 + Math.random() * 0.012) * (0.45 + depth * 0.7),
+    size: 0.65 + depth * 1.55,
     heat: Math.random(),
     twinkle: Math.random() * Math.PI * 2,
-    twinkleSpeed: 0.0009 + Math.random() * 0.0022,
+    twinkleSpeed: 0.0008 + Math.random() * 0.0018,
     depth,
   }
 }
 
-/** Streak spark: bright tip, thin glowing body, fading tail — along travel direction. */
 function drawSpark(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
-  vx: number,
-  vy: number,
   size: number,
-  length: number,
   heat: number,
   alpha: number,
 ) {
-  const speed = Math.hypot(vx, vy) || 0.01
-  const angle = Math.atan2(vy, vx)
-  const streak = length * (0.85 + heat * 0.35) + speed * 420
-  const halfThick = Math.max(0.45, size * (0.16 + heat * 0.1))
-  const tip = streak * 0.42
-  const tail = -streak * 0.58
-
-  ctx.save()
-  ctx.translate(x, y)
-  ctx.rotate(angle)
-  ctx.globalCompositeOperation = 'lighter'
-
-  const bloom = ctx.createRadialGradient(tip * 0.35, 0, 0, tip * 0.2, 0, streak * 0.55)
-  bloom.addColorStop(0, `rgba(255, 210, 90, ${alpha * 0.22})`)
-  bloom.addColorStop(0.45, `rgba(255, 110, 30, ${alpha * 0.1})`)
-  bloom.addColorStop(1, 'rgba(160, 25, 8, 0)')
-  ctx.fillStyle = bloom
+  const glowRadius = size * (2.6 + heat * 2.4)
+  const glow = ctx.createRadialGradient(x, y, 0, x, y, glowRadius)
+  glow.addColorStop(0, `rgba(255, 200, 70, ${alpha * 0.42})`)
+  glow.addColorStop(0.28, `rgba(255, 120, 36, ${alpha * 0.28})`)
+  glow.addColorStop(0.62, `rgba(220, 55, 18, ${alpha * 0.12})`)
+  glow.addColorStop(1, 'rgba(160, 20, 8, 0)')
+  ctx.fillStyle = glow
   ctx.beginPath()
-  ctx.ellipse(tip * 0.15, 0, streak * 0.5, halfThick * 4.5, 0, 0, Math.PI * 2)
+  ctx.arc(x, y, glowRadius, 0, Math.PI * 2)
   ctx.fill()
 
-  const body = ctx.createLinearGradient(tail, 0, tip, 0)
-  body.addColorStop(0, 'rgba(140, 18, 6, 0)')
-  body.addColorStop(0.22, `rgba(220, 45, 12, ${alpha * 0.35})`)
-  body.addColorStop(0.5, `rgba(255, 120, 28, ${alpha * 0.75})`)
-  body.addColorStop(0.78, `rgba(255, 210, 80, ${alpha * 0.95})`)
-  body.addColorStop(1, `rgba(255, 252, 235, ${Math.min(1, alpha * 1.15)})`)
-
-  ctx.fillStyle = body
+  const coreRadius = size * (0.5 + heat * 0.4)
+  const core = ctx.createRadialGradient(x, y, 0, x, y, coreRadius)
+  core.addColorStop(0, `rgba(255, 252, 235, ${Math.min(1, alpha * 1.4)})`)
+  core.addColorStop(0.4, `rgba(255, 228, 110, ${alpha * 0.95})`)
+  core.addColorStop(1, 'rgba(255, 150, 40, 0)')
+  ctx.fillStyle = core
   ctx.beginPath()
-  ctx.moveTo(tail, 0)
-  ctx.quadraticCurveTo(tail * 0.2, -halfThick * 0.55, tip * 0.15, -halfThick)
-  ctx.quadraticCurveTo(tip * 0.75, -halfThick * 0.35, tip, 0)
-  ctx.quadraticCurveTo(tip * 0.75, halfThick * 0.35, tip * 0.15, halfThick)
-  ctx.quadraticCurveTo(tail * 0.2, halfThick * 0.55, tail, 0)
-  ctx.closePath()
+  ctx.arc(x, y, coreRadius, 0, Math.PI * 2)
   ctx.fill()
-
-  ctx.strokeStyle = `rgba(255, 240, 180, ${alpha * 0.55})`
-  ctx.lineWidth = Math.max(0.35, halfThick * 0.45)
-  ctx.lineCap = 'round'
-  ctx.beginPath()
-  ctx.moveTo(tail * 0.35, 0)
-  ctx.lineTo(tip * 0.92, 0)
-  ctx.stroke()
-
-  const tipGlow = ctx.createRadialGradient(tip * 0.88, 0, 0, tip * 0.88, 0, halfThick * 2.8)
-  tipGlow.addColorStop(0, `rgba(255, 255, 245, ${Math.min(1, alpha * 1.35)})`)
-  tipGlow.addColorStop(0.4, `rgba(255, 230, 120, ${alpha * 0.7})`)
-  tipGlow.addColorStop(1, 'rgba(255, 140, 40, 0)')
-  ctx.fillStyle = tipGlow
-  ctx.beginPath()
-  ctx.ellipse(tip * 0.88, 0, halfThick * 2.2, halfThick * 1.15, 0, 0, Math.PI * 2)
-  ctx.fill()
-
-  ctx.restore()
 }
 
 export function EmberSparks() {
@@ -144,7 +101,7 @@ export function EmberSparks() {
     let width = 0
     let height = 0
     let footerTop = Number.POSITIVE_INFINITY
-    let embers: Ember[] = []
+    let dust: Dust[] = []
     let running = true
     let mobile = isMobileViewport()
     let frameMs = mobile ? MOBILE_FRAME_MS : DESKTOP_FRAME_MS
@@ -170,16 +127,16 @@ export function EmberSparks() {
       surface.style.height = `${height}px`
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       measureFooter()
-      embers = Array.from({ length: count }, () => createEmber(width, height, footerTop))
+      dust = Array.from({ length: count }, () => createDust(width, height, footerTop))
     }
 
-    function wrapEmber(particle: Ember) {
+    function wrapDust(particle: Dust) {
       const maxY = Math.max(80, Math.min(footerTop, height) - 16)
 
-      if (particle.x < -24) particle.x = width + 24
-      if (particle.x > width + 24) particle.x = -24
-      if (particle.y < -24) particle.y = maxY
-      if (particle.y > maxY) particle.y = -24
+      if (particle.x < -8) particle.x = width + 8
+      if (particle.x > width + 8) particle.x = -8
+      if (particle.y < -8) particle.y = maxY
+      if (particle.y > maxY) particle.y = -8
     }
 
     function draw(now: number) {
@@ -206,31 +163,19 @@ export function EmberSparks() {
 
       const hideBelow = Math.min(footerTop, height) - 8
 
-      for (const particle of embers) {
+      for (const particle of dust) {
         particle.twinkle += particle.twinkleSpeed * delta
         particle.x += particle.vx * delta
         particle.y += particle.vy * delta
-        // Gentle drift — embers flicker and wobble like rising ash
-        particle.vx += Math.sin(particle.twinkle * 0.55) * 0.00035 * delta
-        wrapEmber(particle)
+        wrapDust(particle)
 
         if (particle.y >= hideBelow) {
           continue
         }
 
-        const pulse = 0.58 + Math.sin(particle.twinkle) * 0.42
-        const alpha = (0.34 + particle.depth * 0.52) * pulse * (mobile ? 0.9 : 1)
-        drawSpark(
-          ctx,
-          particle.x,
-          particle.y,
-          particle.vx,
-          particle.vy,
-          particle.size,
-          particle.length,
-          particle.heat,
-          alpha,
-        )
+        const pulse = 0.55 + Math.sin(particle.twinkle) * 0.45
+        const alpha = (0.28 + particle.depth * 0.5) * pulse * (mobile ? 0.9 : 1)
+        drawSpark(ctx, particle.x, particle.y, particle.size, particle.heat, alpha)
       }
     }
 
