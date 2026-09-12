@@ -14,7 +14,7 @@ import { useCategoryBySlug } from '@/hooks/useCategories'
 import { useProductsByCategory } from '@/hooks/useProducts'
 import { SITE_URL } from '@/utils/constants'
 import { DISCOUNT_BUNDLE_CATEGORY_SLUG } from '@/utils/catalogGroups'
-import { isBundleProduct } from '@/utils/product'
+import { hideFromSeriesGrid } from '@/utils/product'
 import styles from '../Page.module.css'
 
 export function CategoryPage() {
@@ -82,7 +82,7 @@ export function CategoryPage() {
             {products.data ? (
               <ProductGrid
                 products={[...products.data]
-                  .filter((product) => !isBundleProduct(product) && !product.isOnSale)
+                  .filter((product) => !hideFromSeriesGrid(product))
                   .sort((left, right) => left.volumeNumber - right.volumeNumber)}
                 emptyTitle="No volumes in this series yet"
                 emptyDescription="Books for this series will appear here."

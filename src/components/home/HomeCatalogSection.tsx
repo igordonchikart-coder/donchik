@@ -4,7 +4,7 @@ import { getCategoryCopyBySlug } from '@/data/categoryPageCopy'
 import { useCategories } from '@/hooks/useCategories'
 import { useProducts } from '@/hooks/useProducts'
 import type { Category } from '@/types'
-import { isBundleProduct } from '@/utils/product'
+import { hideFromSeriesGrid } from '@/utils/product'
 import { BookSeriesSection } from './BookSeriesSection'
 
 interface HomeCatalogSectionProps {
@@ -79,10 +79,7 @@ export function HomeCatalogSection({
           key={item.id}
           series={item}
           products={productList.filter(
-            (product) =>
-              product.categoryId === item.id &&
-              !isBundleProduct(product) &&
-              !product.isOnSale,
+            (product) => product.categoryId === item.id && !hideFromSeriesGrid(product),
           )}
           showTitle={showTitle}
         />

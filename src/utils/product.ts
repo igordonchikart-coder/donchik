@@ -15,6 +15,21 @@ export function isBundleProduct(product: Pick<Product, 'volumeNumber' | 'categor
   return product.volumeNumber <= 0 || product.categoryId === DISCOUNT_BUNDLE_CATEGORY_ID
 }
 
+/** Sale items stay on Discounts only — except Panzer Camouflage Vol. II (both places). */
+export const SERIES_AND_DISCOUNT_SLUG = 'panzer-camouflage-volume-ii'
+
+export function hideFromSeriesGrid(
+  product: Pick<Product, 'slug' | 'isOnSale' | 'volumeNumber' | 'categoryId'>,
+): boolean {
+  if (isBundleProduct(product)) {
+    return true
+  }
+  if (!product.isOnSale) {
+    return false
+  }
+  return product.slug !== SERIES_AND_DISCOUNT_SLUG
+}
+
 export function toVolumeLabel(volumeNumber: number): string {
   if (volumeNumber <= 0) {
     return 'Bundle'
