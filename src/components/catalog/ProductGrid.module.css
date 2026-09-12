@@ -19,17 +19,6 @@
   margin-right: calc(-1 * var(--frame-right) * var(--card-span));
 }
 
-/* Keep single-column cards inside the phone viewport (no sideways drag). */
-@media (max-width: 639px) {
-  .grid {
-    --frame-left: 0;
-    --frame-right: 0;
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-
 @media (min-width: 640px) {
   .grid {
     --cols: 2;

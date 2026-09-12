@@ -99,6 +99,15 @@ button {
 @media (max-width: 639px) {
   :root {
     --brand-mark-size: 3.35rem;
+    /*
+      Side gutter must cover Panzer card frame hang (~7.5% of content width)
+      so artwork aligns to the same inset as desktop, without sideways scroll.
+    */
+    --page-inline-gutter: clamp(1.4rem, 7.5vw, 1.85rem);
+  }
+
+  .container {
+    width: min(100% - 2 * var(--page-inline-gutter), var(--container-width));
   }
 }
 
