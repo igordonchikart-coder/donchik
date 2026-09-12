@@ -30,7 +30,12 @@ export const aboutAuthorPortraits: AboutAuthorPortrait[] = [
 ]
 
 export const aboutAuthorSocials: AboutAuthorSocial[] = [
-  { id: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/', icon: 'instagram' },
-  { id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/', icon: 'facebook' },
-  { id: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/', icon: 'youtube' },
+  { id: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/military_i_d/', icon: 'instagram' },
+  {
+    id: 'facebook',
+    label: 'Facebook',
+    href: 'https://www.facebook.com/share/1C1exQwTmJ/',
+    icon: 'facebook',
+  },
+  { id: 'youtube', label: 'YouTube', href: 'https://youtube.com/@igor-donchik-art', icon: 'youtube' },
 ]
