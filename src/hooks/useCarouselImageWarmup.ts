@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react'
+import { hasLoadedImage, rememberLoadedImage } from '@/media/imageLoadMemory'
 
 /** Decode an image into the browser cache; resolves even on error. */
 export function preloadImage(url: string): Promise<void> {
   return new Promise((resolve) => {
     if (!url) {
+      resolve()
+      return
+    }
+
+    if (hasLoadedImage(url)) {
       resolve()
       return
     }
@@ -14,6 +20,7 @@ export function preloadImage(url: string): Promise<void> {
         return
       }
       settled = true
+      rememberLoadedImage(url)
       resolve()
     }
 
@@ -31,17 +38,23 @@ export function preloadImage(url: string): Promise<void> {
 
 /** Warm the active slide plus neighbors for smooth carousel moves. */
 export function useCarouselImageWarmup(urls: string[], activeIndex: number) {
-  const [activeReady, setActiveReady] = useState(false)
   const count = urls.length
   const safeIndex = count === 0 ? 0 : Math.min(Math.max(activeIndex, 0), count - 1)
   const activeUrl = count > 0 ? urls[safeIndex] : ''
+  const [activeReady, setActiveReady] = useState(() => Boolean(activeUrl && hasLoadedImage(activeUrl)))
 
   useEffect(() => {
-    setActiveReady(false)
     if (!activeUrl) {
+      setActiveReady(false)
       return
     }
 
+    if (hasLoadedImage(activeUrl)) {
+      setActiveReady(true)
+      return
+    }
+
+    setActiveReady(false)
     let cancelled = false
     void preloadImage(activeUrl).then(() => {
       if (!cancelled) {

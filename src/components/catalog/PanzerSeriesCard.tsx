@@ -1,4 +1,4 @@
-import { useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import { panzerCardAssets, panzerVolumeYears } from '@/assets/books/panzer-camouflage'
@@ -8,6 +8,7 @@ import { useCardTilt, scheduleCardNavigation } from '@/hooks/useCardTilt'
 import { useCardSlideshow } from '@/hooks/useCardSlideshow'
 import type { Product } from '@/types'
 import { getProductCardSlides, isComingSoon } from '@/utils/product'
+import { hasLoadedImage } from '@/media/imageLoadMemory'
 import sliderDots from '@/styles/sliderDots.module.css'
 import { ProductCardFooter } from './ProductCardFooter'
 import styles from './PanzerSeriesCard.module.css'
@@ -48,7 +49,9 @@ if (typeof window !== 'undefined') {
 export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardProps) {
   const cardRef = useRef<HTMLElement>(null)
   const navigate = useNavigate()
-  const [artReady, setArtReady] = useState(false)
+  const slides = getProductCardSlides(product)
+  const coverImage = slides[0]
+  const [artReady, setArtReady] = useState(() => Boolean(coverImage && hasLoadedImage(coverImage)))
   const { tiltRef, onPointerEnter, onPointerMove, onPointerDown, onPointerUp, onPointerLeave, onDragStart } =
     useCardTilt<HTMLDivElement>({
       maxTilt: 10,
@@ -57,8 +60,6 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
     })
   const comingSoon = isComingSoon(product)
   const productTo = comingSoon ? undefined : routes.product(product.slug)
-  const slides = getProductCardSlides(product)
-  const coverImage = slides[0]
   const { activeIndex: safeIndex, warmed, onHoverStart, onHoverEnd, selectSlide } = useCardSlideshow(slides)
   const yearBadge = getYearBadge(product)
   const cropLeft = product.categoryId === 'series-panzer-camouflage' && product.volumeNumber === 6
@@ -67,6 +68,10 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
     isDevelopmentCaption(cardDescription) ||
     isDevelopmentCaption(product.shortDescription) ||
     isDevelopmentCaption(product.description)
+
+  useEffect(() => {
+    setArtReady(Boolean(coverImage && hasLoadedImage(coverImage)))
+  }, [coverImage])
 
   if (!coverImage) {
     return null
