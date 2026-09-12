@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Container } from '@/components/common/Container'
+import videoFrame from '@/assets/ui/video-frame.webp'
 import { ctaSlides as fallbackCtaSlides } from '@/data/ctaSlides'
 import { useHomepageSlides } from '@/hooks/useHomepageSlides'
 import { toCtaSlideView } from '@/utils/homepageSlides'
@@ -56,7 +57,7 @@ export function CtaSlider() {
         <h2 id="cta-slider-title" className={styles.heading}>
           Discounted book collections
         </h2>
-        <div className={styles.frame}>
+        <div className={styles.shell}>
           <div className={styles.viewport}>
             <div
               className={styles.track}
@@ -66,8 +67,9 @@ export function CtaSlider() {
                 <CtaSlide key={slide.id} slide={slide} isActive={index === safeIndex} />
               ))}
             </div>
+            <CtaSliderDots slides={slides} activeIndex={safeIndex} onSelect={goTo} />
           </div>
-          <CtaSliderDots slides={slides} activeIndex={safeIndex} onSelect={goTo} />
+          <img className={styles.frameImage} src={videoFrame} alt="" draggable={false} />
         </div>
       </Container>
     </section>
