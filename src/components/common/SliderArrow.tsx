@@ -13,6 +13,7 @@ export function SliderArrow({ direction, label, onClick, className = '' }: Slide
     event.preventDefault()
     event.stopPropagation()
     onClick()
+    event.currentTarget.blur()
   }
 
   return (

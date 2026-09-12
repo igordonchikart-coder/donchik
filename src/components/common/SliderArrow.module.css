@@ -53,8 +53,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  :global(.sliderHost:hover) > .arrow,
-  :global(.sliderHost:focus-within) > .arrow {
+  :global(.sliderHost:hover) > .arrow {
     opacity: 1;
     pointer-events: auto;
   }
