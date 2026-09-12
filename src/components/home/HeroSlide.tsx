@@ -7,16 +7,17 @@ import styles from './HeroSlide.module.css'
 interface HeroSlideProps {
   slide: HeroSlideData
   isActive: boolean
+  shouldMount?: boolean
 }
 
-export function HeroSlide({ slide, isActive }: HeroSlideProps) {
-  const [loaded, setLoaded] = useState(isActive)
+export function HeroSlide({ slide, isActive, shouldMount = isActive }: HeroSlideProps) {
+  const [mounted, setMounted] = useState(shouldMount)
 
   useEffect(() => {
-    if (isActive) {
-      setLoaded(true)
+    if (shouldMount) {
+      setMounted(true)
     }
-  }, [isActive])
+  }, [shouldMount])
 
   return (
     <Link
@@ -26,8 +27,8 @@ export function HeroSlide({ slide, isActive }: HeroSlideProps) {
       aria-hidden={!isActive}
       aria-label={`${slide.title} ${slide.volumeLabel}`}
     >
-      {loaded ? (
-        <LazyImage className={styles.image} src={slide.image} alt="" eager={isActive} />
+      {mounted ? (
+        <LazyImage className={styles.image} src={slide.image} alt="" eager={shouldMount} />
       ) : (
         <div className={styles.image} aria-hidden="true" />
       )}

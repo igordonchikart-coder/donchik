@@ -7,16 +7,17 @@ import styles from './CtaSlide.module.css'
 interface CtaSlideProps {
   slide: CtaSlideData
   isActive: boolean
+  shouldMount?: boolean
 }
 
-export function CtaSlide({ slide, isActive }: CtaSlideProps) {
-  const [loaded, setLoaded] = useState(isActive)
+export function CtaSlide({ slide, isActive, shouldMount = isActive }: CtaSlideProps) {
+  const [mounted, setMounted] = useState(shouldMount)
 
   useEffect(() => {
-    if (isActive) {
-      setLoaded(true)
+    if (shouldMount) {
+      setMounted(true)
     }
-  }, [isActive])
+  }, [shouldMount])
 
   return (
     <Link
@@ -26,8 +27,8 @@ export function CtaSlide({ slide, isActive }: CtaSlideProps) {
       aria-hidden={!isActive}
       aria-label={slide.title || 'Discount offer'}
     >
-      {loaded ? (
-        <LazyImage className={styles.image} src={slide.image} alt="" eager={isActive} />
+      {mounted ? (
+        <LazyImage className={styles.image} src={slide.image} alt="" eager={shouldMount} />
       ) : (
         <div className={styles.image} aria-hidden="true" />
       )}

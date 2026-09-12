@@ -34,6 +34,23 @@
   background: var(--color-surface);
 }
 
+.viewportPending {
+  background:
+    linear-gradient(110deg, var(--color-surface) 28%, color-mix(in srgb, var(--color-surface) 72%, #000) 48%, var(--color-surface) 68%);
+  background-size: 200% 100%;
+  animation: sliderShimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes sliderShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 .track {
   display: flex;
   height: 100%;
@@ -61,5 +78,9 @@
 @media (prefers-reduced-motion: reduce) {
   .track {
     transition: none;
+  }
+
+  .viewportPending {
+    animation: none;
   }
 }

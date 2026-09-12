@@ -14,7 +14,7 @@ import styles from '../Page.module.css'
 
 export function DiscountsPage() {
   const { data, isLoading, error, reload } = useProducts()
-  const seriesRank = new Map(catalogSeriesOrder.map((slug, index) => [slug, index]))
+  const seriesRank = new Map<string, number>(catalogSeriesOrder.map((slug, index) => [slug, index]))
   const discounted = (data ?? [])
     .filter((product) => product.isOnSale)
     .slice()
