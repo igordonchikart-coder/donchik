@@ -44,7 +44,7 @@ values
   jsonb_build_array(
     'https://eghhruyajykslilnxrfx.supabase.co/storage/v1/object/public/product-images/cta-slides/50257292-a696-4e7b-84d5-7f8600fa0901.webp'
   ),
-  'series-panzer-camouflage',
+  'series-discount-bundles',
   25,
   true,
   false,
@@ -100,7 +100,7 @@ values
   jsonb_build_array(
     'https://eghhruyajykslilnxrfx.supabase.co/storage/v1/object/public/product-images/cta-slides/f0f11d79-df2e-4862-a41d-5cb733e0157d.webp'
   ),
-  'series-military-symbols',
+  'series-discount-bundles',
   30,
   true,
   false,
@@ -155,7 +155,7 @@ values
   jsonb_build_array(
     'https://eghhruyajykslilnxrfx.supabase.co/storage/v1/object/public/product-images/cta-slides/07ef9557-6ca1-4245-8b0f-280cb1330880.webp'
   ),
-  'series-panzer-camouflage',
+  'series-discount-bundles',
   20,
   true,
   false,

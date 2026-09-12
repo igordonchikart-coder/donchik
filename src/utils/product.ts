@@ -1,5 +1,6 @@
 import type { Product } from '@/types'
 import { usableCatalogImages } from '@/utils/catalogArtwork'
+import { DISCOUNT_BUNDLE_CATEGORY_ID } from '@/utils/catalogGroups'
 
 export function isPurchasable(product: Product): boolean {
   return product.status === 'available' && product.isAvailable && product.stock > 0
@@ -10,8 +11,8 @@ export function isComingSoon(product: Product): boolean {
 }
 
 /** Multi-book combo / bundle SKUs — shown on Discounts only, not in series grids. */
-export function isBundleProduct(product: Pick<Product, 'volumeNumber'>): boolean {
-  return product.volumeNumber <= 0
+export function isBundleProduct(product: Pick<Product, 'volumeNumber' | 'categoryId'>): boolean {
+  return product.volumeNumber <= 0 || product.categoryId === DISCOUNT_BUNDLE_CATEGORY_ID
 }
 
 export function toVolumeLabel(volumeNumber: number): string {

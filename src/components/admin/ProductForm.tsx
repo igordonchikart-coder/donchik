@@ -10,6 +10,7 @@ import { uploadProductImage } from '@/services/imagesService'
 import type { Category, Product, ProductInput, ProductStatus } from '@/types'
 import { DEFAULT_CURRENCY } from '@/utils/constants'
 import { usableCatalogImages, withCatalogArtwork } from '@/utils/catalogArtwork'
+import { DISCOUNT_BUNDLE_CATEGORY_ID } from '@/utils/catalogGroups'
 import { toVolumeLabel } from '@/utils/product'
 import {
   paragraphsToText,
@@ -60,11 +61,12 @@ function toState(product: Product | undefined, categories: Category[]): FormStat
     ''
   const features = product?.features.length ? product.features : (catalog?.features ?? [])
   const chapters = product?.chapters.length ? product.chapters : (catalog?.chapters ?? [])
+  const isBundle = Boolean(product && (product.volumeNumber <= 0 || product.categoryId === DISCOUNT_BUNDLE_CATEGORY_ID))
 
   return {
     title: product?.title ?? '',
     slug: product?.slug ?? '',
-    volumeNumber: product ? String(product.volumeNumber) : '1',
+    volumeNumber: product ? String(isBundle ? 0 : product.volumeNumber) : '1',
     shortDescription: product?.shortDescription ?? '',
     headline: pageCopy.headline ?? '',
     seoTitle: pageCopy.seoTitle ?? '',
@@ -84,7 +86,9 @@ function toState(product: Product | undefined, categories: Category[]): FormStat
     coverImage: photos[0] ?? '',
     gallery: photos.slice(1),
     pageGallery: usableCatalogImages(product?.pageGallery ?? []),
-    categoryId: product?.categoryId ?? categories[0]?.id ?? '',
+    categoryId: isBundle
+      ? DISCOUNT_BUNDLE_CATEGORY_ID
+      : (product?.categoryId ?? categories[0]?.id ?? ''),
     stock: product ? String(product.stock) : '0',
     isAvailable: product?.isAvailable ?? true,
     isFeatured: product?.isFeatured ?? false,
@@ -238,14 +242,15 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
     try {
       const price = Number(values.price)
       const stock = Number(values.stock)
-      const volumeNumber = Number(values.volumeNumber)
+      const isBundle = values.categoryId === DISCOUNT_BUNDLE_CATEGORY_ID
+      const volumeNumber = isBundle ? 0 : Number(values.volumeNumber)
       if (!values.title.trim()) {
         throw new Error('Enter a title')
       }
       if (!values.categoryId) {
-        throw new Error('Choose a series')
+        throw new Error('Choose a catalog group')
       }
-      if (!Number.isInteger(volumeNumber) || volumeNumber < 1) {
+      if (!isBundle && (!Number.isInteger(volumeNumber) || volumeNumber < 1)) {
         throw new Error('Enter a valid volume number')
       }
       if (!values.shortDescription.trim()) {
@@ -307,7 +312,8 @@ export function ProductForm({ categories, initialProduct, heading, submitLabel, 
   }
 
   const previewProduct = useMemo<Product>(() => {
-    const volumeNumber = Number(values.volumeNumber) || 1
+    const isBundle = values.categoryId === DISCOUNT_BUNDLE_CATEGORY_ID
+    const volumeNumber = isBundle ? 0 : Number(values.volumeNumber) || 1
     const price = Number(values.price)
     const category = categories.find((item) => item.id === values.categoryId)
 

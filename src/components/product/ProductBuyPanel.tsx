@@ -6,6 +6,7 @@ import { AddToCartButton } from './AddToCartButton'
 import { ProductIntroText } from './ProductIntroText'
 import type { Product } from '@/types'
 import { formatPrice } from '@/utils/formatPrice'
+import { DISCOUNT_BUNDLE_CATEGORY_SLUG } from '@/utils/catalogGroups'
 import { isComingSoon } from '@/utils/product'
 import styles from './ProductBuyPanel.module.css'
 
@@ -17,6 +18,12 @@ export function ProductBuyPanel({ product }: ProductBuyPanelProps) {
   const comingSoon = isComingSoon(product)
   const copy = getProductPageCopy(product)
   const trustpilot = useTrustpilot()
+  const isDiscountBundle = product.category?.slug === DISCOUNT_BUNDLE_CATEGORY_SLUG
+  const seriesCrumb = isDiscountBundle
+    ? { label: 'Discounts', to: routes.discounts }
+    : product.category
+      ? { label: product.category.title, to: routes.category(product.category.slug) }
+      : null
 
   return (
     <div className={styles.panel}>
@@ -24,9 +31,7 @@ export function ProductBuyPanel({ product }: ProductBuyPanelProps) {
         items={[
           { label: 'Home', to: routes.home },
           { label: 'Store', to: routes.catalog },
-          ...(product.category
-            ? [{ label: product.category.title, to: routes.category(product.category.slug) }]
-            : []),
+          ...(seriesCrumb ? [seriesCrumb] : []),
           { label: `${product.title} ${product.volumeLabel}` },
         ]}
       />

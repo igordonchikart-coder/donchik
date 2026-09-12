@@ -17,9 +17,7 @@ export function BookSeriesSection({
   showTitle = true,
   pending = false,
 }: BookSeriesSectionProps) {
-  const ordered = [...products].sort(
-    (left, right) => Number(left.isOnSale) - Number(right.isOnSale) || left.volumeNumber - right.volumeNumber,
-  )
+  const ordered = [...products].sort((left, right) => left.volumeNumber - right.volumeNumber)
   const copy = getCategoryPageCopy(series)
 
   return (

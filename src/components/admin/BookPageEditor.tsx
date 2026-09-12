@@ -2,6 +2,10 @@ import { useState } from 'react'
 import { PhotoStrip } from '@/components/admin/PhotoStrip'
 import { SelectField, TextAreaField, TextField } from '@/components/common/Field'
 import type { Category } from '@/types'
+import {
+  DISCOUNT_BUNDLE_CATEGORY_ID,
+  DISCOUNT_BUNDLE_CATEGORY_TITLE,
+} from '@/utils/catalogGroups'
 import { toVolumeLabel } from '@/utils/product'
 import styles from './BookPageEditor.module.css'
 
@@ -56,12 +60,34 @@ export function BookPageEditor({
   const photos = values.pageGallery
   const safeIndex = photos.length === 0 ? 0 : Math.min(activeIndex, photos.length - 1)
   const activePhoto = photos[safeIndex]
-  const volumeLabel = toVolumeLabel(Number(values.volumeNumber) || 1)
+  const isBundle = values.categoryId === DISCOUNT_BUNDLE_CATEGORY_ID
+  const volumeLabel = isBundle ? 'Bundle' : toVolumeLabel(Number(values.volumeNumber) || 1)
   const headline = values.headline.trim()
     ? values.headline
     : values.title
-      ? `${values.title} ${volumeLabel}`
+      ? isBundle
+        ? values.title
+        : `${values.title} ${volumeLabel}`
       : 'Book title'
+
+  const seriesOptions = [
+    ...categories.filter((category) => category.id !== DISCOUNT_BUNDLE_CATEGORY_ID),
+    {
+      id: DISCOUNT_BUNDLE_CATEGORY_ID,
+      title: DISCOUNT_BUNDLE_CATEGORY_TITLE,
+    },
+  ]
+
+  function handleCatalogGroupChange(nextCategoryId: string) {
+    onChange('categoryId', nextCategoryId)
+    if (nextCategoryId === DISCOUNT_BUNDLE_CATEGORY_ID) {
+      onChange('volumeNumber', '0')
+      return
+    }
+    if (Number(values.volumeNumber) <= 0) {
+      onChange('volumeNumber', '1')
+    }
+  }
 
   return (
     <div className={styles.page}>
@@ -132,28 +158,35 @@ export function BookPageEditor({
           />
           <div className={styles.inline}>
             <SelectField
-              label="Series"
+              label="Catalog group"
               name="categoryId"
               required
               value={values.categoryId}
-              onChange={(event) => onChange('categoryId', event.target.value)}
+              onChange={(event) => handleCatalogGroupChange(event.target.value)}
             >
-              {categories.map((category) => (
+              {seriesOptions.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.title}
                 </option>
               ))}
             </SelectField>
-            <TextField
-              label="Volume number"
-              name="volumeNumber"
-              type="number"
-              min="1"
-              required
-              value={values.volumeNumber}
-              onChange={(event) => onChange('volumeNumber', event.target.value)}
-            />
+            {isBundle ? null : (
+              <TextField
+                label="Volume number"
+                name="volumeNumber"
+                type="number"
+                min="1"
+                required
+                value={values.volumeNumber}
+                onChange={(event) => onChange('volumeNumber', event.target.value)}
+              />
+            )}
           </div>
+          {isBundle ? (
+            <p className={styles.hint}>
+              Discount bundle: no series volume number. This product appears on Discounts only.
+            </p>
+          ) : null}
           <TextField
             label="Page address (slug)"
             name="slug"

@@ -79,7 +79,10 @@ export function HomeCatalogSection({
           key={item.id}
           series={item}
           products={productList.filter(
-            (product) => product.categoryId === item.id && !isBundleProduct(product),
+            (product) =>
+              product.categoryId === item.id &&
+              !isBundleProduct(product) &&
+              !product.isOnSale,
           )}
           showTitle={showTitle}
         />

@@ -16,6 +16,7 @@ import { getProductPageCopy } from '@/data/productPageCopy'
 import { bookJsonLd, breadcrumbJsonLd, organizationJsonLd, toAbsoluteUrl } from '@/data/siteSeo'
 import { useProductBySlug } from '@/hooks/useProducts'
 import { SITE_URL } from '@/utils/constants'
+import { DISCOUNT_BUNDLE_CATEGORY_SLUG } from '@/utils/catalogGroups'
 import { isComingSoon, isPurchasable } from '@/utils/product'
 import styles from '../Page.module.css'
 
@@ -48,7 +49,13 @@ export function ProductPage() {
   const copy = getProductPageCopy(data)
   const origin = typeof window === 'undefined' ? SITE_URL : window.location.origin
   const path = routes.product(data.slug)
-  const categoryPath = data.category ? routes.category(data.category.slug) : routes.catalog
+  const isDiscountBundle = data.category?.slug === DISCOUNT_BUNDLE_CATEGORY_SLUG
+  const categoryPath = isDiscountBundle
+    ? routes.discounts
+    : data.category
+      ? routes.category(data.category.slug)
+      : routes.catalog
+  const categoryCrumb = isDiscountBundle ? 'Discounts' : (data.category?.title ?? 'Series')
 
   return (
     <div className={styles.page}>
@@ -75,7 +82,7 @@ export function ProductPage() {
           breadcrumbJsonLd(origin, [
             { name: 'Home', path: routes.home },
             { name: 'Store', path: routes.catalog },
-            { name: data.category?.title ?? 'Series', path: categoryPath },
+            { name: categoryCrumb, path: categoryPath },
             { name: `${data.title} ${data.volumeLabel}`, path },
           ]),
         ]}

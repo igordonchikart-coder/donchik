@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'
 import { Container } from '@/components/common/Container'
@@ -13,6 +13,7 @@ import { breadcrumbJsonLd, organizationJsonLd } from '@/data/siteSeo'
 import { useCategoryBySlug } from '@/hooks/useCategories'
 import { useProductsByCategory } from '@/hooks/useProducts'
 import { SITE_URL } from '@/utils/constants'
+import { DISCOUNT_BUNDLE_CATEGORY_SLUG } from '@/utils/catalogGroups'
 import { isBundleProduct } from '@/utils/product'
 import styles from '../Page.module.css'
 
@@ -25,6 +26,10 @@ export function CategoryPage() {
   const isLoading = category.isLoading || products.isLoading
   const error = category.error || products.error
   const copy = category.data ? getCategoryPageCopy(category.data) : null
+
+  if (slug === DISCOUNT_BUNDLE_CATEGORY_SLUG) {
+    return <Navigate to={routes.discounts} replace />
+  }
 
   return (
     <div className={styles.page}>
@@ -76,7 +81,9 @@ export function CategoryPage() {
             ) : null}
             {products.data ? (
               <ProductGrid
-                products={products.data.filter((product) => !isBundleProduct(product))}
+                products={[...products.data]
+                  .filter((product) => !isBundleProduct(product) && !product.isOnSale)
+                  .sort((left, right) => left.volumeNumber - right.volumeNumber)}
                 emptyTitle="No volumes in this series yet"
                 emptyDescription="Books for this series will appear here."
               />

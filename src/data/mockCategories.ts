@@ -1,5 +1,10 @@
 import type { Category } from '@/types'
 import { placeholders } from './placeholders'
+import {
+  DISCOUNT_BUNDLE_CATEGORY_ID,
+  DISCOUNT_BUNDLE_CATEGORY_SLUG,
+  DISCOUNT_BUNDLE_CATEGORY_TITLE,
+} from '@/utils/catalogGroups'
 
 export const mockCategories: Category[] = [
   {
@@ -26,6 +31,15 @@ export const mockCategories: Category[] = [
     title: 'German Military Unit Insignia',
     description: 'Atlas of Wehrmacht formation badges, beginning with 727 hand-drawn divisional emblems in Volume I.',
     image: placeholders.categories.painting,
+    createdAt: '2026-01-10T10:00:00.000Z',
+    updatedAt: '2026-01-10T10:00:00.000Z',
+  },
+  {
+    id: DISCOUNT_BUNDLE_CATEGORY_ID,
+    slug: DISCOUNT_BUNDLE_CATEGORY_SLUG,
+    title: DISCOUNT_BUNDLE_CATEGORY_TITLE,
+    description: 'Multi-book combos sold on the Discounts page only.',
+    image: placeholders.categories.albums,
     createdAt: '2026-01-10T10:00:00.000Z',
     updatedAt: '2026-01-10T10:00:00.000Z',
   },

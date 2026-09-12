@@ -1,6 +1,5 @@
 import { DeferredMount } from '@/components/common/DeferredMount'
 import { AboutAuthorSection } from '@/components/home/AboutAuthorSection'
-import { CtaSlider } from '@/components/home/CtaSlider'
 import { HeroSlider } from '@/components/home/HeroSlider'
 import { HomeCatalogSection } from '@/components/home/HomeCatalogSection'
 import { HomeStatsSection } from '@/components/home/HomeStatsSection'
@@ -26,7 +25,6 @@ export function HomePage() {
       <HeroSlider />
       <HomeStatsSection />
       <HomeCatalogSection />
-      <CtaSlider />
       <DeferredMount minHeight="24rem">
         <AboutAuthorSection />
       </DeferredMount>

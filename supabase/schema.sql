@@ -186,5 +186,11 @@ values
     'german-military-unit-insignia',
     'German Military Unit Insignia',
     'Encyclopedia of unit insignia for modelers and historical researchers.'
+  ),
+  (
+    'series-discount-bundles',
+    'discount-bundles',
+    'Discount bundle',
+    'Multi-book combos sold on the Discounts page only.'
   )
 on conflict (id) do nothing;
