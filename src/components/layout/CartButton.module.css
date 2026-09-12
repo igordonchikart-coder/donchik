@@ -4,10 +4,16 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  height: 3.75rem;
+  height: var(--brand-mark-size);
   aspect-ratio: 329 / 255;
   text-decoration: none;
   line-height: 0;
+}
+
+@media (min-width: 1024px) {
+  .button {
+    height: 3.75rem;
+  }
 }
 
 .button:hover {
