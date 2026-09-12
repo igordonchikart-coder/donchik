@@ -10,11 +10,17 @@ export function isComingSoon(product: Product): boolean {
 }
 
 export function toVolumeLabel(volumeNumber: number): string {
+  if (volumeNumber <= 0) {
+    return 'Bundle'
+  }
   const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
   return `Volume ${numerals[volumeNumber - 1] ?? String(volumeNumber)}`
 }
 
 export function getProductHeadline(product: Pick<Product, 'title' | 'volumeNumber' | 'shortDescription'>): string {
+  if (product.volumeNumber <= 0) {
+    return `${product.title} — ${product.shortDescription}`
+  }
   return `${product.title} Vol. ${product.volumeNumber} — ${product.shortDescription}`
 }
 
