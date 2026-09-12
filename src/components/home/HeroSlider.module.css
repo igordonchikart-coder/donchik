@@ -21,6 +21,7 @@
   left: 0.93%;
   overflow: hidden;
   background: var(--color-surface);
+  touch-action: pan-y;
 }
 
 .viewportPending {

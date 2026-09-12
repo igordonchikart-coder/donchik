@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Container } from '@/components/common/Container'
 import { SliderArrow } from '@/components/common/SliderArrow'
@@ -9,6 +9,7 @@ import {
   useCarouselImageWarmup,
 } from '@/hooks/useCarouselImageWarmup'
 import { useHomepageSlides } from '@/hooks/useHomepageSlides'
+import { useSwipeCarousel } from '@/hooks/useSwipeCarousel'
 import { toHeroSlideView } from '@/utils/homepageSlides'
 import { HeroSlide } from './HeroSlide'
 import { HeroSliderDots } from './HeroSliderDots'
@@ -20,7 +21,6 @@ export function HeroSlider() {
     if (dbSlides && dbSlides.length > 0) {
       return dbSlides.map(toHeroSlideView)
     }
-    // Wait for Supabase — do not flash static fallback while loading.
     if (isLoading) {
       return []
     }
@@ -32,12 +32,23 @@ export function HeroSlider() {
   const imageUrls = useMemo(() => slides.map((slide) => slide.image), [slides])
   const { activeReady, safeIndex } = useCarouselImageWarmup(imageUrls, activeIndex)
 
-  function goTo(index: number) {
-    if (slideCount === 0) {
-      return
-    }
-    setActiveIndex(((index % slideCount) + slideCount) % slideCount)
-  }
+  const goTo = useCallback(
+    (index: number) => {
+      if (slideCount === 0) {
+        return
+      }
+      setActiveIndex(((index % slideCount) + slideCount) % slideCount)
+    },
+    [slideCount],
+  )
+
+  const onSwipe = useCallback(
+    (direction: 'prev' | 'next') => {
+      goTo(direction === 'next' ? safeIndex + 1 : safeIndex - 1)
+    },
+    [goTo, safeIndex],
+  )
+  const swipe = useSwipeCarousel(onSwipe, slideCount > 1 && activeReady)
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === 'ArrowRight') {
@@ -66,6 +77,7 @@ export function HeroSlider() {
         <div className={styles.shell}>
           <div
             className={`sliderHost ${styles.viewport} ${showTrack ? '' : styles.viewportPending}`}
+            {...swipe}
           >
             {showTrack ? (
               <div

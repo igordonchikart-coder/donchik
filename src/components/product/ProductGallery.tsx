@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { ProductCardDots } from '@/components/catalog/ProductCardDots'
 import { LazyImage } from '@/components/common/LazyImage'
 import { SliderArrow } from '@/components/common/SliderArrow'
+import { useSwipeCarousel } from '@/hooks/useSwipeCarousel'
 import type { Product } from '@/types'
 import { getProductPageSlides } from '@/utils/product'
 import styles from './ProductGallery.module.css'
@@ -18,10 +19,24 @@ export function ProductGallery({ product }: ProductGalleryProps) {
   const slideCount = slides.length
   const label = `${product.title} ${product.volumeLabel}`
 
-  function goTo(index: number) {
-    const next = ((index % slideCount) + slideCount) % slideCount
-    setActiveIndex(next)
-  }
+  const goTo = useCallback(
+    (index: number) => {
+      if (slideCount === 0) {
+        return
+      }
+      const next = ((index % slideCount) + slideCount) % slideCount
+      setActiveIndex(next)
+    },
+    [slideCount],
+  )
+
+  const onSwipe = useCallback(
+    (direction: 'prev' | 'next') => {
+      goTo(direction === 'next' ? activeIndex + 1 : activeIndex - 1)
+    },
+    [activeIndex, goTo],
+  )
+  const swipe = useSwipeCarousel(onSwipe, slideCount > 1)
 
   useEffect(() => {
     setLoaded((current) => {
@@ -57,6 +72,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
       aria-label={`${label} images`}
       tabIndex={0}
       onKeyDown={handleKeyDown}
+      {...swipe}
     >
       <div className={styles.viewport}>
         <div className={styles.track} style={{ transform: `translateX(-${activeIndex * 100}%)` }}>

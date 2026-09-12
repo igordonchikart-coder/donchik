@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Container } from '@/components/common/Container'
 import { SliderArrow } from '@/components/common/SliderArrow'
@@ -9,6 +9,7 @@ import {
   useCarouselImageWarmup,
 } from '@/hooks/useCarouselImageWarmup'
 import { useHomepageSlides } from '@/hooks/useHomepageSlides'
+import { useSwipeCarousel } from '@/hooks/useSwipeCarousel'
 import { toCtaSlideView } from '@/utils/homepageSlides'
 import { CtaSlide } from './CtaSlide'
 import { CtaSliderDots } from './CtaSliderDots'
@@ -31,12 +32,23 @@ export function CtaSlider() {
   const imageUrls = useMemo(() => slides.map((slide) => slide.image), [slides])
   const { activeReady, safeIndex } = useCarouselImageWarmup(imageUrls, activeIndex)
 
-  function goTo(index: number) {
-    if (slideCount === 0) {
-      return
-    }
-    setActiveIndex(((index % slideCount) + slideCount) % slideCount)
-  }
+  const goTo = useCallback(
+    (index: number) => {
+      if (slideCount === 0) {
+        return
+      }
+      setActiveIndex(((index % slideCount) + slideCount) % slideCount)
+    },
+    [slideCount],
+  )
+
+  const onSwipe = useCallback(
+    (direction: 'prev' | 'next') => {
+      goTo(direction === 'next' ? safeIndex + 1 : safeIndex - 1)
+    },
+    [goTo, safeIndex],
+  )
+  const swipe = useSwipeCarousel(onSwipe, slideCount > 1 && activeReady)
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === 'ArrowRight') {
@@ -68,6 +80,7 @@ export function CtaSlider() {
         <div className={styles.shell}>
           <div
             className={`sliderHost ${styles.viewport} ${showTrack ? '' : styles.viewportPending}`}
+            {...swipe}
           >
             {showTrack ? (
               <div
