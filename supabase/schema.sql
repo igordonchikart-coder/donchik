@@ -59,13 +59,29 @@ create table if not exists public.orders (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.homepage_slides (
+  id uuid primary key default gen_random_uuid(),
+  kind text not null check (kind in ('hero', 'cta')),
+  title text not null,
+  label text not null default '',
+  image text not null default '',
+  link_type text not null default 'product' check (link_type in ('product', 'category', 'discounts')),
+  product_id uuid references public.products (id) on delete set null,
+  category_id text references public.categories (id) on delete set null,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create index if not exists products_category_id_idx on public.products (category_id);
 create index if not exists products_slug_idx on public.products (slug);
 create index if not exists orders_created_at_idx on public.orders (created_at desc);
+create index if not exists homepage_slides_kind_sort_idx on public.homepage_slides (kind, sort_order);
 
 alter table public.categories enable row level security;
 alter table public.products enable row level security;
 alter table public.orders enable row level security;
+alter table public.homepage_slides enable row level security;
 
 drop policy if exists "public read categories" on public.categories;
 drop policy if exists "admin write categories" on public.categories;
@@ -74,6 +90,8 @@ drop policy if exists "admin write products" on public.products;
 drop policy if exists "public insert orders" on public.orders;
 drop policy if exists "admin read orders" on public.orders;
 drop policy if exists "admin update orders" on public.orders;
+drop policy if exists "public read homepage slides" on public.homepage_slides;
+drop policy if exists "admin write homepage slides" on public.homepage_slides;
 
 create policy "public read categories"
   on public.categories for select
@@ -106,6 +124,16 @@ create policy "admin read orders"
 
 create policy "admin update orders"
   on public.orders for update
+  to authenticated
+  using (true)
+  with check (true);
+
+create policy "public read homepage slides"
+  on public.homepage_slides for select
+  using (true);
+
+create policy "admin write homepage slides"
+  on public.homepage_slides for all
   to authenticated
   using (true)
   with check (true);

@@ -1,16 +1,30 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Container } from '@/components/common/Container'
-import { ctaSlides } from '@/data/ctaSlides'
+import { ctaSlides as fallbackCtaSlides } from '@/data/ctaSlides'
+import { useHomepageSlides } from '@/hooks/useHomepageSlides'
+import { toCtaSlideView } from '@/utils/homepageSlides'
 import { CtaSlide } from './CtaSlide'
 import { CtaSliderDots } from './CtaSliderDots'
 import styles from './CtaSlider.module.css'
 
 export function CtaSlider() {
+  const { data: dbSlides } = useHomepageSlides('cta')
+  const slides = useMemo(() => {
+    if (dbSlides && dbSlides.length > 0) {
+      return dbSlides.map(toCtaSlideView)
+    }
+    return fallbackCtaSlides
+  }, [dbSlides])
+
   const [activeIndex, setActiveIndex] = useState(0)
-  const slideCount = ctaSlides.length
+  const slideCount = slides.length
+  const safeIndex = slideCount === 0 ? 0 : Math.min(activeIndex, slideCount - 1)
 
   function goTo(index: number) {
+    if (slideCount === 0) {
+      return
+    }
     const next = ((index % slideCount) + slideCount) % slideCount
     setActiveIndex(next)
   }
@@ -18,12 +32,12 @@ export function CtaSlider() {
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === 'ArrowRight') {
       event.preventDefault()
-      goTo(activeIndex + 1)
+      goTo(safeIndex + 1)
     }
 
     if (event.key === 'ArrowLeft') {
       event.preventDefault()
-      goTo(activeIndex - 1)
+      goTo(safeIndex - 1)
     }
   }
 
@@ -46,14 +60,14 @@ export function CtaSlider() {
           <div className={styles.viewport}>
             <div
               className={styles.track}
-              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+              style={{ transform: `translateX(-${safeIndex * 100}%)` }}
             >
-              {ctaSlides.map((slide, index) => (
-                <CtaSlide key={slide.id} slide={slide} isActive={index === activeIndex} />
+              {slides.map((slide, index) => (
+                <CtaSlide key={slide.id} slide={slide} isActive={index === safeIndex} />
               ))}
             </div>
           </div>
-          <CtaSliderDots slides={ctaSlides} activeIndex={activeIndex} onSelect={goTo} />
+          <CtaSliderDots slides={slides} activeIndex={safeIndex} onSelect={goTo} />
         </div>
       </Container>
     </section>

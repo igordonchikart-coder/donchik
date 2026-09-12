@@ -8,6 +8,7 @@ const items = [
   { to: routes.admin, label: 'Overview', end: true },
   { to: routes.adminProducts, label: 'Books', end: false },
   { to: routes.adminCategories, label: 'Series', end: false },
+  { to: routes.adminSliders, label: 'Sliders', end: false },
   { to: routes.adminOrders, label: 'Orders', end: false },
 ]
 

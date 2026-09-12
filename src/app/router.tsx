@@ -33,6 +33,9 @@ const AdminProductNewPage = lazy(() =>
 const AdminProductsPage = lazy(() =>
   import('@/pages/admin/AdminProductsPage').then((module) => ({ default: module.AdminProductsPage })),
 )
+const AdminSlidersPage = lazy(() =>
+  import('@/pages/admin/AdminSlidersPage').then((module) => ({ default: module.AdminSlidersPage })),
+)
 
 export function AppRouter() {
   return (
@@ -58,6 +61,7 @@ export function AppRouter() {
             <Route path="/admin/products/new" element={<AdminProductNewPage />} />
             <Route path="/admin/products/:id/edit" element={<AdminProductEditPage />} />
             <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+            <Route path="/admin/sliders" element={<AdminSlidersPage />} />
             <Route path="/admin/orders" element={<AdminOrdersPage />} />
           </Route>
         </Route>

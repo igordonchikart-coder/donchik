@@ -37,7 +37,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'orderId and items are required' })
   }
 
-  const origin = req.headers.origin ?? 'https://donchik.art'
+  const origin = req.headers.origin ?? 'https://donchikart.com'
 
   try {
     const stripe = getStripe()

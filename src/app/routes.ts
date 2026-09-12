@@ -16,4 +16,5 @@ export const routes = {
   adminProductEdit: (id: string) => `/admin/products/${id}/edit`,
   adminCategories: '/admin/categories',
   adminOrders: '/admin/orders',
+  adminSliders: '/admin/sliders',
 } as const

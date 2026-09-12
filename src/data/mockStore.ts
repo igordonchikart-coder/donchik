@@ -1,7 +1,8 @@
-import type { Category, Order, Product } from '@/types'
+import type { Category, HomepageSlide, Order, Product } from '@/types'
 import { STORAGE_KEYS } from '@/utils/constants'
 import { readJson, writeJson } from '@/utils/storage'
 import { mockCategories } from './mockCategories'
+import { mockHomepageSlides } from './mockHomepageSlides'
 import { mockOrders } from './mockOrders'
 import { mockProducts } from './mockProducts'
 
@@ -9,6 +10,7 @@ export interface MockStoreState {
   products: Product[]
   categories: Category[]
   orders: Order[]
+  homepageSlides: HomepageSlide[]
 }
 
 function createSeedState(): MockStoreState {
@@ -20,6 +22,7 @@ function createSeedState(): MockStoreState {
       customer: { ...order.customer },
       items: order.items.map((item) => ({ ...item })),
     })),
+    homepageSlides: mockHomepageSlides.map((slide) => ({ ...slide })),
   }
 }
 
@@ -68,8 +71,12 @@ function loadState(): MockStoreState {
       )
     })
 
-  const nextState = { ...stored, products }
-  if (productsChanged) {
+  const homepageSlides = stored.homepageSlides?.length
+    ? stored.homepageSlides
+    : seed.homepageSlides
+
+  const nextState = { ...stored, products, homepageSlides }
+  if (productsChanged || !stored.homepageSlides?.length) {
     writeJson(STORAGE_KEYS.mockStore, nextState)
   }
   return nextState

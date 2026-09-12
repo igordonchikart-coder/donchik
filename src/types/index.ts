@@ -12,3 +12,9 @@ export type { Customer, CustomerInput } from './customer'
 export type { OrderStatus, OrderItem, Order, CreateOrderInput } from './order'
 export { ORDER_STATUS_LABELS } from './order'
 export type { AuthUser, LoginCredentials } from './auth'
+export type {
+  HomepageSlide,
+  HomepageSlideInput,
+  HomepageSlideKind,
+  HomepageSlideLinkType,
+} from './homepageSlide'
