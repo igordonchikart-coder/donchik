@@ -16,8 +16,11 @@
 }
 
 .preview {
-  width: min(100%, 420px);
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  background: var(--color-border);
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 21 / 8;
+  object-fit: contain;
+  object-position: center;
+  background: #1a1612;
+  border: 1px solid var(--color-border);
 }
