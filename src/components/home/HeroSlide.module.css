@@ -24,21 +24,23 @@
 
 .copy {
   position: absolute;
+  top: 10%;
   right: var(--space-md);
-  left: var(--space-md);
-  bottom: 3.75rem;
+  left: auto;
+  bottom: auto;
   display: grid;
-  justify-items: center;
+  justify-items: end;
   gap: var(--space-2xs);
-  text-align: center;
-  max-width: calc(100% - 2 * var(--space-md));
+  text-align: right;
+  max-width: min(72%, 18rem);
+  width: min(72%, 18rem);
   box-sizing: border-box;
 }
 
 .title {
   max-width: 100%;
   font-family: var(--font-nav);
-  font-size: clamp(1.05rem, 5.2vw, 2.1rem);
+  font-size: clamp(1.35rem, 6.4vw, 2.15rem);
   font-weight: 700;
   font-stretch: 75%;
   line-height: 0.95;
@@ -54,10 +56,10 @@
 
 .volume {
   font-family: var(--font-display);
-  font-size: clamp(1.12rem, 5.2vw, 1.7rem);
+  font-size: clamp(1.2rem, 5.6vw, 1.75rem);
   font-stretch: 100%;
   line-height: 1;
-  margin-top: 0.45rem;
+  margin-top: 0.4rem;
   color: var(--color-nav);
   -webkit-text-stroke: 0.08em #0f0c0a;
   paint-order: stroke fill;
@@ -68,10 +70,6 @@
   .copy {
     top: 14%;
     right: calc(var(--space-xl) * 1.2);
-    left: auto;
-    bottom: auto;
-    justify-items: end;
-    text-align: right;
     max-width: min(48%, 36rem);
     width: min(48%, 36rem);
   }
