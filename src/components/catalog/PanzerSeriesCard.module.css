@@ -16,6 +16,10 @@
   -webkit-user-drag: none;
 }
 
+.cardSoon .frameWrap {
+  cursor: default;
+}
+
 .tiltPlane {
   position: absolute;
   inset: 0;

@@ -34,7 +34,7 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
       maxTilt: 10,
     })
   const comingSoon = isComingSoon(product)
-  const productTo = routes.product(product.slug)
+  const productTo = comingSoon ? undefined : routes.product(product.slug)
   const body = getProductCardDescription(product)
 
   function handlePointerEnter(event: ReactPointerEvent<HTMLDivElement>) {
@@ -48,7 +48,7 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
   }
 
   return (
-    <article className={styles.card}>
+    <article className={`${styles.card} ${comingSoon ? styles.cardSoon : ''}`}>
       <div
         className={styles.frame}
         onPointerEnter={handlePointerEnter}
@@ -58,7 +58,7 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
         onPointerLeave={handlePointerLeave}
         onDragStart={onDragStart}
         onClick={(event) => {
-          if ((event.target as HTMLElement).closest('button')) {
+          if (comingSoon || !productTo || (event.target as HTMLElement).closest('button')) {
             return
           }
 
@@ -72,9 +72,13 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
       >
         <div ref={tiltRef} className={styles.tiltPlane}>
           <div className={styles.header}>
-            <Link className={styles.title} to={productTo}>
-              {product.title}
-            </Link>
+            {productTo ? (
+              <Link className={styles.title} to={productTo}>
+                {product.title}
+              </Link>
+            ) : (
+              <span className={styles.title}>{product.title}</span>
+            )}
             <span className={styles.badge}>{product.volumeNumber}</span>
           </div>
           <ProductCardMedia
@@ -94,7 +98,7 @@ export function ProductCard({ product, preview = false }: ProductCardProps) {
           </ProductCardMedia>
           <hr className={styles.divider} />
           <p className={styles.body}>
-            <Link to={productTo}>{body}</Link>
+            {productTo ? <Link to={productTo}>{body}</Link> : <span>{body}</span>}
           </p>
           <div className={styles.shineWell} data-shine-well aria-hidden="true">
             <div className={styles.shine} />

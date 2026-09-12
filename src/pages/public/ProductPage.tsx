@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import { Container } from '@/components/common/Container'
 import { DeferredMount } from '@/components/common/DeferredMount'
@@ -56,6 +56,10 @@ export function ProductPage() {
       ? routes.category(data.category.slug)
       : routes.catalog
   const categoryCrumb = isDiscountBundle ? 'Discounts' : (data.category?.title ?? 'Series')
+
+  if (isComingSoon(data)) {
+    return <Navigate to={categoryPath} replace />
+  }
 
   return (
     <div className={styles.page}>

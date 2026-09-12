@@ -55,11 +55,11 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
       disabled: !artReady,
       shineInsets: { top: 0.0315, right: 0.0635, bottom: 0.0455, left: 0.0655 },
     })
-  const productTo = routes.product(product.slug)
+  const comingSoon = isComingSoon(product)
+  const productTo = comingSoon ? undefined : routes.product(product.slug)
   const slides = getProductCardSlides(product)
   const coverImage = slides[0]
   const { activeIndex: safeIndex, warmed, onHoverStart, onHoverEnd, selectSlide } = useCardSlideshow(slides)
-  const comingSoon = isComingSoon(product)
   const yearBadge = getYearBadge(product)
   const cropLeft = product.categoryId === 'series-panzer-camouflage' && product.volumeNumber === 6
   const cardDescription = getProductCardDescription(product)
@@ -83,7 +83,10 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
   }
 
   return (
-    <article ref={cardRef} className={`${styles.card} ${artReady ? styles.cardReady : ''}`}>
+    <article
+      ref={cardRef}
+      className={`${styles.card} ${artReady ? styles.cardReady : ''} ${comingSoon ? styles.cardSoon : ''}`}
+    >
       <div
         className={styles.frameWrap}
         onPointerEnter={handlePointerEnter}
@@ -93,7 +96,13 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
         onPointerLeave={handlePointerLeave}
         onDragStart={onDragStart}
         onClick={(event) => {
-          if (preview || !artReady || (event.target as HTMLElement).closest('button')) {
+          if (
+            comingSoon ||
+            !productTo ||
+            preview ||
+            !artReady ||
+            (event.target as HTMLElement).closest('button')
+          ) {
             return
           }
 
@@ -116,22 +125,41 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
                 decoding="async"
                 fetchPriority="high"
               />
-              <Link className={styles.mediaLink} to={productTo} aria-label={`${product.title} ${product.volumeLabel}`}>
-                <div className={styles.track} style={{ transform: `translateX(-${safeIndex * 100}%)` }}>
-                  {slides.map((src, index) => (
-                    <div className={styles.slide} key={`${src}-${index}`}>
-                      <LazyImage
-                        className={`${styles.artwork} ${cropLeft ? styles.artworkCropLeft : ''}`}
-                        src={src}
-                        alt=""
-                        eager={index === 0 || warmed}
-                        rootMargin="900px 0px"
-                        onReady={index === 0 ? () => setArtReady(true) : undefined}
-                      />
-                    </div>
-                  ))}
+              {productTo ? (
+                <Link className={styles.mediaLink} to={productTo} aria-label={`${product.title} ${product.volumeLabel}`}>
+                  <div className={styles.track} style={{ transform: `translateX(-${safeIndex * 100}%)` }}>
+                    {slides.map((src, index) => (
+                      <div className={styles.slide} key={`${src}-${index}`}>
+                        <LazyImage
+                          className={`${styles.artwork} ${cropLeft ? styles.artworkCropLeft : ''}`}
+                          src={src}
+                          alt=""
+                          eager={index === 0 || warmed}
+                          rootMargin="900px 0px"
+                          onReady={index === 0 ? () => setArtReady(true) : undefined}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </Link>
+              ) : (
+                <div className={styles.mediaLink} aria-label={`${product.title} ${product.volumeLabel}`}>
+                  <div className={styles.track} style={{ transform: `translateX(-${safeIndex * 100}%)` }}>
+                    {slides.map((src, index) => (
+                      <div className={styles.slide} key={`${src}-${index}`}>
+                        <LazyImage
+                          className={`${styles.artwork} ${cropLeft ? styles.artworkCropLeft : ''}`}
+                          src={src}
+                          alt=""
+                          eager={index === 0 || warmed}
+                          rootMargin="900px 0px"
+                          onReady={index === 0 ? () => setArtReady(true) : undefined}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </Link>
+              )}
               {yearBadge ? (
                 <img className={styles.yearBadge} src={yearBadge} alt="" aria-hidden="true" />
               ) : null}
@@ -165,9 +193,15 @@ export function PanzerSeriesCard({ product, preview = false }: PanzerSeriesCardP
 
             <div className={styles.bottom}>
               <p className={`${styles.description} ${developmentCaption ? styles.descriptionLarge : ''}`}>
-                <Link className={styles.descriptionLink} to={productTo}>
-                  {developmentCaption ? 'Book in development' : cardDescription}
-                </Link>
+                {productTo ? (
+                  <Link className={styles.descriptionLink} to={productTo}>
+                    {developmentCaption ? 'Book in development' : cardDescription}
+                  </Link>
+                ) : (
+                  <span className={styles.descriptionLink}>
+                    {developmentCaption ? 'Book in development' : cardDescription}
+                  </span>
+                )}
               </p>
             </div>
           </div>
