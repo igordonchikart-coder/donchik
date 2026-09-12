@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { Container } from '@/components/common/Container'
+import { SliderArrow } from '@/components/common/SliderArrow'
 import videoFrame from '@/assets/ui/video-frame.webp'
 import { heroSlides as fallbackHeroSlides } from '@/data/heroSlides'
 import {
@@ -51,6 +52,7 @@ export function HeroSlider() {
   }
 
   const showTrack = slideCount > 0 && activeReady
+  const showArrows = showTrack && slideCount > 1
 
   return (
     <section
@@ -62,7 +64,9 @@ export function HeroSlider() {
     >
       <Container>
         <div className={styles.shell}>
-          <div className={`${styles.viewport} ${showTrack ? '' : styles.viewportPending}`}>
+          <div
+            className={`sliderHost ${styles.viewport} ${showTrack ? '' : styles.viewportPending}`}
+          >
             {showTrack ? (
               <div
                 className={styles.track}
@@ -77,6 +81,12 @@ export function HeroSlider() {
                   />
                 ))}
               </div>
+            ) : null}
+            {showArrows ? (
+              <>
+                <SliderArrow direction="prev" label="Previous slide" onClick={() => goTo(safeIndex - 1)} />
+                <SliderArrow direction="next" label="Next slide" onClick={() => goTo(safeIndex + 1)} />
+              </>
             ) : null}
             {showTrack ? (
               <HeroSliderDots slides={slides} activeIndex={safeIndex} onSelect={goTo} />

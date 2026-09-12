@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { ProductCardDots } from '@/components/catalog/ProductCardDots'
 import { LazyImage } from '@/components/common/LazyImage'
+import { SliderArrow } from '@/components/common/SliderArrow'
 import type { Product } from '@/types'
 import { getProductPageSlides } from '@/utils/product'
 import styles from './ProductGallery.module.css'
@@ -51,7 +52,7 @@ export function ProductGallery({ product }: ProductGalleryProps) {
 
   return (
     <div
-      className={styles.frame}
+      className={`sliderHost ${styles.frame}`}
       aria-roledescription="carousel"
       aria-label={`${label} images`}
       tabIndex={0}
@@ -75,6 +76,12 @@ export function ProductGallery({ product }: ProductGalleryProps) {
           )}
         </div>
       </div>
+      {slideCount > 1 ? (
+        <>
+          <SliderArrow direction="prev" label="Previous image" onClick={() => goTo(activeIndex - 1)} />
+          <SliderArrow direction="next" label="Next image" onClick={() => goTo(activeIndex + 1)} />
+        </>
+      ) : null}
       <div className={styles.dots}>
         <ProductCardDots
           count={slideCount}
