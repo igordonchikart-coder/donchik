@@ -29,7 +29,22 @@
 }
 
 .chevron {
-  font-size: 0.55em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 0.15rem;
+  font-size: 0.95em;
+  line-height: 1;
+  transform: translateY(0.05em);
+}
+
+.itemVertical .chevron {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1.35rem;
+  line-height: 1;
+  transform: none;
 }
 
 .menu {

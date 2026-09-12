@@ -71,6 +71,19 @@
   transition: transform 0.18s ease;
 }
 
+@media (max-width: 1023px) {
+  .chevron {
+    flex-basis: 1.65rem;
+    width: 1.65rem;
+    height: 1.65rem;
+  }
+
+  .chevron svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+}
+
 .triggerOpen .chevron svg {
   transform: rotate(180deg);
 }
