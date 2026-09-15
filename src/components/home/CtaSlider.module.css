@@ -16,7 +16,8 @@
 .shell {
   position: relative;
   width: 100%;
-  aspect-ratio: 21 / 8;
+  /* Match current discount preview art (e.g. 1024×520) — taller than the old 21:8 banners */
+  aspect-ratio: 1024 / 520;
   overflow: hidden;
   background: transparent;
 }

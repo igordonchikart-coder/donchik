@@ -167,9 +167,17 @@ export function AdminSlidersPage() {
           {orderedSlides.map((slide, index) => (
             <article key={slide.id} className={slideStyles.card}>
               {slide.image ? (
-                <img className={slideStyles.thumb} src={slide.image} alt="" />
+                <img
+                  className={`${slideStyles.thumb} ${kind === 'cta' ? slideStyles.thumbCta : ''}`}
+                  src={slide.image}
+                  alt=""
+                />
               ) : (
-                <div className={slideStyles.thumbEmpty}>No image</div>
+                <div
+                  className={`${slideStyles.thumbEmpty} ${kind === 'cta' ? slideStyles.thumbEmptyCta : ''}`}
+                >
+                  No image
+                </div>
               )}
               <div className={slideStyles.meta}>
                 <h2>{slide.title}</h2>

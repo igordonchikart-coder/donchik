@@ -193,7 +193,13 @@ export function HomepageSlideForm({
           onChange={handleImageUpload}
         />
         {isUploading ? <p className={styles.hint}>Uploading…</p> : null}
-        {image ? <img className={styles.preview} src={image} alt="" /> : null}
+        {image ? (
+          <img
+            className={`${styles.preview} ${kind === 'cta' ? styles.previewCta : ''}`}
+            src={image}
+            alt=""
+          />
+        ) : null}
       </div>
 
       {error ? (

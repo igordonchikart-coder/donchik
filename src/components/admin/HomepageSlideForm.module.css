@@ -24,3 +24,7 @@
   background: #1a1612;
   border: 1px solid var(--color-border);
 }
+
+.previewCta {
+  aspect-ratio: 1024 / 520;
+}
