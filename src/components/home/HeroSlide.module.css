@@ -25,13 +25,13 @@
 .copy {
   position: absolute;
   top: 10%;
-  right: var(--space-md);
-  left: auto;
+  left: var(--space-md);
+  right: auto;
   bottom: auto;
   display: grid;
-  justify-items: end;
+  justify-items: start;
   gap: var(--space-2xs);
-  text-align: right;
+  text-align: left;
   max-width: min(72%, 18rem);
   width: min(72%, 18rem);
   box-sizing: border-box;
@@ -69,7 +69,7 @@
 @media (min-width: 768px) {
   .copy {
     top: 14%;
-    right: calc(var(--space-xl) * 1.2);
+    left: calc(var(--space-xl) * 1.2);
     max-width: min(48%, 36rem);
     width: min(48%, 36rem);
   }
