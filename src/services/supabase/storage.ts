@@ -2,10 +2,34 @@ import { fileToDataUrl } from '@/utils/fileToDataUrl'
 import { createId } from '@/utils/id'
 import { getStorageBucket, getSupabaseClient } from './client'
 
-const MAX_EDGE = 1280
-const WEBP_QUALITY = 0.72
+type CompressPreset = {
+  maxEdge: number
+  quality: number
+}
 
-async function compressImageForUpload(file: File): Promise<File> {
+/** Gallery / product pages — aggressive enough for thumbs and detail grids. */
+const DEFAULT_PRESET: CompressPreset = {
+  maxEdge: 1280,
+  quality: 0.72,
+}
+
+/**
+ * Homepage hero + discount CTA banners show large and detailed art.
+ * Keep more resolution and softer WebP so fine type/maps stay crisp,
+ * without uploading full camera originals.
+ */
+const SLIDER_PRESET: CompressPreset = {
+  maxEdge: 1920,
+  quality: 0.86,
+}
+
+const SLIDER_FOLDERS = new Set(['hero-slides', 'cta-slides'])
+
+function presetForFolder(folder: string): CompressPreset {
+  return SLIDER_FOLDERS.has(folder) ? SLIDER_PRESET : DEFAULT_PRESET
+}
+
+async function compressImageForUpload(file: File, preset: CompressPreset): Promise<File> {
   if (typeof createImageBitmap !== 'function' || typeof document === 'undefined') {
     return file
   }
@@ -13,13 +37,15 @@ async function compressImageForUpload(file: File): Promise<File> {
   try {
     const bitmap = await createImageBitmap(file)
     let { width, height } = bitmap
-    if (Math.max(width, height) > MAX_EDGE) {
+    const { maxEdge, quality } = preset
+
+    if (Math.max(width, height) > maxEdge) {
       if (width >= height) {
-        height = Math.round((height * MAX_EDGE) / width)
-        width = MAX_EDGE
+        height = Math.round((height * maxEdge) / width)
+        width = maxEdge
       } else {
-        width = Math.round((width * MAX_EDGE) / height)
-        height = MAX_EDGE
+        width = Math.round((width * maxEdge) / height)
+        height = maxEdge
       }
     }
 
@@ -36,7 +62,7 @@ async function compressImageForUpload(file: File): Promise<File> {
     bitmap.close()
 
     const blob = await new Promise<Blob | null>((resolve) => {
-      canvas.toBlob(resolve, 'image/webp', WEBP_QUALITY)
+      canvas.toBlob(resolve, 'image/webp', quality)
     })
     if (!blob || blob.size >= file.size) {
       return file
@@ -50,7 +76,7 @@ async function compressImageForUpload(file: File): Promise<File> {
 }
 
 export async function uploadImage(file: File, folder: string): Promise<string> {
-  const optimized = await compressImageForUpload(file)
+  const optimized = await compressImageForUpload(file, presetForFolder(folder))
   const bucket = getStorageBucket()
   const extension = optimized.name.split('.').pop() || 'jpg'
   const path = `${folder}/${createId()}.${extension}`
