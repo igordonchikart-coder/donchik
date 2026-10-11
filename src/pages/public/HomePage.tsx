@@ -1,5 +1,6 @@
 import { DeferredMount } from '@/components/common/DeferredMount'
 import { AboutAuthorSection } from '@/components/home/AboutAuthorSection'
+import { HomeBackdrop } from '@/components/home/HomeBackdrop'
 import { CtaSlider } from '@/components/home/CtaSlider'
 import { HeroSlider } from '@/components/home/HeroSlider'
 import { HomeCatalogSection } from '@/components/home/HomeCatalogSection'
@@ -23,6 +24,7 @@ export function HomePage() {
         path={routes.home}
         jsonLd={organizationJsonLd(origin)}
       />
+      <HomeBackdrop />
       <HeroSlider />
       <HomeStatsSection />
       <HomeCatalogSection />

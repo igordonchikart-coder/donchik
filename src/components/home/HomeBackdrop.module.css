@@ -1,0 +1,253 @@
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  contain: paint;
+}
+
+.ground {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.city {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 118%;
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%);
+  object-fit: fill;
+  object-position: bottom center;
+}
+
+.beam {
+  position: absolute;
+  bottom: 6%;
+  width: min(22vw, 16rem);
+  max-width: none;
+  height: auto;
+  transform-origin: 92% 98%;
+  mix-blend-mode: screen;
+  opacity: 0.72;
+}
+
+.beamA {
+  left: 8%;
+  animation: sweepA 14s ease-in-out infinite;
+}
+
+.beamB {
+  left: 32%;
+  width: min(18vw, 13rem);
+  opacity: 0.55;
+  animation: sweepB 19s ease-in-out infinite;
+}
+
+.beamC {
+  left: 58%;
+  animation: sweepC 16s ease-in-out infinite reverse;
+}
+
+.beamD {
+  left: 78%;
+  width: min(16vw, 12rem);
+  opacity: 0.48;
+  animation: sweepA 22s ease-in-out infinite reverse;
+}
+
+.airship {
+  position: absolute;
+  width: min(16vw, 11rem);
+  opacity: 0.9;
+}
+
+.airship img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+
+.faceRight {
+  transform: scaleX(-1);
+}
+
+.shipA {
+  top: 12%;
+  animation: flyRight 140s linear infinite;
+}
+
+.shipB {
+  top: 28%;
+  width: min(11vw, 7.5rem);
+  opacity: 0.75;
+  animation: flyLeft 180s linear infinite;
+}
+
+.para {
+  position: absolute;
+  width: 2.4rem;
+  max-width: none;
+  height: auto;
+}
+
+.paraA {
+  left: 18%;
+  animation: fall 78s linear infinite;
+}
+
+.paraB {
+  left: 46%;
+  width: 1.7rem;
+  animation: fallDrift 100s linear infinite;
+  animation-delay: -36s;
+}
+
+.paraC {
+  left: 68%;
+  width: 2.1rem;
+  animation: fall 90s linear infinite;
+  animation-delay: -58s;
+}
+
+.paraD {
+  left: 84%;
+  width: 1.45rem;
+  animation: fallDrift 120s linear infinite;
+  animation-delay: -24s;
+}
+
+@keyframes sweepA {
+  0%,
+  100% {
+    transform: rotate(-18deg);
+  }
+
+  50% {
+    transform: rotate(16deg);
+  }
+}
+
+@keyframes sweepB {
+  0%,
+  100% {
+    transform: rotate(12deg);
+  }
+
+  50% {
+    transform: rotate(-22deg);
+  }
+}
+
+@keyframes sweepC {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+
+  50% {
+    transform: rotate(24deg);
+  }
+}
+
+@keyframes flyRight {
+  0% {
+    transform: translate3d(-30vw, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(120vw, 4vh, 0);
+  }
+}
+
+@keyframes flyLeft {
+  0% {
+    transform: translate3d(110vw, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-40vw, -3vh, 0);
+  }
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -12vh, 0);
+  }
+
+  100% {
+    transform: translate3d(6vw, 108vh, 0);
+  }
+}
+
+@keyframes fallDrift {
+  0% {
+    transform: translate3d(4vw, -14vh, 0);
+  }
+
+  100% {
+    transform: translate3d(-8vw, 108vh, 0);
+  }
+}
+
+@media (max-width: 767px) {
+  .beamB,
+  .beamD,
+  .paraD,
+  .shipB {
+    display: none;
+  }
+
+  .beam {
+    width: 38vw;
+    opacity: 0.6;
+  }
+
+  .city {
+    width: 190%;
+  }
+
+  .airship {
+    width: 34vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beam,
+  .airship,
+  .para {
+    animation: none;
+  }
+
+  .shipA {
+    left: 12%;
+    top: 14%;
+  }
+
+  .shipB {
+    right: 8%;
+    top: 26%;
+  }
+
+  .paraA {
+    top: 18%;
+  }
+
+  .paraB {
+    top: 36%;
+  }
+
+  .paraC {
+    top: 24%;
+  }
+
+  .paraD {
+    top: 42%;
+  }
+}
