@@ -15,6 +15,7 @@ export function HomeBackdrop() {
       return
     }
 
+    const layer: HTMLDivElement = ground
     let frame = 0
     let lastLift = -1
 
@@ -24,7 +25,7 @@ export function HomeBackdrop() {
       if (!footer) {
         if (lastLift !== 0) {
           lastLift = 0
-          ground.style.transform = ''
+          layer.style.transform = ''
         }
         return
       }
@@ -34,7 +35,7 @@ export function HomeBackdrop() {
         return
       }
       lastLift = lift
-      ground.style.transform = lift > 0 ? `translate3d(0, ${-lift}px, 0)` : ''
+      layer.style.transform = lift > 0 ? `translate3d(0, ${-lift}px, 0)` : ''
     }
 
     function onScroll() {
