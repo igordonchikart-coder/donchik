@@ -23,11 +23,11 @@ export function AboutPage() {
       />
       <Container>
         <PageHeader title={aboutPageCopy.title} description={aboutPageCopy.description} />
-        <AboutCompany />
       </Container>
       <AboutAuthorSection compact />
       <Container>
         <AboutStudio />
+        <AboutCompany />
       </Container>
     </div>
   )
