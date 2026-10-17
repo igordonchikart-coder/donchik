@@ -48,7 +48,7 @@ export const legalDocuments: Record<LegalDocId, LegalDocument> = {
       {
         title: '3. Prices and payment',
         paragraphs: [
-          'Catalogue prices can be viewed in EUR, USD, KZT, or GBP using the currency switcher. Display amounts are approximate conversions from the store base price; the amount charged at checkout is confirmed on the payment page of the selected provider.',
+          'Catalogue prices can be viewed in KZT, EUR, USD, or GBP using the currency switcher. KZT is shown as the primary display currency for acquiring review, with an approximate euro equivalent in parentheses. Converted amounts are rounded to clean values. The amount charged at checkout is confirmed on the payment page of the selected provider.',
           'EU VAT, if applicable, is shown at checkout. Outside the EU the listed price is the amount you pay before carrier import duties, if any.',
         ],
       },

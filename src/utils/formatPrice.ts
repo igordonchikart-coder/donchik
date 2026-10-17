@@ -11,9 +11,11 @@ const CURRENCY_LOCALES: Record<string, string> = {
 /** @deprecated use EUR_RATES.KZT — kept for older imports */
 export const EUR_TO_KZT = EUR_RATES.KZT
 
+const WHOLE_CURRENCIES = new Set(['KZT', 'USD', 'GBP'])
+
 export function formatPrice(price: number, currency = 'RUB'): string {
   const locale = CURRENCY_LOCALES[currency] ?? 'ru-RU'
-  const whole = currency === 'KZT'
+  const whole = WHOLE_CURRENCIES.has(currency)
 
   return new Intl.NumberFormat(locale, {
     style: 'currency',
@@ -33,17 +35,31 @@ function toEur(price: number, sourceCurrency: string): number {
   return price
 }
 
+/** Round converted amounts to clean shop display values. */
 export function convertFromEur(amountEur: number, to: DisplayCurrency): number {
   const raw = amountEur * EUR_RATES[to]
-  return to === 'KZT' ? Math.round(raw) : Math.round(raw * 100) / 100
+  if (to === 'KZT') {
+    return Math.round(raw / 10) * 10
+  }
+  if (to === 'USD' || to === 'GBP') {
+    return Math.round(raw)
+  }
+  return Math.round(raw * 100) / 100
 }
 
 /** Storefront display in the shopper-selected currency. */
 export function formatStorePrice(
   price: number,
   sourceCurrency = 'EUR',
-  displayCurrency: DisplayCurrency = 'EUR',
+  displayCurrency: DisplayCurrency = 'KZT',
 ): string {
   const eur = toEur(price, sourceCurrency)
-  return formatPrice(convertFromEur(eur, displayCurrency), displayCurrency)
+  const primary = formatPrice(convertFromEur(eur, displayCurrency), displayCurrency)
+
+  // Bank onboarding: KZT as main price, euro equivalent in parentheses.
+  if (displayCurrency === 'KZT') {
+    return `${primary} (${formatPrice(convertFromEur(eur, 'EUR'), 'EUR')})`
+  }
+
+  return primary
 }

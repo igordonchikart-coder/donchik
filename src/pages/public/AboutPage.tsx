@@ -1,5 +1,6 @@
 import { Container } from '@/components/common/Container'
 import { PageHeader } from '@/components/common/PageHeader'
+import { AboutCompany } from '@/components/about/AboutCompany'
 import { AboutStudio } from '@/components/about/AboutStudio'
 import { AboutAuthorSection } from '@/components/home/AboutAuthorSection'
 import { PageSeo } from '@/components/seo/PageSeo'
@@ -22,6 +23,7 @@ export function AboutPage() {
       />
       <Container>
         <PageHeader title={aboutPageCopy.title} description={aboutPageCopy.description} />
+        <AboutCompany />
       </Container>
       <AboutAuthorSection compact />
       <Container>

@@ -9,7 +9,7 @@ interface CurrencyContextValue {
 
 export const CurrencyContext = createContext<CurrencyContextValue | null>(null)
 
-const DEFAULT_CURRENCY: DisplayCurrency = 'EUR'
+const DEFAULT_CURRENCY: DisplayCurrency = 'KZT'
 
 function readStoredCurrency(): DisplayCurrency {
   if (typeof window === 'undefined') {

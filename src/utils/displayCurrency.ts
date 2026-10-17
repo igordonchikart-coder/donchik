@@ -3,9 +3,9 @@ export const DISPLAY_CURRENCIES = ['EUR', 'USD', 'KZT', 'GBP'] as const
 export type DisplayCurrency = (typeof DISPLAY_CURRENCIES)[number]
 
 export const DISPLAY_CURRENCY_OPTIONS: Array<{ code: DisplayCurrency; label: string }> = [
+  { code: 'KZT', label: 'KZT ₸' },
   { code: 'EUR', label: 'EUR €' },
   { code: 'USD', label: 'USD $' },
-  { code: 'KZT', label: 'KZT ₸' },
   { code: 'GBP', label: 'GBP £' },
 ]
 
