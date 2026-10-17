@@ -45,14 +45,3 @@
 .meta p {
   margin: 0;
 }
-
-@media (min-width: 768px) {
-  .legal {
-    justify-items: end;
-    text-align: right;
-  }
-
-  .links {
-    justify-items: end;
-  }
-}
