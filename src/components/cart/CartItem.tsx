@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import type { CartItem as CartItemType } from '@/types'
-import { formatPrice } from '@/utils/formatPrice'
+import { formatStorePrice } from '@/utils/formatPrice'
 import { useCart } from '@/hooks/useCart'
 import styles from './CartItem.module.css'
 
@@ -19,8 +19,8 @@ export function CartItem({ item }: CartItemProps) {
         <Link className={styles.title} to={routes.product(item.slug)}>
           {item.title}
         </Link>
-        <p className={styles.meta}>per item: {formatPrice(item.price, item.currency)}</p>
-        <p className={styles.price}>{formatPrice(item.price * item.quantity, item.currency)}</p>
+        <p className={styles.meta}>per item: {formatStorePrice(item.price, item.currency)}</p>
+        <p className={styles.price}>{formatStorePrice(item.price * item.quantity, item.currency)}</p>
         <div className={styles.controls}>
           <div className={styles.quantity}>
             <button

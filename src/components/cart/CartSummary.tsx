@@ -2,7 +2,7 @@ import { routes } from '@/app/routes'
 import { Button } from '@/components/common/Button'
 import { useCart } from '@/hooks/useCart'
 import { DEFAULT_CURRENCY } from '@/utils/constants'
-import { formatPrice } from '@/utils/formatPrice'
+import { formatStorePrice } from '@/utils/formatPrice'
 import styles from './CartSummary.module.css'
 
 interface CartSummaryProps {
@@ -23,7 +23,7 @@ export function CartSummary({ showCheckoutButton = true }: CartSummaryProps) {
       <hr className={styles.divider} />
       <p className={`${styles.row} ${styles.total}`}>
         <span>Total</span>
-        <span>{formatPrice(totalPrice, currency)}</span>
+        <span>{formatStorePrice(totalPrice, currency)}</span>
       </p>
       {showCheckoutButton ? (
         <Button to={routes.checkout} disabled={items.length === 0}>

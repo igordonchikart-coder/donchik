@@ -6,9 +6,30 @@
   color: var(--color-nav);
 }
 
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.link:hover {
+  color: var(--color-nav-active);
+}
+
 @media (min-width: 768px) {
   .legal {
     align-self: end;
     text-align: right;
+  }
+
+  .links {
+    justify-content: flex-end;
   }
 }

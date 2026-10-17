@@ -1,0 +1,26 @@
+.seller {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 28rem;
+  font-family: var(--font-nav);
+  font-size: var(--font-size-sm);
+  font-stretch: 87.5%;
+  line-height: 1.45;
+  color: var(--color-nav);
+}
+
+.title {
+  margin-bottom: 0.15rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.link {
+  color: inherit;
+}
+
+.note {
+  margin-top: 0.35rem;
+  color: var(--color-text-muted);
+}

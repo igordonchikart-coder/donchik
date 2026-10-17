@@ -5,7 +5,7 @@ import { useTrustpilot } from '@/hooks/useTrustpilot'
 import { AddToCartButton } from './AddToCartButton'
 import { ProductIntroText } from './ProductIntroText'
 import type { Product } from '@/types'
-import { formatPrice } from '@/utils/formatPrice'
+import { formatStorePrice } from '@/utils/formatPrice'
 import { DISCOUNT_BUNDLE_CATEGORY_SLUG } from '@/utils/catalogGroups'
 import { isComingSoon } from '@/utils/product'
 import styles from './ProductBuyPanel.module.css'
@@ -46,9 +46,9 @@ export function ProductBuyPanel({ product }: ProductBuyPanelProps) {
         <>
           {product.isOnSale && product.saleLabel ? <p className={styles.sale}>{product.saleLabel}</p> : null}
           {product.originalPrice ? (
-            <p className={styles.meta}>{formatPrice(product.originalPrice, product.currency)}</p>
+            <p className={styles.meta}>{formatStorePrice(product.originalPrice, product.currency)}</p>
           ) : null}
-          <p className={styles.price}>{formatPrice(product.price, product.currency)}</p>
+          <p className={styles.price}>{formatStorePrice(product.price, product.currency)}</p>
           {product.deliveryNote ? (
             <p className={styles.delivery}>
               {product.deliveryNote} <span aria-hidden="true">🔥</span>

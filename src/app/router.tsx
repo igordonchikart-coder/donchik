@@ -14,6 +14,9 @@ const CategoryPage = lazy(() => import('@/pages/public/CategoryPage').then((modu
 const CheckoutPage = lazy(() => import('@/pages/public/CheckoutPage').then((module) => ({ default: module.CheckoutPage })))
 const ContactPage = lazy(() => import('@/pages/public/ContactPage').then((module) => ({ default: module.ContactPage })))
 const DiscountsPage = lazy(() => import('@/pages/public/DiscountsPage').then((module) => ({ default: module.DiscountsPage })))
+const LegalDocumentPage = lazy(() =>
+  import('@/pages/public/LegalDocumentPage').then((module) => ({ default: module.LegalDocumentPage })),
+)
 const OrderSuccessPage = lazy(() => import('@/pages/public/OrderSuccessPage').then((module) => ({ default: module.OrderSuccessPage })))
 const ProductPage = lazy(() => import('@/pages/public/ProductPage').then((module) => ({ default: module.ProductPage })))
 const AdminCategoriesPage = lazy(() =>
@@ -47,6 +50,9 @@ export function AppRouter() {
           <Route path="/discounts" element={<DiscountsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/offer" element={<LegalDocumentPage docId="offer" />} />
+          <Route path="/privacy" element={<LegalDocumentPage docId="privacy" />} />
+          <Route path="/terms" element={<LegalDocumentPage docId="terms" />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/product/:slug" element={<ProductPage />} />
           <Route path="/cart" element={<CartPage />} />

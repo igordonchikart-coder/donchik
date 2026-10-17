@@ -3,6 +3,7 @@ import { PageHeader } from '@/components/common/PageHeader'
 import { PageProse } from '@/components/content/PageProse'
 import prose from '@/components/content/PageProse.module.css'
 import { FooterContact } from '@/components/layout/FooterContact'
+import { FooterSeller } from '@/components/layout/FooterSeller'
 import { PageSeo } from '@/components/seo/PageSeo'
 import { organizationJsonLd } from '@/data/siteSeo'
 import { contactPageCopy } from '@/data/staticPageCopy'
@@ -35,6 +36,7 @@ export function ContactPage() {
             ))}
           </PageProse>
           <address className={contactStyles.card}>
+            <FooterSeller />
             <FooterContact />
           </address>
         </div>
