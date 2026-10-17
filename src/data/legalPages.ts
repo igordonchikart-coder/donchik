@@ -34,8 +34,7 @@ export const legalDocuments: Record<LegalDocId, LegalDocument> = {
         title: '1. Seller',
         paragraphs: [
           sellerLine,
-          `Brand / website: ${SITE_NAME} (${siteSeller.shippingAddress} — dispatch warehouse).`,
-          siteSeller.note,
+          `Brand / website: ${SITE_NAME}. Dispatch warehouse: ${siteSeller.shippingAddress}.`,
         ],
       },
       {
@@ -96,7 +95,10 @@ export const legalDocuments: Record<LegalDocId, LegalDocument> = {
     sections: [
       {
         title: '1. Controller',
-        paragraphs: [sellerLine, siteSeller.note],
+        paragraphs: [
+          sellerLine,
+          `Dispatch warehouse: ${siteSeller.shippingAddress}.`,
+        ],
       },
       {
         title: '2. Data we collect',

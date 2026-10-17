@@ -5,22 +5,20 @@ export function FooterSeller() {
   return (
     <div className={styles.seller}>
       <p className={styles.title}>Seller</p>
-      <p>{siteSeller.legalName}</p>
-      <p>{siteSeller.binIin}</p>
-      <p>{siteSeller.legalAddress}</p>
-      <p>
-        Phone:{' '}
-        <a className={styles.link} href={`tel:${siteSeller.phone.replace(/\s+/g, '')}`}>
-          {siteSeller.phone}
-        </a>
-      </p>
-      <p>
-        Email:{' '}
-        <a className={styles.link} href={`mailto:${siteSeller.email}`}>
-          {siteSeller.email}
-        </a>
-      </p>
-      <p className={styles.note}>{siteSeller.note}</p>
+      <dl className={styles.list}>
+        <div className={styles.row}>
+          <dt className={styles.label}>Name</dt>
+          <dd className={styles.value}>{siteSeller.legalName}</dd>
+        </div>
+        <div className={styles.row}>
+          <dt className={styles.label}>BIN / IIN</dt>
+          <dd className={styles.value}>{siteSeller.binIin}</dd>
+        </div>
+        <div className={styles.row}>
+          <dt className={styles.label}>Legal address</dt>
+          <dd className={styles.value}>{siteSeller.legalAddress}</dd>
+        </div>
+      </dl>
     </div>
   )
 }

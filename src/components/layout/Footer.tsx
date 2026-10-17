@@ -8,8 +8,9 @@ export function Footer() {
   return (
     <footer className={styles.footer}>
       <Container className={styles.inner}>
-        <div className={styles.left}>
-          <FooterSeller />
+        <FooterSeller />
+        <div className={styles.column}>
+          <p className={styles.heading}>Contact</p>
           <FooterContact />
         </div>
         <FooterLegal />

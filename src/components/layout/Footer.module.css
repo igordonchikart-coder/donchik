@@ -14,14 +14,24 @@
   gap: var(--space-xl);
 }
 
-.left {
+.column {
   display: grid;
-  gap: var(--space-lg);
+  gap: var(--space-sm);
+  align-content: start;
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 @media (min-width: 768px) {
   .inner {
-    grid-template-columns: 1fr auto;
-    align-items: end;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-xl);
+    align-items: start;
   }
 }
