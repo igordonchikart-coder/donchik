@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { AuthProvider } from '@/context/AuthContext'
 import { CartProvider } from '@/context/CartContext'
 import { CurrencyProvider } from '@/context/CurrencyContext'
@@ -11,6 +12,7 @@ export function App() {
         <CartProvider>
           <ScrollToTop />
           <AppRouter />
+          <Analytics />
         </CartProvider>
       </CurrencyProvider>
     </AuthProvider>
