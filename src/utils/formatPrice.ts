@@ -54,12 +54,5 @@ export function formatStorePrice(
   displayCurrency: DisplayCurrency = 'KZT',
 ): string {
   const eur = toEur(price, sourceCurrency)
-  const primary = formatPrice(convertFromEur(eur, displayCurrency), displayCurrency)
-
-  // Bank onboarding: KZT as main price, euro equivalent in parentheses.
-  if (displayCurrency === 'KZT') {
-    return `${primary} (${formatPrice(convertFromEur(eur, 'EUR'), 'EUR')})`
-  }
-
-  return primary
+  return formatPrice(convertFromEur(eur, displayCurrency), displayCurrency)
 }
