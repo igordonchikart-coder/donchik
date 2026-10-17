@@ -87,6 +87,24 @@
   color: var(--color-text-muted);
 }
 
+.fieldControl:-webkit-autofill,
+.fieldControl:-webkit-autofill:hover,
+.fieldControl:-webkit-autofill:focus,
+.fieldControl:-webkit-autofill:active,
+.fieldTextarea:-webkit-autofill,
+.fieldTextarea:-webkit-autofill:hover,
+.fieldTextarea:-webkit-autofill:focus,
+.fieldTextarea:-webkit-autofill:active,
+.fieldSelect:-webkit-autofill,
+.fieldSelect:-webkit-autofill:hover,
+.fieldSelect:-webkit-autofill:focus,
+.fieldSelect:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-text);
+  caret-color: var(--color-text);
+  box-shadow: 0 0 0 1000px #1a1714 inset;
+  transition: background-color 99999s ease-out;
+}
+
 .fieldTextarea {
   min-height: 120px;
   resize: vertical;
