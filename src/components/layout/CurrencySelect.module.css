@@ -1,45 +1,105 @@
-.wrap {
-  display: inline-flex;
-  align-items: center;
+.root {
+  position: relative;
   flex-shrink: 0;
 }
 
-.select {
-  appearance: none;
+.rootVertical {
+  width: 100%;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-height: 44px;
   margin: 0;
-  padding: 0.35rem 1.6rem 0.35rem 0.55rem;
-  border: 1px solid color-mix(in srgb, var(--color-nav) 35%, transparent);
-  border-radius: 2px;
-  background:
-    linear-gradient(45deg, transparent 50%, currentColor 50%) calc(100% - 0.85rem) calc(50% - 0.12rem) / 0.35rem 0.35rem
-      no-repeat,
-    linear-gradient(135deg, currentColor 50%, transparent 50%) calc(100% - 0.55rem) calc(50% - 0.12rem) / 0.35rem 0.35rem
-      no-repeat,
-    transparent;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--color-nav);
   font-family: var(--font-nav);
-  font-size: 0.78rem;
+  font-size: 1.125rem;
   font-weight: 600;
   font-stretch: 87.5%;
-  letter-spacing: 0.04em;
-  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.select:hover,
-.select:focus-visible {
-  border-color: var(--color-nav-active);
+.trigger:hover,
+.trigger:focus-visible,
+.root:has([aria-expanded='true']) .trigger {
   color: var(--color-nav-active);
 }
 
-.srOnly {
+.rootVertical .trigger {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 0.15rem;
+  font-size: 0.95em;
+  line-height: 1;
+  transform: translateY(0.05em);
+}
+
+.rootVertical .chevron {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1.35rem;
+  line-height: 1;
+  transform: none;
+}
+
+.menu {
+  margin: 0;
+  padding: var(--space-xs);
+  list-style: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.menuHorizontal {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
+  top: 100%;
+  right: 0;
+  min-width: 8.5rem;
+  z-index: 30;
+}
+
+.menuVertical {
+  margin-top: var(--space-xs);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 var(--space-sm);
   border: 0;
+  background: transparent;
+  font-family: var(--font-nav);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  font-stretch: 87.5%;
+  letter-spacing: 0.06em;
+  text-align: left;
+  text-transform: none;
+  color: var(--color-nav);
+  cursor: pointer;
+}
+
+.option:hover,
+.option:focus-visible,
+.optionActive {
+  color: var(--color-nav-active);
 }

@@ -74,7 +74,7 @@ export function Header() {
             <Navigation />
           </div>
           <div className={styles.tools}>
-            <CurrencySelect id="header-currency" />
+            <CurrencySelect />
             <span className={styles.loginWrap}>
               <LoginButton onClick={toggleLogin} />
             </span>

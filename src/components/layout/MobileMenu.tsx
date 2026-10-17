@@ -35,7 +35,7 @@ export function MobileMenu({ isOpen, onClose, onOpenLogin }: MobileMenuProps) {
         </div>
         <Navigation orientation="vertical" onNavigate={onClose} />
         <div className={styles.account}>
-          <CurrencySelect id="mobile-currency" className={styles.currency} />
+          <CurrencySelect orientation="vertical" />
           <LoginButton onClick={onOpenLogin} />
         </div>
       </div>

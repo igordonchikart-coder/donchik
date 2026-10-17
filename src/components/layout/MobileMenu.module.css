@@ -93,10 +93,6 @@
   border-top: 1px solid var(--color-border);
 }
 
-.currency {
-  justify-self: start;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .overlay,
   .panel {
