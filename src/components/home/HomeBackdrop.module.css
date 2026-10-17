@@ -24,6 +24,7 @@
   transform: translateX(-50%);
   object-fit: fill;
   object-position: bottom center;
+  opacity: 0.12;
 }
 
 .beam {
@@ -34,7 +35,7 @@
   height: auto;
   transform-origin: 92% 98%;
   mix-blend-mode: screen;
-  opacity: 0.72;
+  opacity: 0.2;
 }
 
 .beamA {
@@ -45,7 +46,6 @@
 .beamB {
   left: 32%;
   width: min(18vw, 13rem);
-  opacity: 0.55;
   animation: sweepB 19s ease-in-out infinite;
 }
 
@@ -57,14 +57,13 @@
 .beamD {
   left: 78%;
   width: min(16vw, 12rem);
-  opacity: 0.48;
   animation: sweepA 22s ease-in-out infinite reverse;
 }
 
 .airship {
   position: absolute;
   width: min(16vw, 11rem);
-  opacity: 0.9;
+  opacity: 0.2;
 }
 
 .airship img {
@@ -86,7 +85,6 @@
 .shipB {
   top: 28%;
   width: min(11vw, 7.5rem);
-  opacity: 0.75;
   animation: flyLeft 180s linear infinite;
 }
 
@@ -95,6 +93,7 @@
   width: 2.4rem;
   max-width: none;
   height: auto;
+  opacity: 0.2;
 }
 
 .paraA {
@@ -206,7 +205,6 @@
 
   .beam {
     width: 38vw;
-    opacity: 0.6;
   }
 
   .city {
