@@ -26,3 +26,10 @@ a.value:hover {
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
+
+@media (min-width: 768px) {
+  .list {
+    width: max-content;
+    max-width: 100%;
+  }
+}

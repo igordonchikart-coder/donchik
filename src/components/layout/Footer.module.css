@@ -34,4 +34,13 @@
     gap: var(--space-xl);
     align-items: start;
   }
+
+  .column {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .column :global(ul) {
+    justify-items: start;
+  }
 }
