@@ -2,6 +2,7 @@ export const STORAGE_KEYS = {
   cart: 'donchik-art-cart',
   mockStore: 'donchik-art-mock-store-v10',
   mockAuth: 'donchik-art-mock-auth',
+  displayCurrency: 'donchik-art-display-currency',
 } as const
 
 export const DEFAULT_CURRENCY = 'EUR'

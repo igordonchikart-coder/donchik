@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Container } from '@/components/common/Container'
 import navLine from '@/assets/ui/nav-line.png'
 import { CartButton } from './CartButton'
+import { CurrencySelect } from './CurrencySelect'
 import { LoginButton } from './LoginButton'
 import { LoginOverlay, LOGIN_OVERLAY_CLOSE_MS } from './LoginOverlay'
 import { MobileMenu } from './MobileMenu'
@@ -73,6 +74,7 @@ export function Header() {
             <Navigation />
           </div>
           <div className={styles.tools}>
+            <CurrencySelect id="header-currency" />
             <span className={styles.loginWrap}>
               <LoginButton onClick={toggleLogin} />
             </span>

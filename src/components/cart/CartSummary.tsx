@@ -2,7 +2,7 @@ import { routes } from '@/app/routes'
 import { Button } from '@/components/common/Button'
 import { useCart } from '@/hooks/useCart'
 import { DEFAULT_CURRENCY } from '@/utils/constants'
-import { formatStorePrice } from '@/utils/formatPrice'
+import { useStorePrice } from '@/hooks/useStorePrice'
 import styles from './CartSummary.module.css'
 
 interface CartSummaryProps {
@@ -11,6 +11,7 @@ interface CartSummaryProps {
 
 export function CartSummary({ showCheckoutButton = true }: CartSummaryProps) {
   const { items, totalPrice, totalQuantity } = useCart()
+  const formatStorePrice = useStorePrice()
   const currency = items[0]?.currency ?? DEFAULT_CURRENCY
 
   return (

@@ -5,7 +5,7 @@ import { useTrustpilot } from '@/hooks/useTrustpilot'
 import { AddToCartButton } from './AddToCartButton'
 import { ProductIntroText } from './ProductIntroText'
 import type { Product } from '@/types'
-import { formatStorePrice } from '@/utils/formatPrice'
+import { useStorePrice } from '@/hooks/useStorePrice'
 import { DISCOUNT_BUNDLE_CATEGORY_SLUG } from '@/utils/catalogGroups'
 import { isComingSoon } from '@/utils/product'
 import styles from './ProductBuyPanel.module.css'
@@ -18,6 +18,7 @@ export function ProductBuyPanel({ product }: ProductBuyPanelProps) {
   const comingSoon = isComingSoon(product)
   const copy = getProductPageCopy(product)
   const trustpilot = useTrustpilot()
+  const formatStorePrice = useStorePrice()
   const isDiscountBundle = product.category?.slug === DISCOUNT_BUNDLE_CATEGORY_SLUG
   const seriesCrumb = isDiscountBundle
     ? { label: 'Discounts', to: routes.discounts }

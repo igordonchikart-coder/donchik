@@ -1,37 +1,49 @@
+import { EUR_RATES, type DisplayCurrency } from './displayCurrency'
+
 const CURRENCY_LOCALES: Record<string, string> = {
   RUB: 'ru-RU',
   USD: 'en-US',
   EUR: 'en-IE',
   KZT: 'ru-KZ',
+  GBP: 'en-GB',
 }
 
-/**
- * Temporary display rate for acquiring review.
- * Replace when the client / bank confirms the conversion source.
- */
-export const EUR_TO_KZT = 560
+/** @deprecated use EUR_RATES.KZT — kept for older imports */
+export const EUR_TO_KZT = EUR_RATES.KZT
 
 export function formatPrice(price: number, currency = 'RUB'): string {
   const locale = CURRENCY_LOCALES[currency] ?? 'ru-RU'
+  const whole = currency === 'KZT'
 
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
-    minimumFractionDigits: currency === 'EUR' ? 2 : 0,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: whole ? 0 : 2,
+    maximumFractionDigits: whole ? 0 : 2,
   }).format(price)
 }
 
-/** Storefront: primary KZT, foreign currency in parentheses when needed. */
-export function formatStorePrice(price: number, currency = 'EUR'): string {
-  if (currency === 'KZT') {
-    return formatPrice(price, 'KZT')
+function toEur(price: number, sourceCurrency: string): number {
+  if (sourceCurrency === 'EUR') {
+    return price
   }
-
-  if (currency === 'EUR') {
-    const tenge = Math.round(price * EUR_TO_KZT)
-    return `${formatPrice(tenge, 'KZT')} (${formatPrice(price, 'EUR')})`
+  if (sourceCurrency in EUR_RATES) {
+    return price / EUR_RATES[sourceCurrency as DisplayCurrency]
   }
+  return price
+}
 
-  return formatPrice(price, currency)
+export function convertFromEur(amountEur: number, to: DisplayCurrency): number {
+  const raw = amountEur * EUR_RATES[to]
+  return to === 'KZT' ? Math.round(raw) : Math.round(raw * 100) / 100
+}
+
+/** Storefront display in the shopper-selected currency. */
+export function formatStorePrice(
+  price: number,
+  sourceCurrency = 'EUR',
+  displayCurrency: DisplayCurrency = 'EUR',
+): string {
+  const eur = toEur(price, sourceCurrency)
+  return formatPrice(convertFromEur(eur, displayCurrency), displayCurrency)
 }

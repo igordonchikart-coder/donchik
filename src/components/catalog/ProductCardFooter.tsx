@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import type { Product } from '@/types'
-import { formatStorePrice } from '@/utils/formatPrice'
+import { useStorePrice } from '@/hooks/useStorePrice'
 import styles from './ProductCardFooter.module.css'
 
 interface ProductCardFooterProps {
@@ -9,6 +9,8 @@ interface ProductCardFooterProps {
 }
 
 export function ProductCardFooter({ product }: ProductCardFooterProps) {
+  const formatStorePrice = useStorePrice()
+
   return (
     <div className={styles.footer}>
       <Link className={styles.priceBlock} to={routes.product(product.slug)} tabIndex={-1}>

@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom'
+import { CurrencySelect } from './CurrencySelect'
 import { SiteBrand } from './SiteBrand'
 import { LoginButton } from './LoginButton'
 import { Navigation } from './Navigation'
@@ -34,6 +35,7 @@ export function MobileMenu({ isOpen, onClose, onOpenLogin }: MobileMenuProps) {
         </div>
         <Navigation orientation="vertical" onNavigate={onClose} />
         <div className={styles.account}>
+          <CurrencySelect id="mobile-currency" className={styles.currency} />
           <LoginButton onClick={onOpenLogin} />
         </div>
       </div>

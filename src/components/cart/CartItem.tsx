@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { routes } from '@/app/routes'
 import type { CartItem as CartItemType } from '@/types'
-import { formatStorePrice } from '@/utils/formatPrice'
 import { useCart } from '@/hooks/useCart'
+import { useStorePrice } from '@/hooks/useStorePrice'
 import styles from './CartItem.module.css'
 
 interface CartItemProps {
@@ -11,6 +11,7 @@ interface CartItemProps {
 
 export function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeItem } = useCart()
+  const formatStorePrice = useStorePrice()
 
   return (
     <article className={styles.item}>

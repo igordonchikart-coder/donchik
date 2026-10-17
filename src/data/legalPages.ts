@@ -49,8 +49,7 @@ export const legalDocuments: Record<LegalDocId, LegalDocument> = {
       {
         title: '3. Prices and payment',
         paragraphs: [
-          'Catalogue prices are shown in Kazakhstani tenge (KZT). An approximate euro equivalent may appear in parentheses for international readers.',
-          'The amount charged at checkout is confirmed on the payment page of the selected provider (card acquiring / other methods once connected).',
+          'Catalogue prices can be viewed in EUR, USD, KZT, or GBP using the currency switcher. Display amounts are approximate conversions from the store base price; the amount charged at checkout is confirmed on the payment page of the selected provider.',
           'EU VAT, if applicable, is shown at checkout. Outside the EU the listed price is the amount you pay before carrier import duties, if any.',
         ],
       },
@@ -150,7 +149,7 @@ export const legalDocuments: Record<LegalDocId, LegalDocument> = {
       {
         title: '1. Payment',
         paragraphs: [
-          'Prices are displayed primarily in KZT; a foreign-currency equivalent may appear in parentheses.',
+          'Prices can be shown in EUR, USD, KZT, or GBP. The charge currency and final amount are confirmed by the payment provider at checkout.',
           'Payment is completed through the connected acquiring / checkout provider. An order is paid when the provider confirms a successful charge.',
           'If payment fails, the order is not dispatched.',
         ],
