@@ -18,6 +18,8 @@
   display: grid;
   gap: var(--space-sm);
   align-content: start;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .heading {
@@ -30,8 +32,9 @@
 
 @media (min-width: 768px) {
   .inner {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-xl);
+    grid-template-columns: repeat(3, max-content);
+    justify-content: space-between;
+    column-gap: var(--space-xl);
     align-items: start;
   }
 }
